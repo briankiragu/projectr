@@ -40,38 +40,41 @@ function App() {
   return (
     // Main container
     <div class="grid gap-4 overflow-hidden p-3 lg:h-screen lg:grid-cols-4">
-      <aside class="h-[88%] flex-col justify-between rounded-lg bg-gray-100">
+      <aside class="flex-col justify-between rounded-lg lg:h-[90%]">
         {/* Search Pane */}
-        <form class="mb-4 rounded-lg bg-gray-300 px-4 pb-4 pt-3">
-          <label for="search">
-            <span class="text-sm italic text-gray-800">
-              Search for a song by title or lyrics...
-            </span>
-            <input
-              id="search"
-              type="search"
-              name="search"
-              class="mt-1 w-full rounded-lg px-4 py-3 text-sm text-gray-600 focus:outline-none"
-              placeholder="Search for a song by title or lyrics..."
-              autofocus
-            />
+        <div class="mb-5 flex-col justify-between rounded-lg bg-gray-300 px-4 pb-4 pt-3">
+          {/* Search Form */}
+          <form>
+            <label for="search">
+              <span class="text-sm italic text-gray-800">
+                Search for a song by title or lyrics...
+              </span>
+              <input
+                id="search"
+                type="search"
+                name="search"
+                class="mt-1 w-full rounded-lg px-4 py-3 text-sm text-gray-600 focus:outline-none"
+                placeholder="Search for a song by title or lyrics..."
+                autofocus
+              />
+            </label>
+          </form>
 
-            {/* Search results */}
-            <div class="mt-3 h-40 overflow-y-scroll">
-              <For each={results()}>
-                {(track) => (
-                  <SearchResultsItem track={track} handler={[enqueue, track]} />
-                )}
-              </For>
-            </div>
-          </label>
-        </form>
+          {/* Search results */}
+          <div class="mt-3 h-40 overflow-y-scroll lg:h-52">
+            <For each={results()}>
+              {(track) => (
+                <SearchResultsItem track={track} handler={[enqueue, track]} />
+              )}
+            </For>
+          </div>
+        </div>
 
         {/* Play queue */}
-        <div class="rounded-lg bg-gray-200 px-4 pb-4 pt-3 lg:h-3/6">
+        <div class="rounded-lg bg-gray-200 px-4 pb-4 pt-3">
           {/* Now playing */}
           <div class="h-24">
-            <h3 class="mb-1 text-sm text-gray-400">Now Playing</h3>
+            <h3 class="mb-1 text-sm text-gray-500">Now Playing</h3>
             <Show when={nowPlaying()}>
               <div class="grid grid-cols-4 rounded-lg bg-gray-100 px-6 py-3 text-sm">
                 <h4 class="col-span-2 font-semibold text-gray-800">
@@ -82,13 +85,13 @@ function App() {
           </div>
 
           {/* Up next */}
-          <div class="flex justify-between text-gray-400">
+          <div class="flex justify-between text-gray-500">
             <h3 class="text-sm">Up next</h3>
             <button class="text-sm" onClick={flush}>
               Clear all
             </button>
           </div>
-          <div class="h-48 overflow-y-scroll py-0.5">
+          <div class="h-48 overflow-y-scroll py-0.5 lg:h-56">
             <For each={queue().slice(1)}>
               {(track) => (
                 <QueueItem track={track} handler={[dequeue, track.id]} />
