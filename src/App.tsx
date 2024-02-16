@@ -11,6 +11,7 @@ import ButtonPlayback from './ui/buttons/ButtonPlayback';
 import data from './data/sample';
 import ButtonSection from './ui/buttons/ButtonSection';
 import QueueItem from './ui/queue/QueueItem';
+import SearchResultsItem from './ui/search/SearchResultsItem';
 
 function App() {
   const [results] = createSignal<ITrack[]>(data);
@@ -54,21 +55,7 @@ function App() {
             <div class="mt-3">
               <For each={results()}>
                 {(track) => (
-                  <div class="mb-1.5 flex justify-between gap-4 rounded-lg bg-gray-100 px-3 py-2 text-sm text-gray-600">
-                    <span class="material-symbols-outlined cursor-move p-1">
-                      drag_pan
-                    </span>
-                    <h4 class="col-span-2 w-full py-1.5 font-medium italic text-gray-500">
-                      {track.title}
-                    </h4>
-                    <button
-                      type="button"
-                      class="material-symbols-outlined rounded-full p-1 hover:bg-gray-300"
-                      onClick={() => enqueue(track)}
-                    >
-                      playlist_add
-                    </button>
-                  </div>
+                  <SearchResultsItem track={track} handler={[enqueue, track]} />
                 )}
               </For>
             </div>
@@ -95,11 +82,7 @@ function App() {
             <div class="h-2/5 overflow-scroll">
               <For each={queue().slice(1)}>
                 {(track) => (
-                  <QueueItem
-                    isMovable={true}
-                    track={track}
-                    handler={[dequeue, track.id]}
-                  />
+                  <QueueItem track={track} handler={[dequeue, track.id]} />
                 )}
               </For>
             </div>
