@@ -74,7 +74,7 @@ function App() {
         {/* Play queue */}
         <div class="rounded-lg bg-gray-200 px-4 pb-4 pt-3">
           {/* Now playing */}
-          <div class="h-24">
+          <div class="mb-1 h-24">
             <h3 class="mb-1 text-sm text-gray-500">Now Playing</h3>
             <Show when={nowPlaying()}>
               <NowPlayingCard track={nowPlaying()} />
