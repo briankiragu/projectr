@@ -71,7 +71,7 @@ function App() {
         <div class="rounded-lg bg-gray-200 px-4 pb-4 pt-3 lg:h-3/6">
           {/* Now playing */}
           <div class="h-24">
-            <h3 class="text-sm text-gray-400">Now Playing</h3>
+            <h3 class="mb-1 text-sm text-gray-400">Now Playing</h3>
             <Show when={nowPlaying()}>
               <div class="grid grid-cols-4 rounded-lg bg-gray-100 px-6 py-3 text-sm">
                 <h4 class="col-span-2 font-semibold text-gray-800">
@@ -82,20 +82,18 @@ function App() {
           </div>
 
           {/* Up next */}
-          <div class="">
-            <div class="mb-2 flex justify-between text-gray-400">
-              <h3 class="text-sm">Up next</h3>
-              <button class="text-sm" onClick={flush}>
-                Clear all
-              </button>
-            </div>
-            <div class="h-2/5 overflow-scroll">
-              <For each={queue().slice(1)}>
-                {(track) => (
-                  <QueueItem track={track} handler={[dequeue, track.id]} />
-                )}
-              </For>
-            </div>
+          <div class="flex justify-between text-gray-400">
+            <h3 class="text-sm">Up next</h3>
+            <button class="text-sm" onClick={flush}>
+              Clear all
+            </button>
+          </div>
+          <div class="h-2/5 overflow-y-scroll py-0.5">
+            <For each={queue().slice(1)}>
+              {(track) => (
+                <QueueItem track={track} handler={[dequeue, track.id]} />
+              )}
+            </For>
           </div>
         </div>
       </aside>
