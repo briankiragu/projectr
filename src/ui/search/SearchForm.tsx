@@ -1,6 +1,6 @@
 // Import the modules.
 import { Component, Ref, onMount } from 'solid-js';
-import { fromEvent, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, fromEvent, switchMap } from 'rxjs';
 
 // Import the interfaces.
 import type { ITrack } from '../../interfaces/track';
@@ -22,17 +22,16 @@ const SearchForm: Component<{ handler: (results: ITrack[]) => void }> = (
   onMount(() => {
     fromEvent<InputEvent>(inputRef, 'input')
       .pipe(
-        switchMap(
-          (event: InputEvent) => (event.target as HTMLInputElement).value
-        )
+        debounceTime(500),
+        distinctUntilChanged(),
+        switchMap(async (event: InputEvent) => {
+          const { hits } = await search(
+            (event.target as HTMLInputElement).value
+          );
+          return hits as ITrack[];
+        })
       )
-      .subscribe(async (phrase) => {
-        const { hits } = await search(phrase);
-        console.dir(hits);
-
-        // Add the results to the state.
-        props.handler(hits as ITrack[]);
-      });
+      .subscribe((hits) => props.handler(hits));
   });
 
   return (
