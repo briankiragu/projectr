@@ -10,12 +10,13 @@ import NowPlayingCard from './ui/cards/NowPlayingCard';
 import QueueItem from './ui/queue/QueueListItem';
 import SearchForm from './ui/search/SearchForm';
 import SearchResults from './ui/search/SearchResults';
-
-// Sample data.
-import data from './data/sample';
+import useFormatting from './lib/composables/useFormatting';
 
 const App = () => {
-  const [results, setResults] = createStore<ITrack[]>(data);
+  // Import the composables.
+  const { toTitleCase } = useFormatting();
+
+  const [results, setResults] = createStore<ITrack[]>([]);
   const [queue, setQueue] = createStore<ITrack[]>([]);
   const [nowPlaying, setNowPlaying] = createSignal<number>(0);
 
@@ -104,7 +105,7 @@ const App = () => {
       <main class="mb-32 rounded-lg bg-gray-100 px-6 py-4 lg:col-span-3 lg:mb-20 lg:px-20 lg:py-14">
         {/* Title */}
         <h2 class="mb-3 text-wrap text-4xl font-black text-gray-800 lg:mb-12 lg:text-6xl">
-          {peek()?.title}
+          {toTitleCase(peek()?.title)}
         </h2>
 
         {/* Lyrics */}
