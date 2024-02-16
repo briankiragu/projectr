@@ -10,6 +10,7 @@ import ButtonPlayback from './ui/buttons/ButtonPlayback';
 // Sample data.
 import data from './data/sample';
 import ButtonSection from './ui/buttons/ButtonSection';
+import QueueItem from './ui/queue/QueueItem';
 
 function App() {
   const [results] = createSignal<ITrack[]>(data);
@@ -94,20 +95,12 @@ function App() {
             <div class="h-2/5 overflow-scroll">
               <For each={queue().slice(1)}>
                 {(track) => (
-                  <div class="mt-2 flex justify-between gap-4 rounded-lg bg-gray-100 px-4 py-2 align-middle text-sm text-gray-600">
-                    <span class="material-symbols-outlined cursor-move p-1">
-                      drag_pan
-                    </span>
-                    <h4 class="col-span-2 w-full py-1 font-semibold">
-                      {track.title}
-                    </h4>
-                    <button
-                      class="material-symbols-outlined rounded-full p-1 hover:bg-gray-300"
-                      onClick={() => dequeue(track.id)}
-                    >
-                      playlist_remove
-                    </button>
-                  </div>
+                  <QueueItem
+                    isMovable={true}
+                    track={track}
+                    handler={[dequeue, track.id]}
+                    icon="playlist_remove"
+                  />
                 )}
               </For>
             </div>
