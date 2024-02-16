@@ -1,4 +1,5 @@
 export type ITrack = {
+  id?: number;
   title: string;
   lyrics: {
     intro?: string[];

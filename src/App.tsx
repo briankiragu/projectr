@@ -15,13 +15,14 @@ function App() {
   // Enqueue.
   const enqueue = (track: ITrack, event: Event) => {
     event.preventDefault();
-    setQueue([...queue(), track]);
+    // Create a random ID for the track and add it to the queue.
+    setQueue([...queue(), { id: Date.now(), ...track }]);
   };
 
   // Dequeue.
-  const dequeue = (track: ITrack, event: Event) => {
+  const dequeue = (id: number, event: Event) => {
     event.preventDefault();
-    setQueue(queue().filter((item) => item.title !== track.title));
+    setQueue(queue().filter((track) => id !== track.id));
   };
 
   // JSX component.
@@ -95,7 +96,7 @@ function App() {
                       </h4>
                       <button
                         class="material-symbols-outlined rounded-full p-1 hover:bg-gray-300"
-                        onClick={[dequeue, track]}
+                        onClick={[dequeue, track.id]}
                       >
                         playlist_remove
                       </button>
@@ -110,18 +111,26 @@ function App() {
         {/* View Pane */}
         <div class="mb-20 rounded-lg bg-gray-100 px-6 py-4 md:col-span-3">
           {/* Title */}
-          <h2 class="mb-3 text-5xl font-extrabold">{nowPlaying()?.title}</h2>
+          <h2 class="mb-3 text-5xl font-black text-gray-800">
+            {nowPlaying()?.title}
+          </h2>
 
           {/* Lyrics */}
-          {/* <div class="text-md font-medium text-gray-500">
-          {queue.value.at(0)?.lyrics.map((stanza, stanzaIndex) => (
-            <div key={stanzaIndex} class="mb-3">
-              {stanza.map((lyric: string, lyricIndex: number) => (
-                <p key={lyricIndex}>{lyric}</p>
-              ))}
-            </div>
-          ))}
-        </div> */}
+          <div class="text-md font-medium text-gray-600">
+            <For each={nowPlaying()?.lyrics.verses}>
+              {(verse) => (
+                <ul class="mb-3">
+                  <For each={verse}>
+                    {(line) => (
+                      <li>
+                        <span class="italic">{line}</span>
+                      </li>
+                    )}
+                  </For>
+                </ul>
+              )}
+            </For>
+          </div>
 
           {/* Controls */}
           <section class="fixed bottom-0 left-0 w-full bg-white p-3">
@@ -130,7 +139,7 @@ function App() {
               <span class="material-symbols-outlined">skip_previous</span>
             </button> */}
               <button
-                class="h-8 w-8 rounded-full transition-colors hover:bg-gray-400"
+                class="p-1 h-8 w-8 rounded-full transition-colors hover:bg-gray-400"
                 classList={{
                   "hover:bg-gray-200 disabled:text-gray-300": !nowPlaying(),
                 }}
@@ -139,7 +148,7 @@ function App() {
                 <span class="material-symbols-outlined">arrow_back</span>
               </button>
               <button
-                class="h-8 w-8 rounded-full transition-colors hover:bg-gray-400"
+                class="p-1 h-8 w-8 rounded-full transition-colors hover:bg-gray-400"
                 classList={{
                   "hover:bg-gray-200 disabled:text-gray-300": !nowPlaying(),
                 }}
@@ -148,17 +157,17 @@ function App() {
                 <span class="material-symbols-outlined">arrow_forward</span>
               </button>
               <button
-                class="h-8 w-8 rounded-full transition-colors hover:bg-gray-400"
+                class="p-1 h-8 w-8 rounded-full transition-colors hover:bg-gray-400"
                 classList={{
                   "hover:bg-gray-200 disabled:text-gray-300": !nowPlaying(),
                 }}
                 disabled={!nowPlaying()}
-                onClick={[dequeue, nowPlaying()]}
+                onClick={[dequeue, nowPlaying()?.id]}
               >
                 <span class="material-symbols-outlined ">skip_next</span>
               </button>
               <button
-                class="flex justify-center rounded-md px-2 py-2 align-middle transition-colors hover:bg-gray-400"
+                class="rounded-md px-2.5 transition-colors hover:bg-gray-400  hover:text-gray-50"
                 classList={{
                   "hover:bg-gray-200 disabled:text-gray-300": !nowPlaying(),
                 }}
@@ -167,7 +176,7 @@ function App() {
                 Bridge
               </button>
               <button
-                class="flex justify-center rounded-md px-2 py-2 align-middle transition-colors hover:bg-gray-400"
+                class="rounded-md px-2.5 transition-colors hover:bg-gray-400  hover:text-gray-50"
                 classList={{
                   "hover:bg-gray-200 disabled:text-gray-300": !nowPlaying(),
                 }}
