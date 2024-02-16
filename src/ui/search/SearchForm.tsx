@@ -35,7 +35,7 @@ const SearchForm: Component<{ handler: (results: ITrack[]) => void }> = (
   });
 
   return (
-    <form>
+    <form onSubmit={(e) => e.preventDefault()}>
       <label for="search">
         <span class="text-sm italic text-gray-800">
           Search for a song by title or lyrics...
