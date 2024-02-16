@@ -1,9 +1,15 @@
 import { For, Show, createSignal } from 'solid-js';
 import './App.css';
+
+// Import interfaces
 import type { ITrack } from './interfaces/track';
+
+// Import components.
+import ButtonPlayback from './ui/buttons/ButtonPlayback';
 
 // Sample data.
 import data from './data/sample';
+import ButtonSection from './ui/buttons/ButtonSection';
 
 function App() {
   const [results] = createSignal<ITrack[]>(data);
@@ -141,67 +147,31 @@ function App() {
         {/* Controls */}
         <footer class="fixed bottom-0 left-0 w-full bg-white p-3">
           <div class="flex min-h-16 flex-wrap justify-between gap-4 rounded-lg bg-gray-200 p-4 text-gray-700 lg:justify-center">
-            {/* <button class="h-8 w-8 rounded-full transition-all hover:bg-gray-400">
-              <span class="material-symbols-outlined">skip_previous</span>
-            </button> */}
-            <button
-              class="h-8 w-8 rounded-full p-1 transition-colors hover:bg-gray-400"
-              classList={{
-                'hover:bg-gray-200 disabled:text-gray-300': !nowPlaying(),
-              }}
-              disabled={!nowPlaying()}
-            >
-              <span class="material-symbols-outlined">arrow_back</span>
-            </button>
-            <button
-              class="h-8 w-8 rounded-full p-1 transition-colors hover:bg-gray-400"
-              classList={{
-                'hover:bg-gray-200 disabled:text-gray-300': !nowPlaying(),
-              }}
-              disabled={!nowPlaying()}
-            >
-              <span class="material-symbols-outlined">arrow_forward</span>
-            </button>
-            <button
-              class="h-8 w-8 rounded-full p-1 transition-colors hover:bg-gray-400"
-              classList={{
-                'hover:bg-gray-200 disabled:text-gray-300': !nowPlaying(),
-              }}
-              disabled={!nowPlaying()}
-              onClick={() => dequeue(nowPlaying()?.id)}
-            >
-              <span class="material-symbols-outlined ">skip_next</span>
-            </button>
-            <button
-              class="rounded-md px-2.5 transition-colors hover:bg-gray-400  hover:text-gray-50"
-              classList={{
-                'hover:bg-gray-200 disabled:text-gray-300':
-                  !nowPlaying()?.lyrics.preChorus,
-              }}
-              disabled={!nowPlaying()?.lyrics.preChorus}
-            >
-              Pre-Chorus
-            </button>
-            <button
-              class="rounded-md px-2.5 transition-colors hover:bg-gray-400  hover:text-gray-50"
-              classList={{
-                'hover:bg-gray-200 disabled:text-gray-300':
-                  !nowPlaying()?.lyrics.chorus,
-              }}
-              disabled={!nowPlaying()?.lyrics.chorus}
-            >
-              Chorus
-            </button>
-            <button
-              class="rounded-md px-2.5 transition-colors hover:bg-gray-400  hover:text-gray-50"
-              classList={{
-                'hover:bg-gray-200 disabled:text-gray-300':
-                  !nowPlaying()?.lyrics.bridge,
-              }}
-              disabled={!nowPlaying()?.lyrics.bridge}
-            >
-              Bridge
-            </button>
+            <ButtonPlayback
+              isEnabled={nowPlaying() !== undefined}
+              text="arrow_back"
+            />
+            <ButtonPlayback
+              isEnabled={nowPlaying() !== undefined}
+              text="arrow_forward"
+            />
+            <ButtonPlayback
+              isEnabled={nowPlaying() !== undefined}
+              text="skip_next"
+              handler={() => dequeue(nowPlaying()?.id)}
+            />
+            <ButtonSection
+              isEnabled={nowPlaying()?.lyrics.preChorus !== undefined}
+              text="Pre-Chorus"
+            />
+            <ButtonSection
+              isEnabled={nowPlaying()?.lyrics.chorus !== undefined}
+              text="Chorus"
+            />
+            <ButtonSection
+              isEnabled={nowPlaying()?.lyrics.bridge !== undefined}
+              text="Bridge"
+            />
           </div>
         </footer>
       </main>
