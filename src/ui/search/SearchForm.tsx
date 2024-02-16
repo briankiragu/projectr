@@ -28,6 +28,7 @@ const SearchForm: Component<{ handler: (results: ITrack[]) => void }> = (
       )
       .subscribe(async (phrase) => {
         const { hits } = await search(phrase);
+        console.dir(hits);
 
         // Add the results to the state.
         props.handler(hits as ITrack[]);
