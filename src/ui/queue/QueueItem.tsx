@@ -5,9 +5,9 @@ const QueueItem: Component<{
   isMovable: boolean;
   track: ITrack;
   icon: string;
-  handler: [(id: number | undefined) => void, number | undefined];
+  handler: [(...args: number[]) => void, number[]];
 }> = (props) => {
-  const [fn, id] = props.handler;
+  const [fn, args] = props.handler;
 
   return (
     <div class="mt-2 flex justify-between gap-4 rounded-lg bg-gray-100 px-4 py-2 align-middle text-sm text-gray-600">
@@ -17,7 +17,7 @@ const QueueItem: Component<{
       <h4 class="col-span-2 w-full py-1 font-semibold">{props.track.title}</h4>
       <button
         class="material-symbols-outlined rounded-full p-1 hover:bg-gray-300"
-        onClick={() => fn(id)}
+        onClick={() => fn(...args)}
       >
         {props.icon}
       </button>
