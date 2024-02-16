@@ -9,3 +9,8 @@ export type ITrack = {
     verses: Array<string[]>;
   };
 };
+
+export type INowPlaying = {
+  track?: ITrack;
+  activeVerseIndex: number;
+};
