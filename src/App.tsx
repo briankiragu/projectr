@@ -98,8 +98,7 @@ function App() {
                   <QueueItem
                     isMovable={true}
                     track={track}
-                    handler={[dequeue, track.id ? [track.id] : []]}
-                    icon="playlist_remove"
+                    handler={[dequeue, track.id]}
                   />
                 )}
               </For>
