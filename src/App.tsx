@@ -12,6 +12,7 @@ import data from './data/sample';
 import ButtonSection from './ui/buttons/ButtonSection';
 import QueueItem from './ui/queue/QueueItem';
 import SearchResultsItem from './ui/search/SearchResultsItem';
+import NowPlayingCard from './ui/cards/NowPlayingCard';
 
 function App() {
   const [results] = createSignal<ITrack[]>(data);
@@ -76,11 +77,7 @@ function App() {
           <div class="h-24">
             <h3 class="mb-1 text-sm text-gray-500">Now Playing</h3>
             <Show when={nowPlaying()}>
-              <div class="grid grid-cols-4 rounded-lg bg-gray-100 px-6 py-3 text-sm">
-                <h4 class="col-span-2 font-semibold text-gray-800">
-                  {nowPlaying()?.title}
-                </h4>
-              </div>
+              <NowPlayingCard track={nowPlaying()} />
             </Show>
           </div>
 
