@@ -2,7 +2,7 @@ import { ITrack } from '../interfaces/track';
 
 const data: ITrack[] = [
   {
-    title: 'Shusha',
+    title: 'shusha',
     lyrics: [
       [
         'Weka Sifa mbele (Send Judah [praise] first),',
@@ -39,7 +39,7 @@ const data: ITrack[] = [
     ],
   },
   {
-    title: 'Shangilia',
+    title: 'shangilia',
     lyrics: [
       [
         'Anastahili sifa za mioyo yetu, hallelujah',
@@ -89,7 +89,7 @@ const data: ITrack[] = [
     ],
   },
   {
-    title: 'Nina Siri',
+    title: 'nina-siri',
     lyrics: [
       [
         'Nina siri naye Yesu',
@@ -125,7 +125,7 @@ const data: ITrack[] = [
     ],
   },
   {
-    title: 'This I Know (Ungizungezile)',
+    title: 'this-i-know-ungizungezile',
     lyrics: [
       [
         'Sometimes I feel you',

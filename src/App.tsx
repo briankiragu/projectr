@@ -6,15 +6,16 @@ import type { ITrack } from './interfaces/track';
 
 // Import components.
 import ButtonPlayback from './ui/buttons/ButtonPlayback';
+import NowPlayingCard from './ui/cards/NowPlayingCard';
+import QueueItem from './ui/queue/QueueListItem';
+import SearchForm from './ui/search/SearchForm';
+import SearchResults from './ui/search/SearchResults';
 
 // Sample data.
 import data from './data/sample';
-import QueueItem from './ui/queue/QueueListItem';
-import SearchResultsItem from './ui/search/SearchResultsItem';
-import NowPlayingCard from './ui/cards/NowPlayingCard';
 
-function App() {
-  const [results] = createStore<ITrack[]>(data);
+const App = () => {
+  const [results, setResults] = createStore<ITrack[]>(data);
   const [queue, setQueue] = createStore<ITrack[]>([]);
   const [nowPlaying, setNowPlaying] = createSignal<number>(0);
 
@@ -66,30 +67,10 @@ function App() {
         {/* Search Pane */}
         <div class="mb-5 flex-col justify-between rounded-lg bg-gray-300 px-4 pb-4 pt-3">
           {/* Search Form */}
-          <form>
-            <label for="search">
-              <span class="text-sm italic text-gray-800">
-                Search for a song by title or lyrics...
-              </span>
-              <input
-                id="search"
-                type="search"
-                name="search"
-                class="mt-1 w-full rounded-lg px-4 py-3 text-sm text-gray-600 focus:outline-none"
-                placeholder="Search for a song by title or lyrics..."
-                autofocus
-              />
-            </label>
-          </form>
+          <SearchForm handler={setResults} />
 
           {/* Search results */}
-          <div class="mt-3 h-40 overflow-y-scroll lg:h-52">
-            <For each={results}>
-              {(track) => (
-                <SearchResultsItem track={track} handler={[enqueue, track]} />
-              )}
-            </For>
-          </div>
+          <SearchResults results={results} handler={enqueue} />
         </div>
 
         {/* Play queue */}
@@ -162,6 +143,6 @@ function App() {
       </main>
     </div>
   );
-}
+};
 
 export default App;
