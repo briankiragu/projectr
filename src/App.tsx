@@ -2,14 +2,13 @@ import { For, Show, createSignal } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 // Import interfaces
-import { ITrackParts, type INowPlaying, type ITrack } from './interfaces/track';
+import type { ITrack } from './interfaces/track';
 
 // Import components.
 import ButtonPlayback from './ui/buttons/ButtonPlayback';
 
 // Sample data.
 import data from './data/sample';
-import ButtonSection from './ui/buttons/ButtonSection';
 import QueueItem from './ui/queue/QueueListItem';
 import SearchResultsItem from './ui/search/SearchResultsItem';
 import NowPlayingCard from './ui/cards/NowPlayingCard';
@@ -17,40 +16,27 @@ import NowPlayingCard from './ui/cards/NowPlayingCard';
 function App() {
   const [results] = createStore<ITrack[]>(data);
   const [queue, setQueue] = createStore<ITrack[]>([]);
-  const [nowPlaying, setNowPlaying] = createSignal<INowPlaying>({
-    currentlyShowing: ITrackParts.verses,
-    activeVerseIndex: 0,
-  });
+  const [nowPlaying, setNowPlaying] = createSignal<number>(0);
 
   // First item in queue (now playing).
   const peek = () => queue.at(0);
 
-  // Current item's intro and verses.
-  const verses = () => [peek()?.lyrics.intro, ...(peek()?.lyrics.verses || [])];
-
   // Check if the current verse is not the first.
-  const isFirstVerse = (): boolean => nowPlaying().activeVerseIndex === 0;
+  const isFirstVerse = (): boolean => nowPlaying() === 0;
 
   // Check if the current verse is not the last.
-  const isLastVerse = (): boolean =>
-    nowPlaying().activeVerseIndex + 1 === verses().length;
+  const isLastVerse = (): boolean => nowPlaying() + 1 === peek()?.lyrics.length;
 
   // Previous verse
   const goToPreviousVerse = () => {
     if (!isFirstVerse()) {
-      setNowPlaying({
-        currentlyShowing: ITrackParts.verses,
-        activeVerseIndex: nowPlaying().activeVerseIndex - 1,
-      });
+      setNowPlaying((nowPlaying) => nowPlaying - 1);
     }
   };
 
   // Next verse
   const goToNextVerse = () => {
-    setNowPlaying({
-      currentlyShowing: ITrackParts.verses,
-      activeVerseIndex: nowPlaying().activeVerseIndex + 1,
-    });
+    setNowPlaying((nowPlaying) => nowPlaying + 1);
   };
 
   // Enqueue.
@@ -63,11 +49,8 @@ function App() {
   const dequeue = (id: number | undefined) => {
     setQueue(queue.filter((track) => id !== track.id));
 
-    // Update now playing when a track is queued or dequeued.
-    setNowPlaying({
-      currentlyShowing: ITrackParts.verses,
-      activeVerseIndex: 0,
-    });
+    // Update now playing when a track is dequeued.
+    setNowPlaying(0);
   };
 
   // Clear queue
@@ -146,11 +129,9 @@ function App() {
         {/* Lyrics */}
         <div class="text-md text-sm font-medium text-gray-600">
           <ul class="mb-3">
-            <For each={verses()[nowPlaying().activeVerseIndex]}>
+            <For each={peek()?.lyrics[nowPlaying()]}>
               {(line) => (
-                <li>
-                  <span class="text-wrap italic">{line}</span>
-                </li>
+                <li class="text-wrap text-xl font-semibold">{line}</li>
               )}
             </For>
           </ul>
@@ -173,18 +154,6 @@ function App() {
               isEnabled={peek() !== undefined}
               text="skip_next"
               handler={() => dequeue(peek()?.id)}
-            />
-            <ButtonSection
-              isEnabled={peek()?.lyrics.preChorus !== undefined}
-              text="Pre-Chorus"
-            />
-            <ButtonSection
-              isEnabled={peek()?.lyrics.chorus !== undefined}
-              text="Chorus"
-            />
-            <ButtonSection
-              isEnabled={peek()?.lyrics.bridge !== undefined}
-              text="Bridge"
             />
           </div>
         </footer>
