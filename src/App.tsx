@@ -88,7 +88,7 @@ function App() {
               Clear all
             </button>
           </div>
-          <div class="h-2/5 overflow-y-scroll py-0.5">
+          <div class="h-48 overflow-y-scroll py-0.5">
             <For each={queue().slice(1)}>
               {(track) => (
                 <QueueItem track={track} handler={[dequeue, track.id]} />
