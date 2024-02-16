@@ -2,7 +2,7 @@ import { For, Show, createSignal } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 // Import interfaces
-import type { INowPlaying, ITrack } from './interfaces/track';
+import { ITrackParts, type INowPlaying, type ITrack } from './interfaces/track';
 
 // Import components.
 import ButtonPlayback from './ui/buttons/ButtonPlayback';
@@ -18,48 +18,45 @@ function App() {
   const [results] = createStore<ITrack[]>(data);
   const [queue, setQueue] = createStore<ITrack[]>([]);
   const [nowPlaying, setNowPlaying] = createSignal<INowPlaying>({
-    track: undefined,
+    currentlyShowing: ITrackParts.verses,
     activeVerseIndex: 0,
   });
+
+  // First item in queue (now playing).
+  const peek = () => queue.at(0);
+
+  // Current item's intro and verses.
+  const verses = () => [peek()?.lyrics.intro, ...(peek()?.lyrics.verses || [])];
 
   // Check if the current verse is not the first.
   const isFirstVerse = (): boolean => nowPlaying().activeVerseIndex === 0;
 
   // Check if the current verse is not the last.
   const isLastVerse = (): boolean =>
-    nowPlaying().activeVerseIndex + 1 ===
-    [
-      nowPlaying().track?.lyrics.intro,
-      ...(nowPlaying().track?.lyrics.verses || []),
-    ].length;
+    nowPlaying().activeVerseIndex + 1 === verses().length;
 
   // Previous verse
   const goToPreviousVerse = () => {
-    setNowPlaying({
-      ...nowPlaying(),
-      activeVerseIndex: !isFirstVerse() ? nowPlaying().activeVerseIndex - 1 : 0,
-    });
-    console.dir(nowPlaying());
+    if (!isFirstVerse()) {
+      setNowPlaying({
+        currentlyShowing: ITrackParts.verses,
+        activeVerseIndex: nowPlaying().activeVerseIndex - 1,
+      });
+    }
   };
 
   // Next verse
   const goToNextVerse = () => {
     setNowPlaying({
-      ...nowPlaying(),
-      activeVerseIndex: nowPlaying().activeVerseIndex++,
+      currentlyShowing: ITrackParts.verses,
+      activeVerseIndex: nowPlaying().activeVerseIndex + 1,
     });
-    console.dir(nowPlaying());
   };
 
   // Enqueue.
   const enqueue = (track: ITrack) => {
     // Create a random ID for the track and add it to the queue.
     setQueue([...queue, { id: Date.now(), ...track }]);
-
-    // If the queue was empty, set the new now playing
-    if (queue.length === 1) {
-      setNowPlaying({ ...nowPlaying(), track: queue.at(0) });
-    }
   };
 
   // Dequeue.
@@ -67,7 +64,10 @@ function App() {
     setQueue(queue.filter((track) => id !== track.id));
 
     // Update now playing when a track is queued or dequeued.
-    setNowPlaying({ ...nowPlaying(), track: queue.at(0) });
+    setNowPlaying({
+      currentlyShowing: ITrackParts.verses,
+      activeVerseIndex: 0,
+    });
   };
 
   // Clear queue
@@ -114,8 +114,8 @@ function App() {
           {/* Now playing */}
           <div class="mb-1 h-24">
             <h3 class="mb-1 text-sm text-gray-500">Now Playing</h3>
-            <Show when={nowPlaying().track}>
-              <NowPlayingCard track={nowPlaying().track} />
+            <Show when={peek()}>
+              <NowPlayingCard track={peek()} />
             </Show>
           </div>
 
@@ -140,59 +140,50 @@ function App() {
       <main class="mb-32 rounded-lg bg-gray-100 px-6 py-4 lg:col-span-3 lg:mb-20 lg:px-12 lg:py-10">
         {/* Title */}
         <h2 class="mb-3 text-wrap text-4xl font-black text-gray-800 lg:text-5xl">
-          {nowPlaying().track?.title}
+          {peek()?.title}
         </h2>
 
         {/* Lyrics */}
         <div class="text-md text-sm font-medium text-gray-600">
-          <For
-            each={[
-              nowPlaying().track?.lyrics.intro,
-              ...(nowPlaying().track?.lyrics.verses || []),
-            ]}
-          >
-            {(verse) => (
-              <ul class="mb-3">
-                <For each={verse}>
-                  {(line) => (
-                    <li>
-                      <span class="text-wrap italic">{line}</span>
-                    </li>
-                  )}
-                </For>
-              </ul>
-            )}
-          </For>
+          <ul class="mb-3">
+            <For each={verses()[nowPlaying().activeVerseIndex]}>
+              {(line) => (
+                <li>
+                  <span class="text-wrap italic">{line}</span>
+                </li>
+              )}
+            </For>
+          </ul>
         </div>
 
         {/* Controls */}
         <footer class="fixed bottom-0 left-0 w-full bg-white p-3">
           <div class="flex min-h-16 flex-wrap justify-between gap-4 rounded-lg bg-gray-200 p-4 text-gray-700 lg:justify-center">
             <ButtonPlayback
-              isEnabled={!isFirstVerse}
+              isEnabled={!isFirstVerse()}
               text="arrow_back"
-              handler={() => goToPreviousVerse}
+              handler={goToPreviousVerse}
             />
             <ButtonPlayback
-              isEnabled={!isLastVerse}
+              isEnabled={!isLastVerse()}
               text="arrow_forward"
-              handler={() => goToNextVerse}
+              handler={goToNextVerse}
             />
             <ButtonPlayback
-              isEnabled={nowPlaying().track !== undefined}
+              isEnabled={peek() !== undefined}
               text="skip_next"
-              handler={() => dequeue(nowPlaying().track?.id)}
+              handler={() => dequeue(peek()?.id)}
             />
             <ButtonSection
-              isEnabled={nowPlaying().track?.lyrics.preChorus !== undefined}
+              isEnabled={peek()?.lyrics.preChorus !== undefined}
               text="Pre-Chorus"
             />
             <ButtonSection
-              isEnabled={nowPlaying().track?.lyrics.chorus !== undefined}
+              isEnabled={peek()?.lyrics.chorus !== undefined}
               text="Chorus"
             />
             <ButtonSection
-              isEnabled={nowPlaying().track?.lyrics.bridge !== undefined}
+              isEnabled={peek()?.lyrics.bridge !== undefined}
               text="Bridge"
             />
           </div>
