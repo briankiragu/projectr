@@ -31,6 +31,11 @@ function App() {
     setQueue(queue().filter((track) => id !== track.id));
   };
 
+  // Clear queue
+  const flush = () => {
+    setQueue(queue().slice(0, 1));
+  };
+
   // JSX component.
   return (
     // Main container
@@ -66,7 +71,7 @@ function App() {
         <div class="rounded-lg bg-gray-200 px-4 pb-4 pt-3 lg:h-3/6">
           {/* Now playing */}
           <div class="h-24">
-            <h3 class="mb-2 text-sm text-gray-400">Now playing</h3>
+            <h3 class="text-sm text-gray-400">Now Playing</h3>
             <Show when={nowPlaying()}>
               <div class="grid grid-cols-4 rounded-lg bg-gray-100 px-6 py-3 text-sm">
                 <h4 class="col-span-2 font-semibold text-gray-800">
@@ -78,7 +83,12 @@ function App() {
 
           {/* Up next */}
           <div class="">
-            <h3 class="text-sm text-gray-400">Up next</h3>
+            <div class="mb-2 flex justify-between text-gray-400">
+              <h3 class="text-sm">Up next</h3>
+              <button class="text-sm" onClick={flush}>
+                Clear all
+              </button>
+            </div>
             <div class="h-2/5 overflow-scroll">
               <For each={queue().slice(1)}>
                 {(track) => (
