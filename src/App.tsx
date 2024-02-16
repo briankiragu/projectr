@@ -19,9 +19,9 @@ function App() {
   };
 
   // Dequeue.
-  const dequeue = (event: Event) => {
+  const dequeue = (track: ITrack, event: Event) => {
     event.preventDefault();
-    setQueue(queue().slice(1));
+    setQueue(queue().filter((item) => item.title !== track.title));
   };
 
   // JSX component.
@@ -93,7 +93,10 @@ function App() {
                       <h4 class="col-span-2 w-full py-1 font-semibold">
                         {track.title}
                       </h4>
-                      <button class="material-symbols-outlined rounded-full p-1 hover:bg-gray-300">
+                      <button
+                        class="material-symbols-outlined rounded-full p-1 hover:bg-gray-300"
+                        onClick={[dequeue, track]}
+                      >
                         playlist_remove
                       </button>
                     </div>
@@ -150,7 +153,7 @@ function App() {
                   "hover:bg-gray-200 disabled:text-gray-300": !nowPlaying(),
                 }}
                 disabled={!nowPlaying()}
-                onClick={dequeue}
+                onClick={[dequeue, nowPlaying()]}
               >
                 <span class="material-symbols-outlined ">skip_next</span>
               </button>
