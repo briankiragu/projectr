@@ -4,8 +4,7 @@ import { ITrack } from '../../interfaces/track';
 const QueueItem: Component<{
   isMovable: boolean;
   track: ITrack;
-  icon: string;
-  handler: [(...args: number[]) => void, number[]];
+  handler: [(id: number | undefined) => void, number | undefined];
 }> = (props) => {
   const [fn, args] = props.handler;
 
@@ -17,9 +16,9 @@ const QueueItem: Component<{
       <h4 class="col-span-2 w-full py-1 font-semibold">{props.track.title}</h4>
       <button
         class="material-symbols-outlined rounded-full p-1 hover:bg-gray-300"
-        onClick={() => fn(...args)}
+        onClick={() => fn(args)}
       >
-        {props.icon}
+        playlist_remove
       </button>
     </div>
   );
