@@ -13,15 +13,13 @@ function App() {
   const nowPlaying = (): ITrack | undefined => queue().at(0);
 
   // Enqueue.
-  const enqueue = (track: ITrack, event: Event) => {
-    event.preventDefault();
+  const enqueue = (track: ITrack) => {
     // Create a random ID for the track and add it to the queue.
     setQueue([...queue(), { id: Date.now(), ...track }]);
   };
 
   // Dequeue.
-  const dequeue = (id: number, event: Event) => {
-    event.preventDefault();
+  const dequeue = (id: number | undefined) => {
     setQueue(queue().filter((track) => id !== track.id));
   };
 
@@ -58,7 +56,7 @@ function App() {
                       <button
                         type="button"
                         class="material-symbols-outlined rounded-full p-1 hover:bg-gray-300"
-                        onClick={[enqueue, track]}
+                        onClick={() => enqueue(track)}
                       >
                         playlist_add
                       </button>
@@ -96,7 +94,7 @@ function App() {
                       </h4>
                       <button
                         class="material-symbols-outlined rounded-full p-1 hover:bg-gray-300"
-                        onClick={[dequeue, track.id]}
+                        onClick={() => dequeue(track.id)}
                       >
                         playlist_remove
                       </button>
@@ -162,7 +160,7 @@ function App() {
                   "hover:bg-gray-200 disabled:text-gray-300": !nowPlaying(),
                 }}
                 disabled={!nowPlaying()}
-                onClick={[dequeue, nowPlaying()?.id]}
+                onClick={() => dequeue(nowPlaying()?.id)}
               >
                 <span class="material-symbols-outlined ">skip_next</span>
               </button>
