@@ -1,7 +1,7 @@
 import { Component } from 'solid-js';
 import { ITrack } from '../../interfaces/track';
 
-const QueueItem: Component<{
+const QueueListItem: Component<{
   track: ITrack;
   handler: [(id: number | undefined) => void, number | undefined];
 }> = (props) => {
@@ -21,4 +21,4 @@ const QueueItem: Component<{
   );
 };
 
-export default QueueItem;
+export default QueueListItem;
