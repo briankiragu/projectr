@@ -120,9 +120,9 @@ function App() {
       </aside>
 
       {/* View Pane */}
-      <main class="mb-32 rounded-lg bg-gray-100 px-6 py-4 lg:col-span-3 lg:mb-20 lg:px-12 lg:py-10">
+      <main class="mb-32 rounded-lg bg-gray-100 px-6 py-4 lg:col-span-3 lg:mb-20 lg:px-20 lg:py-14">
         {/* Title */}
-        <h2 class="mb-3 text-wrap text-4xl font-black text-gray-800 lg:text-5xl">
+        <h2 class="mb-3 text-wrap text-4xl font-black text-gray-800 lg:mb-12 lg:text-6xl">
           {peek()?.title}
         </h2>
 
@@ -131,7 +131,9 @@ function App() {
           <ul class="mb-3">
             <For each={peek()?.lyrics[nowPlaying()]}>
               {(line) => (
-                <li class="text-wrap text-xl font-semibold">{line}</li>
+                <li class="text-wrap text-xl font-semibold lg:text-4xl">
+                  {line}
+                </li>
               )}
             </For>
           </ul>
@@ -141,12 +143,12 @@ function App() {
         <footer class="fixed bottom-0 left-0 w-full bg-white p-3">
           <div class="flex min-h-16 flex-wrap justify-between gap-4 rounded-lg bg-gray-200 p-4 text-gray-700 lg:justify-center">
             <ButtonPlayback
-              isEnabled={!isFirstVerse()}
+              isEnabled={peek() !== undefined && !isFirstVerse()}
               text="arrow_back"
               handler={goToPreviousVerse}
             />
             <ButtonPlayback
-              isEnabled={!isLastVerse()}
+              isEnabled={peek() !== undefined && !isLastVerse()}
               text="arrow_forward"
               handler={goToNextVerse}
             />
