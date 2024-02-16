@@ -12,10 +12,7 @@ const SearchResultsItem: Component<{
       <h4 class="col-span-2 w-full py-1 font-semibold">{props.track.title}</h4>
       <button
         class="material-symbols-outlined rounded-full p-1 hover:bg-gray-300"
-        onClick={(e) => {
-          e.preventDefault();
-          fn(args);
-        }}
+        onClick={() => fn(args)}
       >
         playlist_add
       </button>
