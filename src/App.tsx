@@ -42,7 +42,7 @@ function App() {
     <div class="grid gap-4 overflow-hidden p-3 lg:h-screen lg:grid-cols-4">
       <aside class="h-[88%] flex-col justify-between rounded-lg bg-gray-100">
         {/* Search Pane */}
-        <form class="mb-4 h-80 rounded-lg bg-gray-300 px-4 pb-4 pt-3">
+        <form class="mb-4 rounded-lg bg-gray-300 px-4 pb-4 pt-3">
           <label for="search">
             <span class="text-sm italic text-gray-800">
               Search for a song by title or lyrics...
@@ -57,7 +57,7 @@ function App() {
             />
 
             {/* Search results */}
-            <div class="mt-3">
+            <div class="mt-3 h-40 overflow-y-scroll">
               <For each={results()}>
                 {(track) => (
                   <SearchResultsItem track={track} handler={[enqueue, track]} />
@@ -108,7 +108,7 @@ function App() {
         </h2>
 
         {/* Lyrics */}
-        <div class="text-md font-medium text-gray-600">
+        <div class="text-md text-sm font-medium text-gray-600">
           <For
             each={[
               nowPlaying()?.lyrics.intro,
@@ -120,7 +120,7 @@ function App() {
                 <For each={verse}>
                   {(line) => (
                     <li>
-                      <span class="italic">{line}</span>
+                      <span class="text-wrap italic">{line}</span>
                     </li>
                   )}
                 </For>
