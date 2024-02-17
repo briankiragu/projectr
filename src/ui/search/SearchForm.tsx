@@ -1,5 +1,5 @@
 // Import the modules.
-import { Component, Ref, onMount } from 'solid-js';
+import { Component, onMount } from 'solid-js';
 import { debounceTime, distinctUntilChanged, fromEvent, switchMap } from 'rxjs';
 
 // Import the interfaces.
@@ -16,7 +16,7 @@ const SearchForm: Component<{ handler: (results: ITrack[]) => void }> = (
 
   // DOM reference.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let inputRef: Ref<HTMLInputElement | undefined>;
+  let inputRef: any;
 
   // Observable from DOM ref that watches user input.
   onMount(() => {
