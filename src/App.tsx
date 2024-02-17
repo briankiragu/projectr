@@ -4,6 +4,9 @@ import { createStore } from 'solid-js/store';
 // Import interfaces
 import type { ITrack } from './interfaces/track';
 
+// Import the composables.
+import useWindowManagement from './lib/composables/useWindowManagement';
+
 // Import components.
 import ButtonPlayback from './ui/buttons/ButtonPlayback';
 import NowPlayingCard from './ui/cards/NowPlayingCard';
@@ -11,11 +14,11 @@ import QueueItem from './ui/queue/QueueListItem';
 import SearchForm from './ui/search/SearchForm';
 import SearchResults from './ui/search/SearchResults';
 import useFormatting from './lib/composables/useFormatting';
-import useWindowManagement from './lib/composables/useWindowManagement';
+import LyricsCard from './ui/cards/LyricsCard';
 
 const App: Component = () => {
   // Import the composables.
-  const { windowDetails, requestPermissions } = useWindowManagement();
+  const { requestPermissions } = useWindowManagement();
   const { toTitleCase } = useFormatting();
 
   // Request Window Management Permissions
@@ -36,16 +39,21 @@ const App: Component = () => {
   // Check if the current verse is not the last.
   const isLastVerse = (): boolean => nowPlaying() + 1 === peek()?.lyrics.length;
 
-  // Previous verse
+  // Previous verse.
   const goToPreviousVerse = () => {
     if (!isFirstVerse()) {
       setNowPlaying((nowPlaying) => nowPlaying - 1);
     }
   };
 
-  // Next verse
+  // Next verse.
   const goToNextVerse = () => {
     setNowPlaying((nowPlaying) => nowPlaying + 1);
+  };
+
+  // Go to a specific verse.
+  const goToVerse = (index: number) => {
+    setNowPlaying(index);
   };
 
   // Enqueue.
@@ -116,16 +124,16 @@ const App: Component = () => {
         </h2>
 
         {/* Lyrics */}
-        <div class="text-md text-sm font-medium text-gray-600">
-          <ul class="mb-3">
-            <For each={peek()?.lyrics[nowPlaying()]}>
-              {(line) => (
-                <li class="text-wrap text-xl font-semibold lg:text-4xl">
-                  {line}
-                </li>
-              )}
-            </For>
-          </ul>
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-4">
+          <For each={peek()?.lyrics}>
+            {(verse, index) => (
+              <LyricsCard
+                verse={verse}
+                isActive={nowPlaying() === index()}
+                handler={[goToVerse, index()]}
+              />
+            )}
+          </For>
         </div>
 
         {/* Controls */}
