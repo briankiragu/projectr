@@ -109,7 +109,7 @@ const App: Component = () => {
       </aside>
 
       {/* View Pane */}
-      <main class="mb-32 rounded-lg bg-gray-100 px-6 py-4 lg:col-span-3 lg:mb-20 lg:px-20 lg:py-14">
+      <main class="mb-20 rounded-lg bg-gray-100 px-6 py-4 lg:col-span-3 lg:px-20 lg:py-14">
         {/* Title */}
         <h2 class="mb-3 text-wrap text-4xl font-black text-gray-800 lg:mb-12 lg:text-6xl">
           {toTitleCase(peek()?.title)}
