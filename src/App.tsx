@@ -1,4 +1,4 @@
-import { For, Show, createSignal } from 'solid-js';
+import { Component, For, Show, createSignal, onMount } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 // Import interfaces
@@ -11,10 +11,17 @@ import QueueItem from './ui/queue/QueueListItem';
 import SearchForm from './ui/search/SearchForm';
 import SearchResults from './ui/search/SearchResults';
 import useFormatting from './lib/composables/useFormatting';
+import useWindowManagement from './lib/composables/useWindowManagement';
 
-const App = () => {
+const App: Component = () => {
   // Import the composables.
+  const { windowDetails, requestPermissions } = useWindowManagement();
   const { toTitleCase } = useFormatting();
+
+  // Request Window Management Permissions
+  onMount(() => {
+    requestPermissions();
+  });
 
   const [results, setResults] = createStore<ITrack[]>([]);
   const [queue, setQueue] = createStore<ITrack[]>([]);
