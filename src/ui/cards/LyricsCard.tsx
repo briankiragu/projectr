@@ -3,17 +3,15 @@ import { Component, For } from 'solid-js';
 const LyricsCard: Component<{
   verse: string[];
   isActive: boolean;
-  handler: [(index: number) => void, number];
+  handler: () => void;
 }> = (props) => {
-  const [fn, args] = props.handler;
-
   return (
     <div
       class="h-32 cursor-pointer truncate rounded-lg border-4 bg-gray-200 px-6 py-4 text-gray-600 shadow-md transition-colors lg:px-4 lg:py-2"
       classList={{
         'border-teal-600 shadow-lg shadow-teal-600/20': props.isActive,
       }}
-      onClick={() => fn(args)}
+      onClick={props.handler}
     >
       <For each={props.verse}>
         {(line) => (
