@@ -125,14 +125,14 @@ const App: Component = () => {
         </h2>
 
         {/* Preview */}
-        <div class="lg:mb-5">
+        <div class="mb-5">
           <Show when={peek()}>
             <LyricsPreviewCard verse={peek()?.lyrics[nowPlaying()]} />
           </Show>
         </div>
 
         {/* Lyrics */}
-        <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:overflow-y-scroll">
+        <div class="grid grid-cols-1 gap-4 lg:h-80 lg:grid-cols-3 lg:overflow-y-scroll lg:pb-2">
           <For each={peek()?.lyrics}>
             {(verse, index) => (
               <LyricsCard
