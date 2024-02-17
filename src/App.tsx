@@ -15,6 +15,7 @@ import SearchForm from './ui/search/SearchForm';
 import SearchResults from './ui/search/SearchResults';
 import useFormatting from './lib/composables/useFormatting';
 import LyricsCard from './ui/cards/LyricsCard';
+import LyricsPreviewCard from './ui/cards/LyricsPreviewCard';
 
 const App: Component = () => {
   // Import the composables.
@@ -117,14 +118,21 @@ const App: Component = () => {
       </aside>
 
       {/* View Pane */}
-      <main class="mb-20 rounded-lg bg-gray-100 px-6 py-4 lg:col-span-3 lg:px-20 lg:py-14">
+      <main class="mb-20 rounded-lg px-6 py-4 lg:col-span-3 lg:px-4 lg:py-2">
         {/* Title */}
-        <h2 class="mb-3 text-wrap text-4xl font-black text-gray-800 lg:mb-12 lg:text-6xl">
+        <h2 class="mb-3 text-wrap text-4xl font-black text-gray-800 lg:mb-4 lg:text-6xl">
           {toTitleCase(peek()?.title)}
         </h2>
 
+        {/* Preview */}
+        <div class="lg:mb-5">
+          <Show when={peek()}>
+            <LyricsPreviewCard verse={peek()?.lyrics[nowPlaying()]} />
+          </Show>
+        </div>
+
         {/* Lyrics */}
-        <div class="grid grid-cols-1 gap-4 lg:grid-cols-4">
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:overflow-y-scroll">
           <For each={peek()?.lyrics}>
             {(verse, index) => (
               <LyricsCard
