@@ -17,11 +17,12 @@ import QueueItem from './ui/queue/QueueListItem';
 import SearchForm from './ui/search/SearchForm';
 import SearchResults from './ui/search/SearchResults';
 import TrackForm from './ui/forms/TrackForm';
+import useWindowManagement from './lib/composables/useWindowManagement';
 
 const App: Component = () => {
   // Import the composables.
-  const { requestPermissions } = useWindowManagement();
   const { toTitleCase } = useFormatting();
+  const { requestPermissions } = useWindowManagement();
 
   // Request Window Management Permissions
   onMount(() => {
