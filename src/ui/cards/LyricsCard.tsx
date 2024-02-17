@@ -9,15 +9,15 @@ const LyricsCard: Component<{
 
   return (
     <div
-      class="cursor-pointer rounded-lg bg-gray-200 px-6 py-4 text-gray-600 shadow-md transition-colors"
+      class="h-32 cursor-pointer truncate rounded-lg border-4 bg-gray-200 px-6 py-4 text-gray-600 shadow-md transition-colors lg:px-4 lg:py-2"
       classList={{
-        'bg-teal-600 shadow-lg shadow-teal-600/60 text-teal-50': props.isActive,
+        'border-teal-600 shadow-lg shadow-teal-600/20': props.isActive,
       }}
       onClick={() => fn(args)}
     >
       <For each={props.verse}>
         {(line) => (
-          <p class="text-wrap text-xl font-semibold lg:text-4xl">{line}</p>
+          <p class="text-wrap text-xl font-semibold lg:text-sm">{line}</p>
         )}
       </For>
     </div>
