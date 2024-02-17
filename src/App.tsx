@@ -1,18 +1,20 @@
 import { For, Show, createSignal } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
-// Import interfaces
+// Import interfaces.
 import type { ITrack } from './interfaces/track';
+
+// Import composables.
+import useFormatting from './lib/composables/useFormatting';
 
 // Import components.
 import ButtonPlayback from './ui/buttons/ButtonPlayback';
+import LyricsCard from './ui/cards/LyricsCard';
+import LyricsPreviewCard from './ui/cards/LyricsPreviewCard';
 import NowPlayingCard from './ui/cards/NowPlayingCard';
 import QueueItem from './ui/queue/QueueListItem';
 import SearchForm from './ui/search/SearchForm';
 import SearchResults from './ui/search/SearchResults';
-import useFormatting from './lib/composables/useFormatting';
-import LyricsCard from './ui/cards/LyricsCard';
-import LyricsPreviewCard from './ui/cards/LyricsPreviewCard';
 
 const App = () => {
   // Import the composables.
@@ -55,17 +57,17 @@ const App = () => {
   };
 
   // Dequeue.
-  const dequeue = (id: number | undefined) => {
+  const dequeue = (id: number | undefined, reset?: boolean) => {
     setQueue(queue.filter((track) => id !== track.id));
 
     // Update now playing when a track is dequeued.
-    setNowPlaying(0);
+    if (reset) {
+      setNowPlaying(0);
+    }
   };
 
   // Clear queue
-  const flush = () => {
-    setQueue(queue.slice(0, 1));
-  };
+  const flush = () => setQueue(queue.slice(0, 1));
 
   // JSX component.
   return (
@@ -101,7 +103,7 @@ const App = () => {
           <div class="h-48 overflow-y-scroll py-0.5 lg:h-56">
             <For each={queue.slice(1)}>
               {(track) => (
-                <QueueItem track={track} handler={[dequeue, track.id]} />
+                <QueueItem track={track} handler={() => dequeue(track.id)} />
               )}
             </For>
           </div>
@@ -129,7 +131,7 @@ const App = () => {
               <LyricsCard
                 verse={verse}
                 isActive={nowPlaying() === index()}
-                handler={[goToVerse, index()]}
+                handler={() => goToVerse(index())}
               />
             )}
           </For>
@@ -151,7 +153,7 @@ const App = () => {
             <ButtonPlayback
               isEnabled={peek() !== undefined}
               text="skip_next"
-              handler={() => dequeue(peek()?.id)}
+              handler={() => dequeue(peek()?.id, true)}
             />
           </div>
         </footer>
