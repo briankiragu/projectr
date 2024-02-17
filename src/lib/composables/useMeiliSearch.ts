@@ -27,7 +27,7 @@ export default () => {
     // An index is where the documents are stored.
     const index = client.index(indexId);
 
-    return index.search(phrase);
+    return index.searchGet(phrase);
   };
 
   return {
