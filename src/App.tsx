@@ -15,10 +15,12 @@ import NowPlayingCard from './ui/cards/NowPlayingCard';
 import QueueItem from './ui/queue/QueueListItem';
 import SearchForm from './ui/search/SearchForm';
 import SearchResults from './ui/search/SearchResults';
+import useTracks from './lib/composables/useTracks';
 
 const App = () => {
   // Import the composables.
   const { toTitleCase } = useFormatting();
+  const { toEditable } = useTracks();
 
   const [results, setResults] = createStore<ITrack[]>([]);
   const [queue, setQueue] = createStore<ITrack[]>([]);
@@ -167,10 +169,17 @@ const App = () => {
       </main>
 
       {/* Live edit */}
-      <div
-        class="rounded-lg bg-gray-100 transition-transform lg:h-[88%]"
-        classList={{ hidden: !enableEditing() }}
-      ></div>
+      <Show when={enableEditing()}>
+        <div class="rounded-lg bg-gray-100 transition-transform lg:h-[88%]">
+          <form>
+            <label for="live-edit">
+              <textarea name="live-edit" id="live-edit" cols="30" rows="10">
+                {toEditable(peek() as ITrack)}
+              </textarea>
+            </label>
+          </form>
+        </div>
+      </Show>
     </div>
   );
 };
