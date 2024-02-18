@@ -82,7 +82,7 @@ const App: Component = () => {
     <div class="grid gap-4 overflow-hidden p-3 lg:h-screen lg:grid-cols-4">
       <aside class="flex-col justify-between rounded-lg lg:h-[90%]">
         {/* Search Pane */}
-        <div class="mb-5 flex-col justify-between rounded-lg bg-gray-300 px-4 pb-4 pt-3">
+        <div class="mb-3 flex-col justify-between rounded-lg bg-gray-300 px-4 pb-4 pt-3">
           {/* Search Form */}
           <SearchForm handler={setResults} />
 
