@@ -23,6 +23,7 @@ const App = () => {
   const [results, setResults] = createStore<ITrack[]>([]);
   const [queue, setQueue] = createStore<ITrack[]>([]);
   const [nowPlaying, setNowPlaying] = createSignal<number>(0);
+  const [enableEditing, setEnableEditing] = createSignal<boolean>(false);
 
   // First item in queue (now playing).
   const peek = () => queue.at(0);
@@ -89,7 +90,10 @@ const App = () => {
           <div class="mb-1 h-24">
             <h3 class="mb-1 text-sm text-gray-500">Now Playing</h3>
             <Show when={peek()}>
-              <NowPlayingCard track={peek()} />
+              <NowPlayingCard
+                track={peek()}
+                handler={() => setEnableEditing(!enableEditing())}
+              />
             </Show>
           </div>
 
@@ -111,7 +115,10 @@ const App = () => {
       </aside>
 
       {/* View Pane */}
-      <main class="mb-20 rounded-lg px-6 py-4 lg:col-span-3 lg:px-4 lg:py-2">
+      <main
+        class="mb-20 rounded-lg px-6 py-4 transition-transform lg:col-span-3 lg:px-4 lg:py-2"
+        classList={{ 'lg:col-span-2': enableEditing() }}
+      >
         {/* Title */}
         <h2 class="mb-3 text-wrap text-4xl font-black text-gray-800 lg:mb-4 lg:text-6xl">
           {toTitleCase(peek()?.title)}
@@ -158,6 +165,12 @@ const App = () => {
           </div>
         </footer>
       </main>
+
+      {/* Live edit */}
+      <div
+        class="rounded-lg bg-gray-100 transition-transform lg:h-[88%]"
+        classList={{ hidden: !enableEditing() }}
+      ></div>
     </div>
   );
 };
