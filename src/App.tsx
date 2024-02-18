@@ -215,6 +215,12 @@ const App: Component = () => {
           </div>
         </footer>
       </main>
+
+      {/* Live edit */}
+      <div
+        class="rounded-lg bg-gray-100 transition-transform lg:h-[88%]"
+        classList={{ hidden: !enableEditing() }}
+      ></div>
     </div>
   );
 };
