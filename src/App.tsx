@@ -16,11 +16,13 @@ import NowPlayingCard from './ui/cards/NowPlayingCard';
 import QueueItem from './ui/queue/QueueListItem';
 import SearchForm from './ui/search/SearchForm';
 import SearchResults from './ui/search/SearchResults';
+import useTracks from './lib/composables/useTracks';
 
 const App: Component = () => {
   // Import the composables.
   const { requestPermissions } = useWindowManagement();
   const { toTitleCase } = useFormatting();
+  const { toEditable } = useTracks();
 
   // Request Window Management Permissions
   onMount(() => {
@@ -174,10 +176,17 @@ const App: Component = () => {
       </main>
 
       {/* Live edit */}
-      <div
-        class="rounded-lg bg-gray-100 transition-transform lg:h-[88%]"
-        classList={{ hidden: !enableEditing() }}
-      ></div>
+      <Show when={enableEditing()}>
+        <div class="rounded-lg bg-gray-100 transition-transform lg:h-[88%]">
+          <form>
+            <label for="live-edit">
+              <textarea name="live-edit" id="live-edit" cols="30" rows="10">
+                {toEditable(peek() as ITrack)}
+              </textarea>
+            </label>
+          </form>
+        </div>
+      </Show>
     </div>
   );
 };
