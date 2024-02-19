@@ -6,7 +6,6 @@ import type { ITrack } from './interfaces/track';
 
 // Import the composables.
 import useFormatting from './lib/composables/useFormatting';
-import useWindowManagement from './lib/composables/useWindowManagement';
 
 // Import components.
 import ButtonPlayback from './ui/buttons/ButtonPlayback';
@@ -21,12 +20,6 @@ import TrackForm from './ui/forms/TrackForm';
 const App: Component = () => {
   // Import the composables.
   const { toTitleCase } = useFormatting();
-  const { requestPermissions } = useWindowManagement();
-
-  // Request Window Management Permissions
-  onMount(() => {
-    requestPermissions();
-  });
 
   const [results, setResults] = createStore<ITrack[]>([]);
   const [queue, setQueue] = createStore<ITrack[]>([]);
