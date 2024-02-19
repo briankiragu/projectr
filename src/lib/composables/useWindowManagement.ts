@@ -51,7 +51,7 @@ export default () => {
     const proxy = openPopup(extendedScreen!, channel);
 
     // Open the proxy in fullscreen mode.
-    await proxy?.document.body.requestFullscreen({ screen: extendedScreen });
+    proxy?.document.body.requestFullscreen({ screen: extendedScreen });
   };
 
   const openPopup = (
