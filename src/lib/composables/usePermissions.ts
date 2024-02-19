@@ -24,7 +24,6 @@ export default () => {
       }
     }
 
-    console.dir(state);
     return state;
   };
 
