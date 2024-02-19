@@ -9,8 +9,15 @@ const NowPlayingCard: Component<{
   const { toTitleCase } = useFormatting();
 
   return (
-    <div class="flex h-16 items-center justify-between truncate rounded-lg bg-cyan-600 px-5 align-middle text-sm shadow-lg shadow-cyan-600/20 lg:px-6 lg:py-4">
-      {/* Now playing track title */}
+    <div class="relative flex h-16 items-center truncate rounded-lg bg-cyan-600 px-5 align-middle text-sm shadow-lg shadow-cyan-600/20 lg:px-6 lg:py-4">
+      {/* Enable live edit */}
+      <span
+        class="material-symbols-outlined absolute right-3 top-3 cursor-pointer rounded-full p-1.5 transition-colors hover:bg-teal-700/40"
+        onClick={props.handler}
+      >
+        edit
+      </span>
+
       <h4 class="w-[90%] text-wrap text-lg font-extrabold text-teal-50">
         {toTitleCase(props.track?.title)}
       </h4>
