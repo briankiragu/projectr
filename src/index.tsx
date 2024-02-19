@@ -1,9 +1,26 @@
 /* @refresh reload */
-import { render } from 'solid-js/web'
+import { lazy } from 'solid-js';
+import { render } from 'solid-js/web';
+import { Route, Router } from '@solidjs/router';
 
-import './index.css'
-import App from './App'
+// Import global styles.
+import './index.css';
 
-const root = document.getElementById('root')
+// Import components.
+const App = lazy(() => import('./App'));
+const LyricsProjectionCard = lazy(
+  () => import('./ui/cards/LyricsProjectionCard')
+);
 
-render(() => <App />, root!)
+// Get the root element
+const root = document.getElementById('root');
+
+render(
+  () => (
+    <Router>
+      <Route path="/" component={App} />
+      <Route path="/project" component={LyricsProjectionCard} />
+    </Router>
+  ),
+  root!
+);
