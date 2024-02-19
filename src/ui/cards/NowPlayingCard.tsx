@@ -18,7 +18,7 @@ const NowPlayingCard: Component<{
         edit
       </span>
 
-      <h4 class="text-wrap text-lg font-extrabold text-teal-50">
+      <h4 class="w-[90%] text-wrap text-lg font-extrabold text-teal-50">
         {toTitleCase(props.track?.title)}
       </h4>
     </div>
