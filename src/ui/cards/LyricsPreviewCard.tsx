@@ -1,21 +1,20 @@
-import { Component, For } from 'solid-js';
+import { Component, For, Show } from 'solid-js';
+import useWindowManagement from '../../lib/composables/useWindowManagement';
 
-// Import composables.
-import usePermissions from '../../lib/composables/usePermissions';
-
-const LyricsPreviewCard: Component<{
-  verse?: string[];
-}> = (props) => {
-  const { requestWindowManagementPermissions } = usePermissions();
+const LyricsPreviewCard: Component<{ verse?: string[] }> = (props) => {
+  // Import the composables.
+  const { isSupported, project } = useWindowManagement();
 
   return (
     <div class="relative flex min-h-60 flex-col justify-center rounded-lg bg-teal-600 px-6 py-4 text-center text-teal-50 shadow-lg shadow-teal-600/20 transition-colors lg:min-h-72">
-      <span
-        class="material-symbols-outlined absolute right-2 top-2 cursor-pointer rounded-full p-1.5 transition-colors hover:bg-teal-700"
-        onClick={requestWindowManagementPermissions}
-      >
-        screen_share
-      </span>
+      <Show when={isSupported}>
+        <span
+          class="material-symbols-outlined absolute right-2 top-2 cursor-pointer rounded-full bg-teal-700/50 p-2 transition-colors hover:bg-teal-700"
+          onClick={project}
+        >
+          screen_share
+        </span>
+      </Show>
 
       <For each={props.verse}>
         {(line) => (

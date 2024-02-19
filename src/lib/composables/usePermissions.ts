@@ -11,6 +11,7 @@ export default () => {
       if ((err as Error).name !== 'TypeError') {
         return `${(err as Error).name}: ${(err as Error).message}`;
       }
+
       // The old permission name.
       try {
         ({ state } = await navigator.permissions.query({
@@ -18,9 +19,10 @@ export default () => {
         }));
       } catch (err) {
         if ((err as Error).name === 'TypeError') {
-          console.error('Window management not supported.');
+          return 'Window management not supported.';
         }
-        console.error(`${(err as Error).name}: ${(err as Error).message}`);
+
+        return `${(err as Error).name}: ${(err as Error).message}`;
       }
     }
 

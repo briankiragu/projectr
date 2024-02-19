@@ -11,6 +11,7 @@
   "devDependencies": {
     "@builder.io/partytown": "^0.9.2",
     "@playwright/test": "^1.41.2",
+    "@solidjs/router": "^0.12.3",
     "@types/bun": "latest",
     "@types/node": "^20.11.19",
     "@types/webscreens-window-placement": "^0.1.3",

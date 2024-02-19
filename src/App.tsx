@@ -1,4 +1,4 @@
-import { Component, For, Show, createSignal, onMount } from 'solid-js';
+import { Component, For, Show, createSignal } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 // Import interfaces.
