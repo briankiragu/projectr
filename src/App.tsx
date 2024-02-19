@@ -15,6 +15,7 @@ import NowPlayingCard from './ui/cards/NowPlayingCard';
 import QueueItem from './ui/queue/QueueListItem';
 import SearchForm from './ui/search/SearchForm';
 import SearchResults from './ui/search/SearchResults';
+import TrackForm from './ui/forms/TrackForm';
 
 const App = () => {
   // Import the composables.
@@ -23,6 +24,7 @@ const App = () => {
   const [results, setResults] = createStore<ITrack[]>([]);
   const [queue, setQueue] = createStore<ITrack[]>([]);
   const [nowPlaying, setNowPlaying] = createSignal<number>(0);
+  const [enableEditing, setEnableEditing] = createSignal<boolean>(false);
 
   // First item in queue (now playing).
   const peek = () => queue.at(0);
@@ -63,25 +65,38 @@ const App = () => {
     // Update now playing when a track is dequeued.
     if (reset) {
       setNowPlaying(0);
+      setEnableEditing(false);
     }
   };
 
   // Clear queue
   const flush = () => setQueue(queue.slice(0, 1));
 
+  const alterNowPlaying = (lyrics: string[][], id?: number) => {
+    // Update an item in the queue.
+    setQueue(
+      (track) => track.id === id,
+      'lyrics',
+      () => lyrics
+    );
+
+    // Toggle live edit
+    setEnableEditing(false);
+  };
+
   // JSX component.
   return (
     // Main container
     <div class="grid gap-4 overflow-hidden p-3 lg:h-screen lg:grid-cols-4">
-      <aside class="flex-col justify-between rounded-lg lg:h-[90%]">
+      <aside class="flex flex-col gap-4 rounded-lg lg:mb-20">
         {/* Search Pane */}
-        <div class="mb-5 flex-col justify-between rounded-lg bg-gray-300 px-4 pb-4 pt-3">
+        <search class="flex flex-col gap-2 rounded-lg bg-gray-300 px-4 pb-4 pt-3">
           {/* Search Form */}
           <SearchForm handler={setResults} />
 
           {/* Search results */}
           <SearchResults results={results} handler={enqueue} />
-        </div>
+        </search>
 
         {/* Play queue */}
         <div class="rounded-lg bg-gray-200 px-4 pb-4 pt-3">
@@ -89,29 +104,45 @@ const App = () => {
           <div class="mb-1 h-24">
             <h3 class="mb-1 text-sm text-gray-500">Now Playing</h3>
             <Show when={peek()}>
-              <NowPlayingCard track={peek()} />
+              <NowPlayingCard
+                track={peek()}
+                handler={() => setEnableEditing(!enableEditing())}
+              />
             </Show>
           </div>
 
           {/* Up next */}
-          <div class="flex justify-between text-gray-500">
-            <h3 class="text-sm">Up next</h3>
-            <button class="text-sm" onClick={flush}>
-              Clear all
-            </button>
-          </div>
-          <div class="h-48 overflow-y-scroll py-0.5 lg:h-56">
-            <For each={queue.slice(1)}>
-              {(track) => (
-                <QueueItem track={track} handler={() => dequeue(track.id)} />
-              )}
-            </For>
+          <div class="text-gray-500">
+            <div class="flex justify-between">
+              <h3 class="text-sm">Up next</h3>
+              <button class="text-sm" onClick={flush}>
+                Clear all
+              </button>
+            </div>
+
+            <div class="h-48 overflow-y-scroll py-0.5 lg:h-56">
+              <For each={queue.slice(1)}>
+                {(track) => (
+                  <QueueItem track={track} handler={() => dequeue(track.id)} />
+                )}
+              </For>
+            </div>
           </div>
         </div>
       </aside>
 
+      {/* Live edit */}
+      <Show when={enableEditing()}>
+        <aside class="mb-12 rounded-lg bg-gray-100 p-3 transition-transform lg:mb-20">
+          <TrackForm track={peek()} handler={alterNowPlaying} />
+        </aside>
+      </Show>
+
       {/* View Pane */}
-      <main class="mb-20 rounded-lg px-6 py-4 lg:col-span-3 lg:px-4 lg:py-2">
+      <main
+        class="mb-20 rounded-lg px-6 py-4 transition-transform lg:col-start-2 lg:col-end-6 lg:px-4 lg:py-2"
+        classList={{ 'lg:col-start-3': enableEditing() }}
+      >
         {/* Title */}
         <h2 class="mb-3 text-wrap text-4xl font-black text-gray-800 lg:mb-4 lg:text-6xl">
           {toTitleCase(peek()?.title)}
