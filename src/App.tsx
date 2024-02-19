@@ -133,7 +133,7 @@ const App = () => {
 
       {/* Live edit */}
       <Show when={enableEditing()}>
-        <aside class="mb-12 rounded-lg bg-gray-100 p-3 transition-transform lg:mb-20 lg:h-[80%]">
+        <aside class="mb-12 rounded-lg bg-gray-100 p-3 transition-transform lg:mb-20">
           <TrackForm track={peek()} handler={alterNowPlaying} />
         </aside>
       </Show>
