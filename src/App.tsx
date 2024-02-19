@@ -1,4 +1,4 @@
-import { Component, For, Show, createSignal } from 'solid-js';
+import { Component, For, Show, createEffect, createSignal } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 // Import interfaces.
@@ -6,6 +6,7 @@ import type { ITrack } from './interfaces/track';
 
 // Import the composables.
 import useFormatting from './lib/composables/useFormatting';
+import useWindowManagement from './lib/composables/useWindowManagement';
 
 // Import components.
 import ButtonPlayback from './ui/buttons/ButtonPlayback';
@@ -18,8 +19,12 @@ import SearchResults from './ui/search/SearchResults';
 import TrackForm from './ui/forms/TrackForm';
 
 const App: Component = () => {
+  // Create a broadcast channel.
+  const broadcast = new BroadcastChannel('projectr');
+
   // Import the composables.
   const { toTitleCase } = useFormatting();
+  const { project } = useWindowManagement();
 
   const [results, setResults] = createStore<ITrack[]>([]);
   const [queue, setQueue] = createStore<ITrack[]>([]);
@@ -83,6 +88,11 @@ const App: Component = () => {
     // Toggle live edit
     setEnableEditing(false);
   };
+
+  createEffect(() => {
+    const data = JSON.stringify(peek()?.lyrics[nowPlaying()]);
+    broadcast.postMessage(data);
+  });
 
   // JSX component.
   return (
@@ -151,7 +161,10 @@ const App: Component = () => {
         {/* Preview */}
         <div class="mb-5">
           <Show when={peek()}>
-            <LyricsPreviewCard verse={peek()?.lyrics[nowPlaying()]} />
+            <LyricsPreviewCard
+              verse={peek()?.lyrics[nowPlaying()]}
+              handler={() => project('projectr')}
+            />
           </Show>
         </div>
 

@@ -1,16 +1,17 @@
 import { Component, For, createSignal } from 'solid-js';
 
 const LyricsProjectionCard: Component = () => {
-  const [verse] = createSignal<string[]>([
-    'WEKA SIFA MBELE (SEND JUDAH [PRAISE] FIRST),',
-    'KWA KUIMBA NA KUABUDU (PRAISING AND WORSHIPPING),',
-    'PIGA KELELE (SHOUT FOR JOY),',
-    'KUTA ZOTE NITA SHUSHA (AND I WILL TEAR DOWN THE WALLS),',
-    'WEKA SIFA MBELE (SEND JUDAH [PRAISE] FIRST),',
-    'UFIKAPO JERICHO (WHEN YOU GET TO JERICHO),',
-    'PIGA KELELE (SHOUT FOR JOY),',
-    'KUTA ZOTE NITA SHUSHA (AND I WILL TEAR DOWN THE WALLS),',
-  ]);
+  // Create a broadcast channel.
+  const broadcast = new BroadcastChannel('projectr');
+
+  // To hold the data from the broadcast channel.
+  const [verse, setVerse] = createSignal<string[]>([]);
+
+  // When a message relays on the channel.
+  broadcast.addEventListener('message', (e: Event) => {
+    const data = JSON.parse((e as MessageEvent).data);
+    setVerse(data);
+  });
 
   return (
     <div class="h-screen p-4">

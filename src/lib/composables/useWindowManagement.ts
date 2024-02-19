@@ -4,7 +4,7 @@ export default () => {
   // Check if the API is supported.
   const isSupported = 'getScreens' in window || 'getScreenDetails';
 
-  const project = async (): Promise<void> => {
+  const project = async (channel: string): Promise<WindowProxy | undefined> => {
     // Import the composable methods.
     const { requestWindowManagementPermissions } = usePermissions();
 
@@ -48,11 +48,13 @@ export default () => {
     const extendedScreen = screens.find((screen) => screen.isPrimary);
 
     // Open the popup with the correct data.
-    const proxy = openPopup(extendedScreen!);
-    console.dir(proxy);
+    return openPopup(extendedScreen!, channel) ?? undefined;
   };
 
-  const openPopup = (screen: ScreenDetailed): WindowProxy | null => {
+  const openPopup = (
+    screen: ScreenDetailed,
+    channel: string
+  ): WindowProxy | null => {
     // Set the popup configuration.
     const features = [
       `left=${screen.left}`,
@@ -61,7 +63,7 @@ export default () => {
       `height=${screen.height}`,
     ].join(',');
 
-    return window.open('iframe.html', Math.random().toString(), features);
+    return window.open('/project', channel, features);
   };
 
   return { isSupported, project };
