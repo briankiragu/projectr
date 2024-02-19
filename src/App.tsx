@@ -17,7 +17,6 @@ import QueueItem from './ui/queue/QueueListItem';
 import SearchForm from './ui/search/SearchForm';
 import SearchResults from './ui/search/SearchResults';
 import TrackForm from './ui/forms/TrackForm';
-import useWindowManagement from './lib/composables/useWindowManagement';
 
 const App: Component = () => {
   // Import the composables.
