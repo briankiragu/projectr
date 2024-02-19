@@ -79,13 +79,16 @@ const App: Component = () => {
   // Clear queue
   const flush = () => setQueue(queue.slice(0, 1));
 
-  // Update an item in the queue.
-  const liveEdit = (live: ITrack) => {
+  const alterNowPlaying = (lyrics: string[][], id?: number) => {
+    // Update an item in the queue.
     setQueue(
-      (track) => track.id === live.id,
+      (track) => track.id === id,
       'lyrics',
-      () => live.lyrics
+      () => lyrics
     );
+
+    // Toggle live edit
+    setEnableEditing(false);
   };
 
   // JSX component.
@@ -94,13 +97,13 @@ const App: Component = () => {
     <div class="grid gap-4 overflow-hidden p-3 lg:h-screen lg:grid-cols-4">
       <aside class="flex-col justify-between rounded-lg lg:h-[90%]">
         {/* Search Pane */}
-        <div class="mb-3 flex-col justify-between rounded-lg bg-gray-300 px-4 pb-4 pt-3">
+        <search class="mb-3 flex-col justify-between rounded-lg bg-gray-300 px-4 pb-4 pt-3">
           {/* Search Form */}
           <SearchForm handler={setResults} />
 
           {/* Search results */}
           <SearchResults results={results} handler={enqueue} />
-        </div>
+        </search>
 
         {/* Play queue */}
         <div class="rounded-lg bg-gray-200 px-4 pb-4 pt-3">
@@ -135,7 +138,7 @@ const App: Component = () => {
       {/* Live edit */}
       <Show when={enableEditing()}>
         <aside class="rounded-lg bg-gray-100 p-3 transition-transform lg:h-[88%]">
-          <TrackForm track={peek()} handler={liveEdit} />
+          <TrackForm track={peek()} handler={alterNowPlaying} />
         </aside>
       </Show>
 
