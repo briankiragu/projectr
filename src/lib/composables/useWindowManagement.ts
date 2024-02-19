@@ -4,7 +4,7 @@ export default () => {
   // Check if the API is supported.
   const isSupported = 'getScreens' in window || 'getScreenDetails';
 
-  const project = async (channel: string): Promise<WindowProxy | undefined> => {
+  const project = async (channel: string): Promise<void> => {
     // Import the composable methods.
     const { requestWindowManagementPermissions } = usePermissions();
 
@@ -48,7 +48,10 @@ export default () => {
     const extendedScreen = screens.find((screen) => screen.isPrimary);
 
     // Open the popup with the correct data.
-    return openPopup(extendedScreen!, channel) ?? undefined;
+    const proxy = openPopup(extendedScreen!, channel);
+
+    // Open the proxy in fullscreen mode.
+    await proxy?.document.body.requestFullscreen({ screen: extendedScreen });
   };
 
   const openPopup = (
