@@ -215,19 +215,6 @@ const App: Component = () => {
           </div>
         </footer>
       </main>
-
-      {/* Live edit */}
-      <Show when={enableEditing()}>
-        <div class="rounded-lg bg-gray-100 transition-transform lg:h-[88%]">
-          <form>
-            <label for="live-edit">
-              <textarea name="live-edit" id="live-edit" cols="30" rows="10">
-                {toEditable(peek() as ITrack)}
-              </textarea>
-            </label>
-          </form>
-        </div>
-      </Show>
     </div>
   );
 };
