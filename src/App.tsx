@@ -16,13 +16,12 @@ import NowPlayingCard from './ui/cards/NowPlayingCard';
 import QueueItem from './ui/queue/QueueListItem';
 import SearchForm from './ui/search/SearchForm';
 import SearchResults from './ui/search/SearchResults';
-import useTracks from './lib/composables/useTracks';
+import TrackForm from './ui/forms/TrackForm';
 
 const App: Component = () => {
   // Import the composables.
   const { requestPermissions } = useWindowManagement();
   const { toTitleCase } = useFormatting();
-  const { toEditable } = useTracks();
 
   // Request Window Management Permissions
   onMount(() => {
@@ -73,11 +72,21 @@ const App: Component = () => {
     // Update now playing when a track is dequeued.
     if (reset) {
       setNowPlaying(0);
+      setEnableEditing(false);
     }
   };
 
   // Clear queue
   const flush = () => setQueue(queue.slice(0, 1));
+
+  // Update an item in the queue.
+  const liveEdit = (live: ITrack) => {
+    setQueue(
+      (track) => track.id === live.id,
+      'lyrics',
+      () => live.lyrics
+    );
+  };
 
   // JSX component.
   return (
@@ -123,10 +132,17 @@ const App: Component = () => {
         </div>
       </aside>
 
+      {/* Live edit */}
+      <Show when={enableEditing()}>
+        <aside class="rounded-lg bg-gray-100 p-3 transition-transform lg:h-[88%]">
+          <TrackForm track={peek()} handler={liveEdit} />
+        </aside>
+      </Show>
+
       {/* View Pane */}
       <main
-        class="mb-20 rounded-lg px-6 py-4 transition-transform lg:col-span-3 lg:px-4 lg:py-2"
-        classList={{ 'lg:col-span-2': enableEditing() }}
+        class="mb-20 rounded-lg px-6 py-4 transition-transform lg:col-start-2 lg:col-end-6 lg:px-4 lg:py-2"
+        classList={{ 'lg:col-start-3': enableEditing() }}
       >
         {/* Title */}
         <h2 class="mb-3 text-wrap text-4xl font-black text-gray-800 lg:mb-4 lg:text-6xl">
@@ -174,19 +190,6 @@ const App: Component = () => {
           </div>
         </footer>
       </main>
-
-      {/* Live edit */}
-      <Show when={enableEditing()}>
-        <div class="rounded-lg bg-gray-100 transition-transform lg:h-[88%]">
-          <form>
-            <label for="live-edit">
-              <textarea name="live-edit" id="live-edit" cols="30" rows="10">
-                {toEditable(peek() as ITrack)}
-              </textarea>
-            </label>
-          </form>
-        </div>
-      </Show>
     </div>
   );
 };
