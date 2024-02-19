@@ -88,9 +88,9 @@ const App = () => {
   return (
     // Main container
     <div class="grid gap-4 overflow-hidden p-3 lg:h-screen lg:grid-cols-4">
-      <aside class="flex-col justify-between rounded-lg lg:h-[90%]">
+      <aside class="flex flex-col gap-4 rounded-lg lg:mb-20">
         {/* Search Pane */}
-        <search class="mb-3 flex-col justify-between rounded-lg bg-gray-300 px-4 pb-4 pt-3">
+        <search class="flex flex-col gap-2 rounded-lg bg-gray-300 px-4 pb-4 pt-3">
           {/* Search Form */}
           <SearchForm handler={setResults} />
 
@@ -112,25 +112,28 @@ const App = () => {
           </div>
 
           {/* Up next */}
-          <div class="flex justify-between text-gray-500">
-            <h3 class="text-sm">Up next</h3>
-            <button class="text-sm" onClick={flush}>
-              Clear all
-            </button>
-          </div>
-          <div class="h-48 overflow-y-scroll py-0.5 lg:h-56">
-            <For each={queue.slice(1)}>
-              {(track) => (
-                <QueueItem track={track} handler={() => dequeue(track.id)} />
-              )}
-            </For>
+          <div class="text-gray-500">
+            <div class="flex justify-between">
+              <h3 class="text-sm">Up next</h3>
+              <button class="text-sm" onClick={flush}>
+                Clear all
+              </button>
+            </div>
+
+            <div class="h-48 overflow-y-scroll py-0.5 lg:h-56">
+              <For each={queue.slice(1)}>
+                {(track) => (
+                  <QueueItem track={track} handler={() => dequeue(track.id)} />
+                )}
+              </For>
+            </div>
           </div>
         </div>
       </aside>
 
       {/* Live edit */}
       <Show when={enableEditing()}>
-        <aside class="rounded-lg bg-gray-100 p-3 transition-transform lg:h-[88%]">
+        <aside class="mb-12 rounded-lg bg-gray-100 p-3 transition-transform lg:mb-20 lg:h-[80%]">
           <TrackForm track={peek()} handler={alterNowPlaying} />
         </aside>
       </Show>

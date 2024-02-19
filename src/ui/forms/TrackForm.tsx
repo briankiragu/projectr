@@ -22,11 +22,11 @@ const TrackForm: Component<{
       </h3>
 
       {/* Lyrics */}
-      <label for="live-edit">
+      <label for="live-edit" class="grow">
         <textarea
           name="live-edit"
           id="live-edit"
-          rows="25"
+          rows="26"
           class="w-full rounded-md px-3 py-2"
           onInput={(e) => setLive(e.target.value)}
         >
@@ -37,7 +37,7 @@ const TrackForm: Component<{
       {/* Submit */}
       <button
         type="submit"
-        class="rounded-md bg-teal-600 py-3 text-teal-50 shadow-md shadow-teal-600/60"
+        class="rounded-md bg-teal-600 py-3 font-semibold text-teal-50 shadow-md shadow-teal-700/60"
       >
         Publish changes
       </button>
