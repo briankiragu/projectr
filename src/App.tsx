@@ -170,10 +170,7 @@ const App: Component = () => {
         {/* Preview */}
         <div class="mb-5">
           <Show when={peek()}>
-            <LyricsPreviewCard
-              verse={peek()?.lyrics[nowPlaying()]}
-              handler={() => project('projectr')}
-            />
+            <LyricsPreviewCard verse={peek()?.lyrics[nowPlaying()]} />
           </Show>
         </div>
 
