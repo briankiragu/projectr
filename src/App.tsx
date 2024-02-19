@@ -73,6 +73,11 @@ const App: Component = () => {
       setNowPlaying(0);
       setEnableEditing(false);
     }
+
+    // If the queue is finished, clear the projection.
+    if (peek() === undefined) {
+      broadcast.postMessage(null);
+    }
   };
 
   // Clear queue
