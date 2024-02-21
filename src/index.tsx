@@ -8,18 +8,17 @@ import './index.css';
 
 // Import components.
 const App = lazy(() => import('./App'));
-const LyricsProjectionCard = lazy(
-  () => import('./ui/cards/LyricsProjectionCard')
-);
+const Project = lazy(() => import('./pages/Project'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
 
 // Get the root element
 const root = document.getElementById('root');
 
 render(
   () => (
-    <Router>
-      <Route path="/" component={App} />
-      <Route path="/project" component={LyricsProjectionCard} />
+    <Router root={App}>
+      <Route path="/" component={Dashboard} />
+      <Route path="/project" component={Project} />
     </Router>
   ),
   root!
