@@ -21,7 +21,7 @@ def extract_lyrics_from_string(verse: str) -> list[str]:
 def format_extracted_text(slides: list[list[str]]) -> list[dict[str, str | list[str]]]:
     """Format the extracted data to the expected format"""
 
-    tracks: list[dict[str, str | list[str]]] = []
+    tracks: list[dict[str, int | str | list[str]]] = []
     current_title: str = ""
     current_lyrics: list[str] = []
 
@@ -29,7 +29,7 @@ def format_extracted_text(slides: list[list[str]]) -> list[dict[str, str | list[
         if len(slide) >= 2:
             tracks.append(
                 {
-                    "id": str(uuid.uuid4()),
+                    "id": len(tracks) + 1,
                     "title": current_title,
                     "lyrics": current_lyrics,
                 }
