@@ -1,18 +1,16 @@
 """Script to get track lyrics as json data from .PPTX"""
 
 import json
-import os
 import re
-from io import TextIOWrapper
 
 
 def format_extracted_text(slides: list[list[str]]) -> list[dict[str, str | list[str]]]:
     """Format the extracted data to the expected format"""
 
     tracks: list[dict[str, str | list[str]]] = []
-    current_track: dict[str, str | list[str]] = {"title": "", "lyrics": []}
-
     for slide in slides:
+        current_track: dict[str, str | list[str]] = {"title": "", "lyrics": []}
+
         filtered_slide = [
             re.split(r"[\u000b\n]", item.replace("\u2019", "'"))
             for item in slide
