@@ -2,6 +2,7 @@
 
 import json
 import re
+import uuid
 
 
 def extract_title_from_string(title: str) -> str:
@@ -26,7 +27,13 @@ def format_extracted_text(slides: list[list[str]]) -> list[dict[str, str | list[
 
     for slide in slides:
         if len(slide) >= 2:
-            tracks.append({"title": current_title, "lyrics": current_lyrics})
+            tracks.append(
+                {
+                    "id": str(uuid.uuid4()),
+                    "title": current_title,
+                    "lyrics": current_lyrics,
+                }
+            )
 
             current_title = extract_title_from_string(slide[0])
             current_lyrics = [  # type: ignore
