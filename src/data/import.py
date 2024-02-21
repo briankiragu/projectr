@@ -19,7 +19,9 @@ def extract_lyrics_from_string(verse: str) -> list[str]:
     return re.split(r"[\u000b\n]", verse.replace("\u2019", "'"))
 
 
-def format_extracted_text(slides: list[list[str]]) -> list[dict[str, int | str | list[str]]]:
+def format_extracted_text(
+    slides: list[list[str]],
+) -> list[dict[str, int | str | list[str]]]:
     """Format the extracted data to the expected format"""
 
     tracks: list[dict[str, int | str | list[str]]] = []
