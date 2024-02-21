@@ -25,10 +25,11 @@ def extract_text_from_pptx(input_pptx):
     prs = Presentation(input_pptx)
     data = []
     for slide in prs.slides:
-        slide_data = []
-        for shape in slide.shapes:
-            if hasattr(shape, "text"):
-                slide_data.append(shape.text)
+        slide_data = [
+            shape.text.strip()
+            for shape in slide.shapes
+            if shape.has_text_frame and shape.text.strip()
+        ]
         data.append(slide_data)
     return data
 

@@ -4,27 +4,32 @@ import json
 import re
 
 
+def extract_lyrics_from_string(verse: str) -> list[str]:
+    """From a single string, extract each lyric as an item in an array."""
+
+    return re.split(r"[\u000b\n]", verse.replace("\u2019", "'"))
+
+
 def format_extracted_text(slides: list[list[str]]) -> list[dict[str, str | list[str]]]:
     """Format the extracted data to the expected format"""
 
     tracks: list[dict[str, str | list[str]]] = []
+    current_title: str = ""
+    current_lyrics: list[str] = []
+
     for slide in slides:
-        current_track: dict[str, str | list[str]] = {"title": "", "lyrics": []}
+        if len(slide) >= 2:
+            tracks.append({"title": current_title, "lyrics": current_lyrics})
 
-        filtered_slide = [
-            re.split(r"[\u000b\n]", item.replace("\u2019", "'"))
-            for item in slide
-            if item.strip()
-        ]
-        # tracks.append(filtered_slide)
-
-        if len(filtered_slide) > 1:
-            tracks.append(current_track)
-
-            current_track["title"] = filtered_slide[0][0]
-            current_track["lyrics"] = [filtered_slide[1]]  # type: ignore
-        else:
-            current_track["lyrics"].append(filtered_slide[0])  # type: ignore
+            current_title = slide[0]
+            current_lyrics = [  # type: ignore
+                extract_lyrics_from_string(*slide[1:])  # type: ignore
+            ]
+        elif len(slide) == 1:
+            current_lyrics.append(  # type: ignore
+                extract_lyrics_from_string(*slide)  # type: ignore
+            )
+        # else:
 
     return tracks
 
