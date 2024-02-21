@@ -110,8 +110,8 @@ const App: Component = () => {
   // JSX component.
   return (
     // Main container
-    <div class="grid gap-4 p-4 lg:h-screen lg:grid-cols-4">
-      <aside class="flex flex-col gap-3 rounded-lg lg:mb-20">
+    <div class="grid gap-5 p-6 lg:h-screen lg:grid-cols-4">
+      <aside class="flex flex-col gap-5 rounded-lg lg:mb-20">
         {/* Search Pane */}
         <search class="flex flex-col gap-2 rounded-lg bg-gray-300 px-4 pb-4 pt-3">
           {/* Search Form */}
@@ -146,7 +146,7 @@ const App: Component = () => {
               </button>
             </div>
 
-            <div class="flex h-48 flex-col gap-2 overflow-y-scroll rounded-md bg-gray-50/50 lg:h-56">
+            <div class="flex h-48 flex-col gap-2 overflow-y-scroll rounded-md bg-gray-50/50 lg:h-52">
               <For each={queue.slice(1)}>
                 {(track) => (
                   <QueueItem track={track} handler={() => dequeue(track.qid)} />
@@ -166,11 +166,14 @@ const App: Component = () => {
 
       {/* View Pane */}
       <main
-        class="mb-20 rounded-lg px-6 py-4 transition-transform lg:col-start-2 lg:col-end-6 lg:px-4 lg:py-2"
+        class="mb-20 rounded-lg px-6 py-4 transition-transform lg:col-start-2 lg:col-end-6 lg:px-0 lg:py-0"
         classList={{ 'lg:col-start-3': enableEditing() }}
       >
         {/* Title */}
-        <Show when={peek()}>
+        <Show
+          when={peek()}
+          fallback={<div class="mb-3 h-16 rounded-md bg-gray-200/60"></div>}
+        >
           <h2 class="mb-3 text-wrap text-4xl font-black text-gray-800 lg:mb-4 lg:text-6xl">
             {toTitleCase(peek()!.title)}
           </h2>
@@ -178,22 +181,30 @@ const App: Component = () => {
 
         {/* Preview */}
         <div class="mb-5">
-          <Show when={peek()}>
+          <Show
+            when={peek()}
+            fallback={<div class="h-72 rounded-md bg-gray-300/50"></div>}
+          >
             <LyricsPreviewCard verse={peek()!.lyrics[nowPlaying()]} />
           </Show>
         </div>
 
         {/* Lyrics */}
         <div class="grid grid-cols-1 gap-4 lg:h-80 lg:grid-cols-3 lg:overflow-y-scroll lg:pb-2">
-          <For each={peek()?.lyrics}>
-            {(verse, index) => (
-              <LyricsCard
-                verse={verse}
-                isActive={nowPlaying() === index()}
-                handler={() => goToVerse(index())}
-              />
-            )}
-          </For>
+          <Show
+            when={peek()}
+            fallback={<div class="h-42 rounded-md bg-gray-200/40"></div>}
+          >
+            <For each={peek()?.lyrics}>
+              {(verse, index) => (
+                <LyricsCard
+                  verse={verse}
+                  isActive={nowPlaying() === index()}
+                  handler={() => goToVerse(index())}
+                />
+              )}
+            </For>
+          </Show>
         </div>
 
         {/* Controls */}
