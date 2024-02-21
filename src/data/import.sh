@@ -31,11 +31,19 @@ def extract_text_from_pptx(input_pptx):
         data.append(slide_data)
     return data
 
+
+def format_extracted_text(data):
+    for i in data:
+        pass
+    return data
+
 input_pptx = "$input_pptx"
 output_json = "$output_json"
 
 try:
     extracted_data = extract_text_from_pptx(input_pptx)
+    formatted_data = format_extracted_text(extracted_data)
+
     with open(output_json, "w") as json_file:
         json.dump(extracted_data, json_file)
     print("Data extracted successfully and saved to", output_json)

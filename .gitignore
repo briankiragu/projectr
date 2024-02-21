@@ -32,3 +32,6 @@ dist-ssr
 !.env.example
 !.env.testing
 !.env.production
+
+# Python virtual env
+.venv
