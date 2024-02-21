@@ -10,7 +10,7 @@ services:
       - '3306:3306'
       - '33060:33060'
     volumes:
-      - ./docker/mysql:/docker-entrypoint-initdb.d:r
+      - ./docker/mysql:/docker-entrypoint-initdb.d/:ro
     environment:
       MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
       MYSQL_USER: '${MYSQL_USER}'
@@ -31,4 +31,4 @@ services:
     container_name: projectr_meilisync
     restart: always
     volumes:
-      - ./docker/meilisync/config.yml:/meilisync/config.yml:r
+      - ./docker/meilisync/config.yml:/meilisync/config.yml/:ro
