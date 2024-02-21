@@ -61,11 +61,11 @@ const App: Component = () => {
   // Enqueue.
   const enqueue = (track: ITrack) => {
     // Create a random ID for the track and add it to the queue.
-    setQueue([...queue, { id: Date.now(), ...track }]);
+    setQueue([...queue, track]);
   };
 
   // Dequeue.
-  const dequeue = (id: number | undefined, reset?: boolean) => {
+  const dequeue = (id: number, reset?: boolean) => {
     setQueue(queue.filter((track) => id !== track.id));
 
     // Update now playing when a track is dequeued.
@@ -83,7 +83,7 @@ const App: Component = () => {
   // Clear queue
   const flush = () => setQueue(queue.slice(0, 1));
 
-  const alterNowPlaying = (lyrics: string[][], id?: number) => {
+  const alterNowPlaying = (lyrics: string[][], id: number) => {
     // Update an item in the queue.
     setQueue(
       (track) => track.id === id,
@@ -163,14 +163,16 @@ const App: Component = () => {
         classList={{ 'lg:col-start-3': enableEditing() }}
       >
         {/* Title */}
-        <h2 class="mb-3 text-wrap text-4xl font-black text-gray-800 lg:mb-4 lg:text-6xl">
-          {toTitleCase(peek()?.title)}
-        </h2>
+        <Show when={peek()}>
+          <h2 class="mb-3 text-wrap text-4xl font-black text-gray-800 lg:mb-4 lg:text-6xl">
+            {toTitleCase(peek()!.title)}
+          </h2>
+        </Show>
 
         {/* Preview */}
         <div class="mb-5">
           <Show when={peek()}>
-            <LyricsPreviewCard verse={peek()?.lyrics[nowPlaying()]} />
+            <LyricsPreviewCard verse={peek()!.lyrics[nowPlaying()]} />
           </Show>
         </div>
 
@@ -207,7 +209,7 @@ const App: Component = () => {
               isEnabled={peek() !== undefined}
               icon="skip_next"
               text="Next track"
-              handler={() => dequeue(peek()?.id, true)}
+              handler={() => dequeue(peek()!.id, true)}
             />
           </div>
         </footer>
