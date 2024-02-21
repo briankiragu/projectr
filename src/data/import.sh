@@ -13,11 +13,12 @@ if [ $# -ne 1 ]; then
 fi
 
 input_pptx="$1"
-output_json="${input_pptx%.*}.json"
+output_json="${input_pptx%.*}.extracted.json"
 
-# Python script to extract data from pptx and convert it to JSON
 python << END_PYTHON
 import json
+import re
+
 from pptx import Presentation
 
 def extract_text_from_pptx(input_pptx):
@@ -32,17 +33,11 @@ def extract_text_from_pptx(input_pptx):
     return data
 
 
-def format_extracted_text(data):
-    for i in data:
-        pass
-    return data
-
 input_pptx = "$input_pptx"
 output_json = "$output_json"
 
 try:
     extracted_data = extract_text_from_pptx(input_pptx)
-    formatted_data = format_extracted_text(extracted_data)
 
     with open(output_json, "w") as json_file:
         json.dump(extracted_data, json_file)
@@ -50,3 +45,5 @@ try:
 except Exception as e:
     print("Error:", str(e))
 END_PYTHON
+
+python import.py output_json
