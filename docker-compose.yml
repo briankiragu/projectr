@@ -10,7 +10,7 @@ services:
       - '3306:3306'
       - '33060:33060'
     volumes:
-      - ./docker/mysql:/docker-entrypoint-initdb.d/:ro
+      - ./docker/mysql:/docker-entrypoint-initdb.d
     environment:
       MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
       MYSQL_USER: '${MYSQL_USER}'
