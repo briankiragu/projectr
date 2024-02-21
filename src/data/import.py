@@ -4,6 +4,13 @@ import json
 import re
 
 
+def extract_title_from_string(title: str) -> str:
+    """Remove formatting from titles"""
+    return re.sub(
+        r"[\u000b\n]", " ", title.replace("\u2019", "'").replace("\u2013", "-")
+    )
+
+
 def extract_lyrics_from_string(verse: str) -> list[str]:
     """From a single string, extract each lyric as an item in an array."""
 
@@ -21,7 +28,7 @@ def format_extracted_text(slides: list[list[str]]) -> list[dict[str, str | list[
         if len(slide) >= 2:
             tracks.append({"title": current_title, "lyrics": current_lyrics})
 
-            current_title = slide[0]
+            current_title = extract_title_from_string(slide[0])
             current_lyrics = [  # type: ignore
                 extract_lyrics_from_string(*slide[1:])  # type: ignore
             ]
