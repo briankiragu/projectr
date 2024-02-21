@@ -68,12 +68,12 @@ const App: Component = () => {
   // Enqueue.
   const enqueue = (track: ITrack) => {
     // Create a random ID for the track and add it to the queue.
-    setQueue([...queue, track]);
+    setQueue([...queue, { qid: Date.now(), ...track }]);
   };
 
   // Dequeue.
-  const dequeue = (id: number, reset?: boolean) => {
-    setQueue(queue.filter((track) => id !== track.id));
+  const dequeue = (qid: number | undefined, reset?: boolean) => {
+    setQueue(queue.filter((track) => qid !== track.qid));
 
     // Update now playing when a track is dequeued.
     if (reset) {
@@ -90,10 +90,10 @@ const App: Component = () => {
   // Clear queue
   const flush = () => setQueue(queue.slice(0, 1));
 
-  const alterNowPlaying = (lyrics: string[][], id: number) => {
+  const alterNowPlaying = (lyrics: string[][], qid: number | undefined) => {
     // Update an item in the queue.
     setQueue(
-      (track) => track.id === id,
+      (track) => track.qid === qid,
       'lyrics',
       () => lyrics
     );
@@ -149,7 +149,7 @@ const App: Component = () => {
             <div class="flex h-48 flex-col gap-2 overflow-y-scroll rounded-md bg-gray-50/50 lg:h-56">
               <For each={queue.slice(1)}>
                 {(track) => (
-                  <QueueItem track={track} handler={() => dequeue(track.id)} />
+                  <QueueItem track={track} handler={() => dequeue(track.qid)} />
                 )}
               </For>
             </div>
@@ -216,7 +216,7 @@ const App: Component = () => {
               isEnabled={peek() !== undefined}
               icon="skip_next"
               text="Next track"
-              handler={() => dequeue(peek()!.id, true)}
+              handler={() => dequeue(peek()!.qid, true)}
             />
           </div>
         </footer>
