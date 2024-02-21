@@ -1,0 +1,50 @@
+{
+  "name": "Projectr: Worship Lyrics",
+  "short_name": "Projectr",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "Simple projection software",
+  "icons": [
+    {
+      "src": "/favicons/apple-touch-icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicons/apple-touch-icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicons/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicons/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "images/long.png",
+      "sizes": "2227x3840",
+      "type": "image/png",
+      "label": "Projectr Mobile"
+    },
+    {
+      "src": "images/wide.png",
+      "sizes": "3840x2451",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Projectr Desktop"
+    }
+  ],
+  "serviceworker": {
+    "src": "sw.js",
+    "scope": "/",
+    "use_cache": false
+  }
+}

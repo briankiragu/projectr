@@ -1,0 +1,24 @@
+debug: true
+plugins:
+  - meilisync.plugin.Plugin
+source:
+  type: mysql
+  host: 172.19.0.3
+  port: 3306
+  user: root
+  password: 'secret'
+  database: projectrCMS
+meilisearch:
+  api_url: http://172.19.0.4:7700
+  api_key: '018db27a-b774-78af-9756-6531be6607a3'
+  insert_size: 1000
+  insert_interval: 10
+sync:
+  - table: tracks
+    index: title
+    plugins:
+      - meilisync.plugin.Plugin
+    full: true
+    fields:
+      title:
+      lyrics:
