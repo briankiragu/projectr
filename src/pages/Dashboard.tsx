@@ -36,6 +36,7 @@ const App: Component = () => {
 
   const [results, setResults] = createStore<ITrack[]>([]);
   const [queue, setQueue] = createStore<ITrack[]>([]);
+  const [isProjecting, setIsProjecting] = createSignal(false);
   const [nowPlaying, setNowPlaying] = createSignal<number>(0);
   const [enableEditing, setEnableEditing] = createSignal<boolean>(false);
 
@@ -100,6 +101,14 @@ const App: Component = () => {
 
     // Toggle live edit
     setEnableEditing(false);
+  };
+
+  const onProject = async () => {
+    const proxy = await project('projectr');
+
+    if (proxy) {
+      setIsProjecting(true);
+    }
   };
 
   createEffect(() => {
@@ -210,7 +219,10 @@ const App: Component = () => {
         {/* Controls */}
         <footer class="fixed bottom-0 left-0 w-full bg-white p-3">
           <div class="flex min-h-16 flex-wrap justify-between gap-4 rounded-lg bg-gray-200 p-4 text-gray-700 lg:justify-center">
-            <ProjectionButton handler={() => project('projectr')} />
+            <ProjectionButton
+              isProjecting={isProjecting()}
+              handler={onProject}
+            />
             <PlaybackButton
               isEnabled={peek() !== undefined && !isFirstVerse()}
               icon="arrow_back"
