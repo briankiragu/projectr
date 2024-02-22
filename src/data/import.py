@@ -3,6 +3,7 @@
 import json
 import re
 import uuid
+import sys
 
 
 def extract_title_from_string(title: str) -> str:
@@ -29,7 +30,7 @@ def format_extracted_text(slides: list[list[str]]) -> list[dict[str, int | str |
         if len(slide) >= 2:
             tracks.append(
                 {
-                    "id": len(tracks) + 1,
+                    "id": len(tracks) + 461,
                     "title": current_title,
                     "lyrics": current_lyrics,
                 }
@@ -49,12 +50,11 @@ def format_extracted_text(slides: list[list[str]]) -> list[dict[str, int | str |
 
 
 try:
-    # input_json: str = sys.argv[0]
     input_json: str = (
-        "/Users/charis/Source/projectr/projectr-app/src/data/lyrics.extracted.json"
+        "/Users/charis/Source/projectr/projectr-app/src/data/tvc-lyrics.extracted.json"
     )
     output_json: str = (
-        "/Users/charis/Source/projectr/projectr-app/src/data/lyrics.formatted.json"
+        "/Users/charis/Source/projectr/projectr-app/src/data/tvc-lyrics.formatted.json"
     )
 
     # Read the input file.
