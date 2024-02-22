@@ -18,7 +18,7 @@ def extract_lyrics_from_string(verse: str) -> list[str]:
     return re.split(r"[\u000b\n]", verse.replace("\u2019", "'"))
 
 
-def format_extracted_text(slides: list[list[str]]) -> list[dict[str, str | list[str]]]:
+def format_extracted_text(slides: list[list[str]]) -> list[dict[str, int | str | list[str]]]:
     """Format the extracted data to the expected format"""
 
     tracks: list[dict[str, int | str | list[str]]] = []
@@ -62,7 +62,7 @@ try:
         data: list[list[str]] = json.load(json_file)
 
     # Format the data.
-    formatted_data: list[dict[str, str | list[str]]] = format_extracted_text(data)
+    formatted_data: list[dict[str, int | str | list[str]]] = format_extracted_text(data)
 
     # Write the output file.
     with open(output_json, "w", encoding="utf8") as json_file:
