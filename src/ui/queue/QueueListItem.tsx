@@ -1,5 +1,9 @@
 import { Component } from 'solid-js';
-import { ITrack } from '../../interfaces/track';
+
+// Import interfaces.
+import type { ITrack } from '../../interfaces/track';
+
+// Import composables.
 import useFormatting from '../../lib/composables/useFormatting';
 
 const QueueListItem: Component<{

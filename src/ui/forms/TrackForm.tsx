@@ -1,5 +1,5 @@
 import { Component, createSignal } from 'solid-js';
-import { ITrack } from '../../interfaces/track';
+import type { ITrack } from '../../interfaces/track';
 import useTracks from '../../lib/composables/useTracks';
 
 const TrackForm: Component<{

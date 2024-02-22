@@ -14,18 +14,17 @@ import type { ITrack } from '../interfaces/track';
 // Import the composables.
 import useFormatting from '../lib/composables/useFormatting';
 import useWindowManagement from '../lib/composables/useWindowManagement';
-import QueueList from '../ui/queue/QueueList';
 
 // Import components.
 const LyricsCard = lazy(() => import('../ui/cards/LyricsCard'));
 const LyricsPreviewCard = lazy(() => import('../ui/cards/LyricsPreviewCard'));
 const NowPlayingCard = lazy(() => import('../ui/cards/NowPlayingCard'));
 const PlaybackButton = lazy(() => import('../ui/buttons/PlaybackButton'));
-const QueueItem = lazy(() => import('../ui/queue/QueueListItem'));
+const ProjectionButton = lazy(() => import('../ui/buttons/ProjectionButton'));
+const QueueListItem = lazy(() => import('../ui/queue/QueueListItem'));
 const SearchForm = lazy(() => import('../ui/search/SearchForm'));
 const SearchResults = lazy(() => import('../ui/search/SearchResults'));
 const TrackForm = lazy(() => import('../ui/forms/TrackForm'));
-const ProjectionButton = lazy(() => import('../ui/buttons/ProjectionButton'));
 
 const App: Component = () => {
   // Create a broadcast channel.
@@ -147,7 +146,17 @@ const App: Component = () => {
               </button>
             </div>
 
-            <QueueList queue={queue.slice(1)} handler={dequeue} />
+            {/* <QueueList queue={queue.slice(1)} handler={dequeue} /> */}
+            <div class="flex h-48 flex-col gap-2 overflow-y-scroll rounded-md bg-gray-50/50 lg:h-56">
+              <For each={queue}>
+                {(track: ITrack) => (
+                  <QueueListItem
+                    track={track}
+                    handler={() => dequeue(track.qid)}
+                  />
+                )}
+              </For>
+            </div>
           </div>
         </div>
       </aside>
