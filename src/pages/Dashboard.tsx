@@ -14,6 +14,7 @@ import type { ITrack } from '../interfaces/track';
 // Import the composables.
 import useFormatting from '../lib/composables/useFormatting';
 import useWindowManagement from '../lib/composables/useWindowManagement';
+import QueueList from '../ui/queue/QueueList';
 
 // Import components.
 const LyricsCard = lazy(() => import('../ui/cards/LyricsCard'));
@@ -146,13 +147,7 @@ const App: Component = () => {
               </button>
             </div>
 
-            <div class="flex h-48 flex-col gap-2 overflow-y-scroll rounded-md bg-gray-50/50 lg:h-52">
-              <For each={queue.slice(1)}>
-                {(track) => (
-                  <QueueItem track={track} handler={() => dequeue(track.qid)} />
-                )}
-              </For>
-            </div>
+            <QueueList queue={queue.slice(1)} handler={dequeue} />
           </div>
         </div>
       </aside>
