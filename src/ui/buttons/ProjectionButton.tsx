@@ -1,4 +1,4 @@
-import { Component, Show } from 'solid-js';
+import { type Component, Show } from 'solid-js';
 
 // Import the composables.
 import useWindowManagement from '../../lib/composables/useWindowManagement';

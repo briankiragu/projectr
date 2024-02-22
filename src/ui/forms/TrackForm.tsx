@@ -1,4 +1,4 @@
-import { Component, createSignal } from 'solid-js';
+import { type Component, createSignal } from 'solid-js';
 import type { ITrack } from '../../interfaces/track';
 import useTracks from '../../lib/composables/useTracks';
 
