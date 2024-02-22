@@ -1,10 +1,10 @@
-import { Component, For } from 'solid-js';
+import { Component, For, lazy } from 'solid-js';
 
 // Import interfaces.
 import type { ITrack } from '../../interfaces/track';
 
 // Import the components.
-import QueueListItem from './QueueListItem';
+const QueueListItem = lazy(() => import('./QueueListItem'));
 
 const QueueList: Component<{
   queue: ITrack[];
@@ -12,9 +12,9 @@ const QueueList: Component<{
 }> = ({ queue, handler }) => {
   return (
     <div class="flex h-48 flex-col gap-2 overflow-y-scroll rounded-md bg-gray-50/50 lg:h-56">
-      <For each={queue.slice(1)}>
+      <For each={queue}>
         {(track: ITrack) => (
-          <QueueListItem track={track} handler={() => handler(track.id)} />
+          <QueueListItem track={track} handler={() => handler(track.qid)} />
         )}
       </For>
     </div>

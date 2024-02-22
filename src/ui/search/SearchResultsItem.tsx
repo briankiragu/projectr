@@ -1,5 +1,5 @@
 import { Component } from 'solid-js';
-import { ITrack } from '../../interfaces/track';
+import type { ITrack } from '../../interfaces/track';
 import useFormatting from '../../lib/composables/useFormatting';
 
 const SearchResultsItem: Component<{
