@@ -21,7 +21,7 @@ const LyricsPreviewCard = lazy(() => import('../ui/cards/LyricsPreviewCard'));
 const NowPlayingCard = lazy(() => import('../ui/cards/NowPlayingCard'));
 const PlaybackButton = lazy(() => import('../ui/buttons/PlaybackButton'));
 const ProjectionButton = lazy(() => import('../ui/buttons/ProjectionButton'));
-const QueueListItem = lazy(() => import('../ui/queue/QueueListItem'));
+const QueueList = lazy(() => import('../ui/queue/QueueList'));
 const SearchForm = lazy(() => import('../ui/search/SearchForm'));
 const SearchResults = lazy(() => import('../ui/search/SearchResults'));
 const TrackForm = lazy(() => import('../ui/forms/TrackForm'));
@@ -146,17 +146,7 @@ const App: Component = () => {
               </button>
             </div>
 
-            {/* <QueueList queue={queue.slice(1)} handler={dequeue} /> */}
-            <div class="flex h-48 flex-col gap-2 overflow-y-scroll rounded-md bg-gray-50/50 lg:h-56">
-              <For each={queue}>
-                {(track: ITrack) => (
-                  <QueueListItem
-                    track={track}
-                    handler={() => dequeue(track.qid)}
-                  />
-                )}
-              </For>
-            </div>
+            <QueueList queue={queue} handler={dequeue} />
           </div>
         </div>
       </aside>
