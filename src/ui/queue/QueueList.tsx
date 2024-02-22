@@ -9,15 +9,12 @@ import QueueListItem from './QueueListItem';
 const QueueList: Component<{
   queue: ITrack[];
   handler: (id: number | undefined) => void;
-}> = (props) => {
+}> = ({ queue, handler }) => {
   return (
     <div class="flex h-48 flex-col gap-2 overflow-y-scroll rounded-md bg-gray-50/50 lg:h-56">
-      <For each={props.queue.slice(1)}>
+      <For each={queue.slice(1)}>
         {(track: ITrack) => (
-          <QueueListItem
-            track={track}
-            handler={() => props.handler(track.id)}
-          />
+          <QueueListItem track={track} handler={() => handler(track.id)} />
         )}
       </For>
     </div>
