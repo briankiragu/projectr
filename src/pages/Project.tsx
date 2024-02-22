@@ -1,4 +1,4 @@
-import { Component, createSignal, lazy } from 'solid-js';
+import { type Component, createSignal, lazy } from 'solid-js';
 
 // Import components.
 const LyricsPreviewCard = lazy(() => import('../ui/cards/LyricsPreviewCard'));

@@ -1,5 +1,5 @@
 // Import the modules.
-import { Component, onMount } from 'solid-js';
+import { type Component, onMount } from 'solid-js';
 import { debounceTime, distinctUntilChanged, fromEvent, switchMap } from 'rxjs';
 
 // Import the interfaces.
