@@ -166,7 +166,7 @@ const App: Component = () => {
 
       {/* View Pane */}
       <main
-        class="mb-20 rounded-lg px-6 py-4 transition-transform lg:col-start-2 lg:col-end-6 lg:px-0 lg:py-0"
+        class="mb-20 rounded-lg transition-transform lg:col-start-2 lg:col-end-6"
         classList={{ 'lg:col-start-3': enableEditing() }}
       >
         {/* Title */}
