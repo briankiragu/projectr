@@ -161,7 +161,7 @@ const App: Component = () => {
 
       {/* View Pane */}
       <main
-        class="mb-20 rounded-lg transition-transform lg:col-start-2 lg:col-end-6"
+        class="mb-16 rounded-lg transition-transform lg:col-start-2 lg:col-end-6 lg:mb-20"
         classList={{ 'lg:col-start-3': enableEditing() }}
       >
         {/* Title */}
@@ -186,7 +186,7 @@ const App: Component = () => {
 
         {/* Lyrics Preloader */}
         <Show when={!peek()}>
-          <div class="h-42 grid grid-cols-1 gap-4 lg:h-80 lg:grid-cols-3 lg:overflow-y-scroll lg:pb-2">
+          <div class="h-42 hidden grid-cols-1 gap-4 lg:grid lg:h-80 lg:grid-cols-3 lg:overflow-y-scroll lg:pb-2">
             <div class="rounded-md bg-gray-200/40"></div>
             <div class="rounded-md bg-gray-200/40"></div>
             <div class="rounded-md bg-gray-200/40"></div>
