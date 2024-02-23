@@ -2,6 +2,7 @@
 import { lazy } from 'solid-js';
 import { render } from 'solid-js/web';
 import { Route, Router } from '@solidjs/router';
+import { injectSpeedInsights } from '@vercel/speed-insights';
 
 // Import global styles.
 import './index.css';
@@ -13,6 +14,9 @@ const Dashboard = lazy(() => import('@pages/Dashboard'));
 
 // Get the root element
 const root = document.getElementById('root');
+
+// Vercel insights.
+injectSpeedInsights();
 
 render(
   () => (
