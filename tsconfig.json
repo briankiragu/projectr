@@ -35,8 +35,8 @@
   },
   "include": [
     "src",
-    "eslintrc.cjs",
-    "prettierrc.cjs",
+    ".eslintrc.cjs",
+    ".prettierrc.cjs",
     "playwright.config.ts",
     "postcss.config.js",
     "tailwind.config.js"
