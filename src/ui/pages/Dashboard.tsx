@@ -116,7 +116,11 @@ const App: Component = () => {
   };
 
   createEffect(() => {
-    const data = JSON.stringify(peek()?.lyrics[nowPlaying()]);
+    const data = JSON.stringify({
+      track: peek(),
+      nowPlaying: nowPlaying()
+    });
+
     broadcast.postMessage(data);
   });
 

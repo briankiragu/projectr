@@ -5,7 +5,7 @@ import type { ITrack } from '@interfaces/track';
 
 // Import composables.
 import useFormatting from '@composables/useFormatting';
-import { type IDragHandlers } from '@/lib/composables/useDragAndDropAPI';
+import { type IDragHandlers } from '@composables/useDragAndDropAPI';
 
 const QueueListItem: Component<{
   // ref?: HTMLDivElement;

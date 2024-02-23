@@ -2,7 +2,7 @@ import { type Component, For, lazy } from 'solid-js';
 
 // Import interfaces.
 import type { ITrack } from '@interfaces/track';
-import useDragAndDropAPI from '@/lib/composables/useDragAndDropAPI';
+import useDragAndDropAPI from '@composables/useDragAndDropAPI';
 
 // Import the components.
 const QueueListItem = lazy(() => import('./QueueListItem'));
