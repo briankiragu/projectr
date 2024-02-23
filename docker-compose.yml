@@ -7,8 +7,8 @@ services:
     restart: always
     command: --binlog-format=ROW
     ports:
-      - "3306:3306"
-      - "33060:33060"
+      - '3306:3306'
+      - '33060:33060'
     volumes:
       - ./docker/mysql:/docker-entrypoint-initdb.d
     environment:
@@ -22,9 +22,7 @@ services:
     container_name: projectr_meilisearch
     restart: always
     ports:
-      - "7700:7700"
-    volumes:
-      - ./docker/meili_data:/meili_data
+      - '7700:7700'
     environment:
       MEILI_MASTER_KEY: '018db27a-b774-78af-9756-6531be6607a3'
 
