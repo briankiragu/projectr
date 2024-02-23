@@ -3,14 +3,14 @@ plugins:
   - meilisync.plugin.Plugin
 source:
   type: mysql
-  host: 172.19.0.3
+  host: projectr_mysql
   port: 3306
-  user: root
-  password: 'secret'
-  database: projectrCMS
+  user: '${MYSQL_USER}'
+  password: '${MYSQL_PASSWORD}'
+  database: '${MYSQL_DATABASE}'
 meilisearch:
-  api_url: http://172.19.0.4:7700
-  api_key: '018db27a-b774-78af-9756-6531be6607a3'
+  api_url: '{VITE_MEILI_HOST}'
+  api_key: '{VITE_MEILI_MASTER_KEY}'
   insert_size: 1000
   insert_interval: 10
 sync:
