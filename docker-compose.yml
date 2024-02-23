@@ -2,20 +2,20 @@ version: '3.7'
 
 services:
   mysql:
-    image: mysql:5
+    image: mysql:latest
     container_name: projectr_mysql
     restart: always
-    command: --binlog-format=ROW
+    command: --binlog-format=ROW --default-authentication-plugin=mysql_native_password
     ports:
       - '3306:3306'
       - '33060:33060'
     volumes:
       - ./docker/mysql:/docker-entrypoint-initdb.d
     environment:
-      MYSQL_ROOT_PASSWORD: 'secret'
-      MYSQL_DATABASE: 'projectrCMS'
-      MYSQL_USER: 'chariskiragu'
-      MYSQL_PASSWORD: 'secret'
+      MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
+      MYSQL_USER: '${MYSQL_USER}'
+      MYSQL_PASSWORD: '${MYSQL_PASSWORD}'
+      MYSQL_DATABASE: '${MYSQL_DATABASE}'
 
   meilisearch:
     image: getmeili/meilisearch:latest
@@ -24,7 +24,7 @@ services:
     ports:
       - '7700:7700'
     environment:
-      MEILI_MASTER_KEY: '018db27a-b774-78af-9756-6531be6607a3'
+      MEILI_MASTER_KEY: '${VITE_MEILI_MASTER_KEY}'
 
   meilisync:
     image: long2ice/meilisync
@@ -32,6 +32,3 @@ services:
     restart: always
     volumes:
       - ./docker/meilisync/config.yml:/meilisync/config.yml
-
-volumes:
-  meilisearch_data:

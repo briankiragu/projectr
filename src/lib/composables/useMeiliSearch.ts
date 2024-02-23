@@ -4,8 +4,8 @@ import data from '../../data/sample';
 export default () => {
   // Create the client
   const client = new MeiliSearch({
-    host: 'http://127.0.0.1:7700',
-    apiKey: '018db27a-b774-78af-9756-6531be6607a3',
+    host: import.meta.env.VITE_MEILI_HOST,
+    apiKey: import.meta.env.VITE_MEILI_MASTER_KEY,
   });
 
   // The name of the index.
