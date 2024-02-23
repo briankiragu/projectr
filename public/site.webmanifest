@@ -1,6 +1,7 @@
 {
   "name": "Projectr: Worship Lyrics",
   "short_name": "Projectr",
+  "id: "/",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#fff",
