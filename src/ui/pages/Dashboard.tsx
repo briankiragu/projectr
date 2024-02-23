@@ -185,7 +185,7 @@ const App: Component = () => {
           when={peek()}
           fallback={<div class="mb-3 h-16 rounded-md bg-gray-200/60"></div>}
         >
-          <h2 class="mb-3 text-wrap text-4xl font-black text-gray-800 lg:mb-4 lg:text-6xl">
+          <h2 class="mb-3 text-wrap text-4xl font-black text-center text-yellow-600 lg:mb-4 lg:text-6xl">
             {toTitleCase(peek()!.title)}
           </h2>
         </Show>
