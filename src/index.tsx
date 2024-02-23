@@ -7,9 +7,9 @@ import { Route, Router } from '@solidjs/router';
 import './index.css';
 
 // Import components.
-const App = lazy(() => import('./App'));
-const Project = lazy(() => import('./pages/Project'));
-const Dashboard = lazy(() => import('./pages/Dashboard'));
+const App = lazy(() => import('@pages/App'));
+const Project = lazy(() => import('@pages/Project'));
+const Dashboard = lazy(() => import('@pages/Dashboard'));
 
 // Get the root element
 const root = document.getElementById('root');

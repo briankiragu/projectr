@@ -1,4 +1,4 @@
-import type { ITrack } from '../interfaces/track';
+import type { ITrack } from '@interfaces/track';
 
 const data: ITrack[] = [
   {

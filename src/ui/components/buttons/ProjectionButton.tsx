@@ -1,7 +1,7 @@
 import { type Component, Show } from 'solid-js';
 
 // Import the composables.
-import useWindowManagement from '../../lib/composables/useWindowManagement';
+import useWindowManagement from '@composables/useWindowManagement';
 
 const ProjectionButton: Component<{
   isProjecting: boolean;

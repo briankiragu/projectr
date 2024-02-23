@@ -1,6 +1,6 @@
 import { type Component, For } from 'solid-js';
-import type { ITrack } from '../../interfaces/track';
-import SearchResultsItem from './SearchResultsItem';
+import type { ITrack } from '@interfaces/track';
+import SearchResultsItem from '@components/search/SearchResultsItem';
 
 const SearchResults: Component<{
   results: ITrack[];

@@ -1,7 +1,9 @@
 import { type Component, createSignal, lazy } from 'solid-js';
 
 // Import components.
-const LyricsPreviewCard = lazy(() => import('../ui/cards/LyricsPreviewCard'));
+const LyricsPreviewCard = lazy(
+  () => import('@components/cards/LyricsPreviewCard')
+);
 
 const Project: Component = () => {
   // Create a broadcast channel.

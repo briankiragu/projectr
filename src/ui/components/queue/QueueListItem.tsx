@@ -1,17 +1,24 @@
-import { type Component } from 'solid-js';
+import { onMount, type Component } from 'solid-js';
 
 // Import interfaces.
-import type { ITrack } from '../../interfaces/track';
+import type { ITrack } from '@interfaces/track';
 
 // Import composables.
-import useFormatting from '../../lib/composables/useFormatting';
+import useFormatting from '@composables/useFormatting';
 
 const QueueListItem: Component<{
-  ref?: HTMLDivElement;
+  // ref?: HTMLDivElement;
   track: ITrack;
   handler: () => void;
-}> = ({ ref, track, handler }) => {
+}> = ({ track, handler }) => {
+  let ref: HTMLDivElement | undefined;
   const { toTitleCase } = useFormatting();
+
+  onMount(() => {
+    ref?.addEventListener('dragstart', (e) => {
+      console.dir(e);
+    });
+  });
 
   return (
     <div
