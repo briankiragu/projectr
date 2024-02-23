@@ -1,14 +1,14 @@
 import { type Component, Show } from 'solid-js';
 
 // Import the composables.
-import useWindowManagement from '@composables/useWindowManagement';
+import useWindowManagementAPI from '@composables/useWindowManagementAPI';
 
 const ProjectionButton: Component<{
   isProjecting: boolean;
   handler?: () => void;
 }> = ({ isProjecting, handler }) => {
   // Import the composable property.
-  const { isSupported } = useWindowManagement();
+  const { isSupported } = useWindowManagementAPI();
 
   return (
     <Show when={isSupported}>
