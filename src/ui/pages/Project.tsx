@@ -39,7 +39,7 @@ const Project: Component = () => {
         when={track()}
         fallback={<div class="mb-3 h-16 rounded-md bg-gray-200/60"></div>}
       >
-        <h2 class="mb-3 text-center text-wrap text-4xl underline font-black text-yellow-600 lg:mb-4 lg:text-6xl 2xl:text-7xl">
+        <h2 class="mb-3 text-center text-wrap text-4xl underline font-black text-yellow-600 lg:mb-4 lg:text-6xl 2xl:text-7xl uppercase">
           {toTitleCase(track()!.title)}
         </h2>
       </Show>
