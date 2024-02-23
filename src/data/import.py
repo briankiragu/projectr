@@ -78,15 +78,9 @@ def format_extracted_lyrics_as_text(
 
 
 try:
-    input_json: str = (
-        "/Users/charis/Source/projectr/projectr-app/src/data/tvc-lyrics.extracted.json"
-    )
-    output_json: str = (
-        "/Users/charis/Source/projectr/projectr-app/src/data/tvc-lyrics.formatted.json"
-    )
-    output_text: str = (
-        "/Users/charis/Source/projectr/projectr-app/src/data/lyrics.text.json"
-    )
+    input_json = sys.argv[1]
+    output_json = "lyrics.formatted_as_json.json"
+    output_text = "lyrics.formatted_as_text.json"
 
     # Read the input file.
     with open(input_json, "r", encoding="utf8") as json_file:
