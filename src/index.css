@@ -6,10 +6,10 @@
 
 :root {
   font-family:
-    'Inter',
     system-ui,
     -apple-system,
     BlinkMacSystemFont,
+    'Inter',
     'Segoe UI',
     Roboto,
     Oxygen,
@@ -20,11 +20,11 @@
     sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
+  font-synthesis: none;
   font-variation-settings: 'slnt' 0;
 
   color-scheme: light dark;
 
-  font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

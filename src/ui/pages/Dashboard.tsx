@@ -9,22 +9,26 @@ import {
 import { createStore } from 'solid-js/store';
 
 // Import interfaces.
-import type { ITrack } from '../interfaces/track';
+import type { ITrack } from '@interfaces/track';
 
 // Import the composables.
-import useFormatting from '../lib/composables/useFormatting';
-import useWindowManagement from '../lib/composables/useWindowManagement';
+import useFormatting from '@composables/useFormatting';
+import useWindowManagementAPI from '@composables/useWindowManagementAPI';
 
 // Import components.
-const LyricsCard = lazy(() => import('../ui/cards/LyricsCard'));
-const LyricsPreviewCard = lazy(() => import('../ui/cards/LyricsPreviewCard'));
-const NowPlayingCard = lazy(() => import('../ui/cards/NowPlayingCard'));
-const PlaybackButton = lazy(() => import('../ui/buttons/PlaybackButton'));
-const QueueItem = lazy(() => import('../ui/queue/QueueListItem'));
-const SearchForm = lazy(() => import('../ui/search/SearchForm'));
-const SearchResults = lazy(() => import('../ui/search/SearchResults'));
-const TrackForm = lazy(() => import('../ui/forms/TrackForm'));
-const ProjectionButton = lazy(() => import('../ui/buttons/ProjectionButton'));
+const LyricsCard = lazy(() => import('@components/cards/LyricsCard'));
+const LyricsPreviewCard = lazy(
+  () => import('@components/cards/LyricsPreviewCard')
+);
+const NowPlayingCard = lazy(() => import('@components/cards/NowPlayingCard'));
+const PlaybackButton = lazy(() => import('@components/buttons/PlaybackButton'));
+const ProjectionButton = lazy(
+  () => import('@components/buttons/ProjectionButton')
+);
+const QueueList = lazy(() => import('@components/queue/QueueList'));
+const SearchForm = lazy(() => import('@components/search/SearchForm'));
+const SearchResults = lazy(() => import('@components/search/SearchResults'));
+const TrackForm = lazy(() => import('@components/forms/TrackForm'));
 
 const App: Component = () => {
   // Create a broadcast channel.
@@ -32,10 +36,11 @@ const App: Component = () => {
 
   // Import the composables.
   const { toTitleCase } = useFormatting();
-  const { project } = useWindowManagement();
+  const { project } = useWindowManagementAPI();
 
   const [results, setResults] = createStore<ITrack[]>([]);
   const [queue, setQueue] = createStore<ITrack[]>([]);
+  const [isProjecting, setIsProjecting] = createSignal(false);
   const [nowPlaying, setNowPlaying] = createSignal<number>(0);
   const [enableEditing, setEnableEditing] = createSignal<boolean>(false);
 
@@ -102,6 +107,14 @@ const App: Component = () => {
     setEnableEditing(false);
   };
 
+  const onProject = async () => {
+    const proxy = await project('projectr');
+
+    if (proxy) {
+      setIsProjecting(true);
+    }
+  };
+
   createEffect(() => {
     const data = JSON.stringify(peek()?.lyrics[nowPlaying()]);
     broadcast.postMessage(data);
@@ -146,13 +159,7 @@ const App: Component = () => {
               </button>
             </div>
 
-            <div class="flex h-48 flex-col gap-2 overflow-y-scroll rounded-md bg-gray-50/50 lg:h-52">
-              <For each={queue.slice(1)}>
-                {(track) => (
-                  <QueueItem track={track} handler={() => dequeue(track.qid)} />
-                )}
-              </For>
-            </div>
+            <QueueList queue={queue} handler={dequeue} />
           </div>
         </div>
       </aside>
@@ -166,7 +173,7 @@ const App: Component = () => {
 
       {/* View Pane */}
       <main
-        class="mb-20 rounded-lg transition-transform lg:col-start-2 lg:col-end-6"
+        class="mb-16 rounded-lg transition-transform lg:col-start-2 lg:col-end-6 lg:mb-20"
         classList={{ 'lg:col-start-3': enableEditing() }}
       >
         {/* Title */}
@@ -191,7 +198,7 @@ const App: Component = () => {
 
         {/* Lyrics Preloader */}
         <Show when={!peek()}>
-          <div class="h-42 grid grid-cols-1 gap-4 lg:h-80 lg:grid-cols-3 lg:overflow-y-scroll lg:pb-2">
+          <div class="h-42 hidden grid-cols-1 gap-4 lg:grid lg:h-80 lg:grid-cols-3 lg:overflow-y-scroll lg:pb-2">
             <div class="rounded-md bg-gray-200/40"></div>
             <div class="rounded-md bg-gray-200/40"></div>
             <div class="rounded-md bg-gray-200/40"></div>
@@ -216,7 +223,10 @@ const App: Component = () => {
         {/* Controls */}
         <footer class="fixed bottom-0 left-0 w-full bg-white p-3">
           <div class="flex min-h-16 flex-wrap justify-between gap-4 rounded-lg bg-gray-200 p-4 text-gray-700 lg:justify-center">
-            <ProjectionButton handler={() => project('projectr')} />
+            <ProjectionButton
+              isProjecting={isProjecting()}
+              handler={onProject}
+            />
             <PlaybackButton
               isEnabled={peek() !== undefined && !isFirstVerse()}
               icon="arrow_back"

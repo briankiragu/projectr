@@ -19,8 +19,27 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    /* Aliases */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/ui/components/*"],
+      "@composables/*": ["./src/lib/composables/*"],
+      "@interfaces/*": ["./src/lib/interfaces/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@pages/*": ["./src/ui/pages/*"],
+      "@ui/*": ["./src/ui/*"]
+    }
   },
-  "include": ["src"],
+  "include": [
+    "src",
+    "eslintrc.cjs",
+    "prettierrc.cjs",
+    "playwright.config.ts",
+    "postcss.config.js",
+    "tailwind.config.js"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,4 +1,4 @@
-import { Component } from 'solid-js';
+import { type Component } from 'solid-js';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const App: Component = ({ children }: any) => {

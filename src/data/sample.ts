@@ -1,7 +1,8 @@
-import { ITrack } from '../interfaces/track';
+import type { ITrack } from '@interfaces/track';
 
 const data: ITrack[] = [
   {
+    id: 1,
     title: 'shusha',
     lyrics: [
       [
@@ -39,6 +40,7 @@ const data: ITrack[] = [
     ],
   },
   {
+    id: 2,
     title: 'shangilia',
     lyrics: [
       [
@@ -89,6 +91,7 @@ const data: ITrack[] = [
     ],
   },
   {
+    id: 3,
     title: 'nina-siri',
     lyrics: [
       [
@@ -125,6 +128,7 @@ const data: ITrack[] = [
     ],
   },
   {
+    id: 4,
     title: 'this-i-know-ungizungezile',
     lyrics: [
       [

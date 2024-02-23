@@ -1,12 +1,12 @@
 // Import the modules.
-import { Component, onMount } from 'solid-js';
+import { type Component, onMount } from 'solid-js';
 import { debounceTime, distinctUntilChanged, fromEvent, switchMap } from 'rxjs';
 
 // Import the interfaces.
-import type { ITrack } from '../../interfaces/track';
+import type { ITrack } from '@interfaces/track';
 
 // Import the composables.
-import useMeiliSearch from '../../lib/composables/useMeiliSearch';
+import useMeiliSearch from '@composables/useMeiliSearch';
 
 const SearchForm: Component<{ handler: (results: ITrack[]) => void }> = (
   props

@@ -1,1 +1,3 @@
-lyrics.*
+*.pptx
+*.extracted.json
+*.formatted.json
