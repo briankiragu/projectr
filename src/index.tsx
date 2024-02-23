@@ -7,7 +7,7 @@ import { Route, Router } from '@solidjs/router';
 import './index.css';
 
 // Import components.
-const App = lazy(() => import('@pages/App'));
+import App from '@pages/App';
 const Project = lazy(() => import('@pages/Project'));
 const Dashboard = lazy(() => import('@pages/Dashboard'));
 
