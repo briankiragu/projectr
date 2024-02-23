@@ -13,7 +13,7 @@ import type { ITrack } from '@interfaces/track';
 
 // Import the composables.
 import useFormatting from '@composables/useFormatting';
-import useWindowManagement from '@composables/useWindowManagement';
+import useWindowManagementAPI from '@composables/useWindowManagementAPI';
 
 // Import components.
 const LyricsCard = lazy(() => import('@components/cards/LyricsCard'));
@@ -36,7 +36,7 @@ const App: Component = () => {
 
   // Import the composables.
   const { toTitleCase } = useFormatting();
-  const { project } = useWindowManagement();
+  const { project } = useWindowManagementAPI();
 
   const [results, setResults] = createStore<ITrack[]>([]);
   const [queue, setQueue] = createStore<ITrack[]>([]);

@@ -2,6 +2,7 @@ import { type Component, For, lazy } from 'solid-js';
 
 // Import interfaces.
 import type { ITrack } from '@interfaces/track';
+import useDragAndDropAPI from '@/lib/composables/useDragAndDropAPI';
 
 // Import the components.
 const QueueListItem = lazy(() => import('./QueueListItem'));
@@ -19,7 +20,8 @@ const QueueList: Component<{
           <QueueListItem
             ref={refs.at(index())}
             track={track}
-            handler={() => handler(track.qid)}
+            dragHandlers={useDragAndDropAPI}
+            queueHandler={() => handler(track.qid)}
           />
         )}
       </For>

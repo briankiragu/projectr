@@ -5,19 +5,22 @@ import type { ITrack } from '@interfaces/track';
 
 // Import composables.
 import useFormatting from '@composables/useFormatting';
+import { type IDragHandlers } from '@/lib/composables/useDragAndDropAPI';
 
 const QueueListItem: Component<{
   // ref?: HTMLDivElement;
   track: ITrack;
-  handler: () => void;
-}> = ({ track, handler }) => {
+  dragHandlers: () => IDragHandlers;
+  queueHandler: () => void;
+}> = ({ track, dragHandlers, queueHandler }) => {
   let ref: HTMLDivElement | undefined;
+
   const { toTitleCase } = useFormatting();
+  const { onDragOver, onDragStart } = dragHandlers();
 
   onMount(() => {
-    ref?.addEventListener('dragstart', (e) => {
-      console.dir(e);
-    });
+    ref?.addEventListener('dragstart', onDragStart);
+    ref?.addEventListener('dragover', onDragOver);
   });
 
   return (
@@ -32,7 +35,7 @@ const QueueListItem: Component<{
       </h4>
       <button
         class="material-symbols-outlined rounded-full p-1 hover:bg-gray-300"
-        onClick={handler}
+        onClick={queueHandler}
       >
         playlist_remove
       </button>
