@@ -9,22 +9,26 @@ import {
 import { createStore } from 'solid-js/store';
 
 // Import interfaces.
-import type { ITrack } from '../interfaces/track';
+import type { ITrack } from '@interfaces/track';
 
 // Import the composables.
-import useFormatting from '../lib/composables/useFormatting';
-import useWindowManagement from '../lib/composables/useWindowManagement';
+import useFormatting from '@composables/useFormatting';
+import useWindowManagement from '@composables/useWindowManagement';
 
 // Import components.
-const LyricsCard = lazy(() => import('../ui/cards/LyricsCard'));
-const LyricsPreviewCard = lazy(() => import('../ui/cards/LyricsPreviewCard'));
-const NowPlayingCard = lazy(() => import('../ui/cards/NowPlayingCard'));
-const PlaybackButton = lazy(() => import('../ui/buttons/PlaybackButton'));
-const ProjectionButton = lazy(() => import('../ui/buttons/ProjectionButton'));
-const QueueList = lazy(() => import('../ui/queue/QueueList'));
-const SearchForm = lazy(() => import('../ui/search/SearchForm'));
-const SearchResults = lazy(() => import('../ui/search/SearchResults'));
-const TrackForm = lazy(() => import('../ui/forms/TrackForm'));
+const LyricsCard = lazy(() => import('@components/cards/LyricsCard'));
+const LyricsPreviewCard = lazy(
+  () => import('@components/cards/LyricsPreviewCard')
+);
+const NowPlayingCard = lazy(() => import('@components/cards/NowPlayingCard'));
+const PlaybackButton = lazy(() => import('@components/buttons/PlaybackButton'));
+const ProjectionButton = lazy(
+  () => import('@components/buttons/ProjectionButton')
+);
+const QueueList = lazy(() => import('@components/queue/QueueList'));
+const SearchForm = lazy(() => import('@components/search/SearchForm'));
+const SearchResults = lazy(() => import('@components/search/SearchResults'));
+const TrackForm = lazy(() => import('@components/forms/TrackForm'));
 
 const App: Component = () => {
   // Create a broadcast channel.
