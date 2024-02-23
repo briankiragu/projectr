@@ -48,13 +48,7 @@ export default () => {
     const extendedScreen = screens.find((screen) => screen.isPrimary);
 
     // Open the popup with the correct data.
-    const proxy = openPopup(extendedScreen!, channel);
-
-    // Open the proxy in fullscreen mode.
-    proxy?.document.body.requestFullscreen({ screen: extendedScreen });
-
-    // Return the proxy.
-    return proxy ?? undefined;
+    return openPopup(extendedScreen!, channel) ?? undefined;
   };
 
   const openPopup = (
