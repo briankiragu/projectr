@@ -17,9 +17,7 @@ export default defineConfig({
       '@components': path.resolve(__dirname, './src/ui/components'),
       '@composables': path.resolve(__dirname, './src/lib/composables'),
       '@interfaces': path.resolve(__dirname, './src/lib/interfaces'),
-      '@lib': path.resolve(__dirname, './src/lib'),
       '@pages': path.resolve(__dirname, './src/ui/pages'),
-      '@ui': path.resolve(__dirname, './src/ui'),
     },
   },
 });

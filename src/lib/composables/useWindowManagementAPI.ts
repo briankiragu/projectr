@@ -1,13 +1,16 @@
-import usePermissions from './usePermissions';
+import usePermissionsAPI from '@composables/usePermissionsAPI';
 
 export default () => {
+  // Check the current mode of the environment.
+  const isInDevelopmentMode: boolean = import.meta.env.MODE === 'development';
+
   // Check if the API is supported.
   const isSupported = 'getScreens' in window || 'getScreenDetails';
 
-  const project = async (channel: string): Promise<WindowProxy | undefined> => {
-    // Import the composable methods.
-    const { requestWindowManagementPermissions } = usePermissions();
+  // Import the composable methods.
+  const { requestWindowManagementPermissions } = usePermissionsAPI();
 
+  const project = async (channel: string): Promise<WindowProxy | undefined> => {
     // If the API is not supported, do not project.
     if (!isSupported) return;
 
@@ -28,7 +31,7 @@ export default () => {
 
     // If onyl one screen is detected, ask the user to connect a second display.
     // eslint-disable-next-line no-constant-condition
-    if (screens.length < 1) {
+    if (!isInDevelopmentMode && screens.length < 2) {
       // Prompt the user to set their display mode to 'extend'.
       window.alert(`Connect a second screen to activate projection.`);
       return;
@@ -39,13 +42,15 @@ export default () => {
 
     // If not set, prompt the user to set their display mode to 'extend'.
     // eslint-disable-next-line no-constant-condition
-    if (isExtended) {
+    if (!isInDevelopmentMode && !isExtended) {
       window.alert(`Set your display settings to 'extend'.`);
       return;
     }
 
     // Get the non-primary (extended) screen.
-    const extendedScreen = screens.find((screen) => screen.isPrimary);
+    const extendedScreen = screens.find(
+      (screen) => isInDevelopmentMode || !screen.isPrimary
+    );
 
     // Open the popup with the correct data.
     return openPopup(extendedScreen!, channel) ?? undefined;
