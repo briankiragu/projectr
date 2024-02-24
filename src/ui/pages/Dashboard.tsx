@@ -16,18 +16,18 @@ import useFormatting from '@composables/useFormatting';
 import useWindowManagementAPI from '@composables/useWindowManagementAPI';
 
 // Import components.
+import PlaybackButton from '@components/buttons/PlaybackButton';
+import ProjectionButton from '@components/buttons/ProjectionButton';
+import QueueList from '@components/queue/QueueList';
+import SearchForm from '@components/search/SearchForm';
+import SearchResults from '@components/search/SearchResults';
+
+// Lazy-loaded components.
 const LyricsCard = lazy(() => import('@components/cards/LyricsCard'));
 const LyricsPreviewCard = lazy(
   () => import('@components/cards/LyricsPreviewCard')
 );
 const NowPlayingCard = lazy(() => import('@components/cards/NowPlayingCard'));
-const PlaybackButton = lazy(() => import('@components/buttons/PlaybackButton'));
-const ProjectionButton = lazy(
-  () => import('@components/buttons/ProjectionButton')
-);
-const QueueList = lazy(() => import('@components/queue/QueueList'));
-const SearchForm = lazy(() => import('@components/search/SearchForm'));
-const SearchResults = lazy(() => import('@components/search/SearchResults'));
 const TrackForm = lazy(() => import('@components/forms/TrackForm'));
 
 const App: Component = () => {
