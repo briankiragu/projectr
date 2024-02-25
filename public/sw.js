@@ -1,4 +1,4 @@
-const cacheName = 'projectr-v1.0.1';
+const cacheName = 'projectr-v1.0.2';
 const appShellFiles = [
   '/favicons/android-chrome-36x36.png',
   '/favicons/android-chrome-48x48.png',
