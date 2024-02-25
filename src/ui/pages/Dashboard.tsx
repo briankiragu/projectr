@@ -127,7 +127,7 @@ const App: Component = () => {
   // JSX component.
   return (
     // Main container
-    <div class="grid gap-5 p-6 lg:h-screen lg:grid-cols-4">
+    <div class="grid gap-5 p-6 lg:grid-cols-4">
       <aside class="flex flex-col gap-5 rounded-lg lg:mb-20">
         {/* Search Pane */}
         <search class="flex flex-col gap-2 rounded-lg bg-gray-300 px-4 pb-4 pt-3">
