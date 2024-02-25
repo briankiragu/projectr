@@ -1,4 +1,4 @@
-import { type Component } from 'solid-js';
+import { onMount, type Component } from 'solid-js';
 
 const PlaybackButton: Component<{
   isEnabled: boolean;
@@ -6,11 +6,8 @@ const PlaybackButton: Component<{
   text: string;
   handler?: () => void;
 }> = (props) => {
-  let el: HTMLButtonElement | undefined
-
   return (
     <button
-      ref={el}
       class="flex h-10 w-10 items-center justify-center gap-2 rounded-full font-semibold transition-colors hover:bg-gray-600/70 hover:text-gray-50 lg:h-auto lg:w-auto lg:rounded-lg lg:px-4"
       classList={{
         'hover:bg-transparent disabled:text-gray-300': !props.isEnabled,

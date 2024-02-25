@@ -5,6 +5,7 @@ import {
   createEffect,
   createSignal,
   lazy,
+  onMount,
 } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
@@ -62,7 +63,9 @@ const App: Component = () => {
 
   // Next verse.
   const goToNextVerse = () => {
-    setNowPlaying((nowPlaying) => nowPlaying + 1);
+    if (!isLastVerse()) {
+      setNowPlaying((nowPlaying) => nowPlaying + 1);
+    }
   };
 
   // Go to a specific verse.
@@ -114,6 +117,14 @@ const App: Component = () => {
       setIsProjecting(true);
     }
   };
+
+  onMount(() => {
+    window.addEventListener("keydown", (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') goToPreviousVerse()
+      if (e.key === 'ArrowRight') goToNextVerse()
+      if (e.shiftKey && e.key === 'ArrowRight') dequeue(peek()!.qid, true)
+    })
+  })
 
   createEffect(() => {
     const data = JSON.stringify({
@@ -232,21 +243,21 @@ const App: Component = () => {
               handler={onProject}
             />
             <PlaybackButton
-              isEnabled={peek() !== undefined && !isFirstVerse()}
               icon="arrow_back"
               text="Previous verse"
+              isEnabled={peek() !== undefined && !isFirstVerse()}
               handler={goToPreviousVerse}
             />
             <PlaybackButton
-              isEnabled={peek() !== undefined && !isLastVerse()}
               icon="arrow_forward"
               text="Next verse"
+              isEnabled={peek() !== undefined && !isLastVerse()}
               handler={goToNextVerse}
             />
             <PlaybackButton
-              isEnabled={peek() !== undefined}
               icon="skip_next"
               text="Next track"
+              isEnabled={peek() !== undefined}
               handler={() => dequeue(peek()!.qid, true)}
             />
           </div>
