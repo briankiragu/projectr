@@ -5,6 +5,7 @@
     "module": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
+    "allowJs": true,
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -33,14 +34,6 @@
       "@ui/*": ["./src/ui/*"]
     }
   },
-  "include": [
-    "src",
-    "tests",
-    ".eslintrc.cjs",
-    ".prettierrc.cjs",
-    "playwright.config.ts",
-    "postcss.config.js",
-    "tailwind.config.js"
-  ],
+  "include": ["src", "tests", "public/sw.js"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -27,4 +27,12 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['@typescript-eslint'],
+  ignorePatterns: [
+    ".eslintrc.cjs",
+    ".prettierrc.cjs",
+    "playwright.config.ts",
+    "postcss.config.js",
+    "tailwind.config.js",
+    "vite.config.ts",
+  ]
 };
