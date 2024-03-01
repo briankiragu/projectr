@@ -98,20 +98,15 @@ const App: Component = () => {
    */
   const playNow = (qid: number) => {
     if (peek()) {
-      // Create a subset of the queue.
-      const subqueue: IQueueItem[] = JSON.parse(JSON.stringify(queue.slice(1)))
-
       // Find the item in the queue.
-      const trackIndex = subqueue.findIndex((track) => track.qid !== qid)
+      const track = queue.find((track) => track.qid === qid)
 
-      // Remove the item from the queue.
-      const [track] = subqueue.splice(trackIndex, 1)
-
-      // Place the given item as first in the queue.
-      subqueue.unshift(track)
-
-      // Add the values back to the main queue.
-      setQueue([peek()!, ...subqueue])
+      // Rebuild the queue.
+      setQueue([
+        peek()!,
+        track!,
+        ...queue.slice(1).filter((track) => track.qid !== qid)
+      ])
 
       // Dequeue the first item.
       dequeue(peek()!.qid, true)
