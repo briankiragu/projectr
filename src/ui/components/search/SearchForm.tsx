@@ -25,9 +25,8 @@ const SearchForm: Component<{
         debounceTime(500),
         distinctUntilChanged(),
         switchMap(async (event: InputEvent) => {
-          const { hits } = await search(
-            (event.target as HTMLInputElement).value
-          );
+          const phrase: string = (event.target as HTMLInputElement).value
+          const { hits } = await search(phrase);
           return hits as ITrack[];
         })
       )

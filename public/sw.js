@@ -1,6 +1,7 @@
 const cacheName = "projectr-v1.0.3";
 const appShellFiles = [
   "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200",
+  "https://tracking.musixmatch.com/t1.0/AMa6hJCIEzn1v8RuOP",
 
   "/favicons/favicon-32x32.png",
   "/favicons/favicon-16x16.png",
