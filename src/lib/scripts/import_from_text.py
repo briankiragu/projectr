@@ -54,7 +54,7 @@ def add_to_meilisearch(title:str, lyrics: list[list[str]]):
         task = index.add_documents(new_document)
 
         print(
-            f"Successfully added track '{title}' with ID: '{new_document[0]['id']}' with task UID: '{task.task_uid}'."
+            f"Successfully added track '{title}' with ID: '{new_document[0]['id']}'. Task UID: '{task.task_uid}'."
         )
     except Exception as e:
        raise(e)
