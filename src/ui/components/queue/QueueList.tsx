@@ -9,8 +9,9 @@ const QueueListItem = lazy(() => import('./QueueListItem'));
 
 const QueueList: Component<{
   queue: IQueueItem[];
-  handler: (id: number) => void;
-}> = ({ queue, handler }) => {
+  playHandler: (id: number) => void;
+  queueHandler: (id: number) => void;
+}> = ({ queue, playHandler, queueHandler }) => {
   const refs: (HTMLDivElement | undefined)[] = [];
 
   return (
@@ -21,7 +22,8 @@ const QueueList: Component<{
             ref={refs.at(index())}
             track={track}
             dragHandlers={useDragAndDropAPI}
-            queueHandler={() => handler(track.qid)}
+            playHandler={() => playHandler(track.qid)}
+            queueHandler={() => queueHandler(track.qid)}
           />
         )}
       </For>

@@ -80,25 +80,48 @@ const App: Component = () => {
   };
 
   // Dequeue.
-  const dequeue = (qid: number, reset?: boolean) => {
+  const dequeue = (qid: number, shouldReset?: boolean) => {
     setQueue(queue.filter((track) => qid !== track.qid));
 
     // Update now playing when a track is dequeued.
-    if (reset) {
+    if (shouldReset) {
       setNowPlaying(0);
       setEnableEditing(false);
-    }
-
-    // If the queue is finished, clear the projection.
-    if (peek() === undefined) {
-      broadcast.postMessage(null);
     }
   };
 
   // Clear queue
   const flush = () => setQueue(queue.slice(0, 1));
 
-  const alterNowPlaying = (lyrics: string[][], qid: number) => {
+  /**
+   * Set a queued playing song as now playing.
+   */
+  const playNow = (qid: number) => {
+    if (peek()) {
+      // Create a subset of the queue.
+      const subqueue: IQueueItem[] = JSON.parse(JSON.stringify(queue.slice(1)))
+
+      // Find the item in the queue.
+      const trackIndex = subqueue.findIndex((track) => track.qid !== qid)
+
+      // Remove the item from the queue.
+      const [track] = subqueue.splice(trackIndex, 1)
+
+      // Place the given item as first in the queue.
+      subqueue.unshift(track)
+
+      // Add the values back to the main queue.
+      setQueue([peek()!, ...subqueue])
+
+      // Dequeue the first item.
+      dequeue(peek()!.qid, true)
+    }
+  }
+
+  /**
+   * Edit the currently playing track lyrics.
+   */
+  const editNowPlaying = (lyrics: string[][], qid: number) => {
     // Update an item in the queue.
     setQueue(
       (track) => track.qid === qid,
@@ -127,11 +150,18 @@ const App: Component = () => {
   })
 
   createEffect(() => {
-    const data = JSON.stringify({
-      track: peek(),
-      nowPlaying: nowPlaying()
-    });
+    // Declare a variable to hold the outgoing data.
+    let data: string | null = null
 
+    // If the queue is finished, clear the projection.
+    if (peek() !== undefined) {
+      data = JSON.stringify({
+        track: peek(),
+        nowPlaying: nowPlaying()
+      });
+    }
+
+    // Send the message.
     broadcast.postMessage(data);
   });
 
@@ -174,7 +204,7 @@ const App: Component = () => {
               </button>
             </div>
 
-            <QueueList queue={queue} handler={dequeue} />
+            <QueueList queue={queue} playHandler={playNow} queueHandler={dequeue} />
           </div>
         </div>
       </aside>
@@ -182,7 +212,7 @@ const App: Component = () => {
       {/* Live edit */}
       <Show when={enableEditing()}>
         <aside class="mb-12 rounded-lg bg-gray-100 p-3 transition-transform lg:mb-20">
-          <TrackForm track={peek()} handler={alterNowPlaying} />
+          <TrackForm track={peek()} handler={editNowPlaying} />
         </aside>
       </Show>
 

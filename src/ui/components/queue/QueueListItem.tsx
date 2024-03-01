@@ -11,8 +11,9 @@ const QueueListItem: Component<{
   // ref?: HTMLDivElement;
   track: IQueueItem;
   dragHandlers: () => IDragHandlers;
+  playHandler: () => void;
   queueHandler: () => void;
-}> = ({ track, dragHandlers, queueHandler }) => {
+}> = ({ track, dragHandlers, playHandler, queueHandler }) => {
   let ref: HTMLDivElement | undefined;
 
   const { toTitleCase } = useFormatting();
@@ -33,6 +34,12 @@ const QueueListItem: Component<{
       <h4 class="col-span-2 w-full py-1 font-semibold">
         {toTitleCase(track.title)}
       </h4>
+      <button
+        class="material-symbols-outlined rounded-full p-1 hover:bg-gray-300"
+        onClick={playHandler}
+      >
+        play_arrow
+      </button>
       <button
         class="material-symbols-outlined rounded-full p-1 hover:bg-gray-300"
         onClick={queueHandler}
