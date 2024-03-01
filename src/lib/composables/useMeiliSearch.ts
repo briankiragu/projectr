@@ -2,15 +2,15 @@ import { MeiliSearch } from 'meilisearch';
 import data from '../../data/sample';
 
 export default () => {
+  // The name of the index.
+  const indexId = 'tracks';
+  const primaryKey = 'id';
+
   // Create the client
   const client = new MeiliSearch({
     host: import.meta.env.VITE_MEILI_HOST,
     apiKey: import.meta.env.VITE_MEILI_MASTER_KEY,
   });
-
-  // The name of the index.
-  const indexId = 'tracks';
-  const primaryKey = 'id';
 
   const init = async () => {
     // Create the index.
