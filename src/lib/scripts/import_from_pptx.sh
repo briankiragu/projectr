@@ -47,4 +47,4 @@ except Exception as e:
     print("Error:", str(e))
 END_PYTHON
 
-python import.py $output_json
+python import_from_pptx.py $output_json

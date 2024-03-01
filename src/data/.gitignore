@@ -1,3 +1,2 @@
-*.pptx
-*.json
-*.sql
+*
+!sample.ts
