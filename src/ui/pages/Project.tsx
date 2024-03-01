@@ -1,7 +1,7 @@
 import { type Component, createSignal, lazy, Show } from 'solid-js';
 
 // Import the interfaces
-import type { ITrack } from '@interfaces/track';
+import type { IQueueItem } from '@interfaces/track';
 
 // Import the composables.
 import useFormatting from '@composables/useFormatting';
@@ -19,7 +19,7 @@ const Project: Component = () => {
   const broadcast = new BroadcastChannel('projectr');
 
   // To hold the data from the broadcast channel.
-  const [track, setTrack] = createSignal<ITrack | undefined>();
+  const [track, setTrack] = createSignal<IQueueItem | undefined>();
   const [nowPlaying, setNowPlaying] = createSignal(0);
 
   const currentVerse = (): string[] | undefined => track()?.lyrics.at(nowPlaying())

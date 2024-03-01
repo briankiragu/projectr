@@ -1,7 +1,7 @@
 import { onMount, type Component } from 'solid-js';
 
 // Import interfaces.
-import type { ITrack } from '@interfaces/track';
+import type { IQueueItem } from '@interfaces/track';
 
 // Import composables.
 import useFormatting from '@composables/useFormatting';
@@ -9,7 +9,7 @@ import { type IDragHandlers } from '@composables/useDragAndDropAPI';
 
 const QueueListItem: Component<{
   // ref?: HTMLDivElement;
-  track: ITrack;
+  track: IQueueItem;
   dragHandlers: () => IDragHandlers;
   queueHandler: () => void;
 }> = ({ track, dragHandlers, queueHandler }) => {

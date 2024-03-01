@@ -51,6 +51,12 @@ const data: ITrack[] = [
         'Elder John:  0728 042 943',
       ],
     ],
+
+    created_at: Date.now().toString(),
+    updated_at: Date.now().toString(),
+
+    created_by_id: 1,
+    updated_by_id: 1,
   },
 ];
 

@@ -1,24 +1,18 @@
 debug: true
-plugins:
-  - meilisync.plugin.Plugin
-source:
-  type: mysql
-  host: projectr_mysql
-  port: 3306
-  user: '${MYSQL_USER}'
-  password: '${MYSQL_PASSWORD}'
-  database: '${MYSQL_DATABASE}'
 meilisearch:
   api_url: '{VITE_MEILI_HOST}'
   api_key: '{VITE_MEILI_MASTER_KEY}'
   insert_size: 1000
   insert_interval: 10
+source:
+  type: mysql
+  host: 127.0.0.1
+  port: 3306
+  user: 'root'
+  password: '${MYSQL_ROOT_PASSWORD}'
+  database: '${MYSQL_DATABASE}'
 sync:
   - table: tracks
-    index: title
-    plugins:
-      - meilisync.plugin.Plugin
+    index: id
+    pk: id
     full: true
-    fields:
-      title:
-      lyrics:

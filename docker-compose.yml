@@ -27,8 +27,11 @@ services:
       MEILI_MASTER_KEY: '${VITE_MEILI_MASTER_KEY}'
 
   meilisync:
-    image: long2ice/meilisync
+    image: long2ice/meilisync:latest
     container_name: projectr_meilisync
     restart: always
     volumes:
-      - ./docker/meilisync/config.yml:/meilisync/config.yml/:ro
+      - ./docker/meilisync/config.yml:/meilisync/config.yml
+    depends_on:
+      - mysql
+      - meilisearch

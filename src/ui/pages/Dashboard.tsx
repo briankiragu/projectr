@@ -9,7 +9,7 @@ import {
 import { createStore } from 'solid-js/store';
 
 // Import interfaces.
-import type { ITrack } from '@interfaces/track';
+import type { ITrack, IQueueItem } from '@interfaces/track';
 
 // Import the composables.
 import useFormatting from '@composables/useFormatting';
@@ -39,7 +39,7 @@ const App: Component = () => {
   const { project } = useWindowManagementAPI();
 
   const [results, setResults] = createStore<ITrack[]>([]);
-  const [queue, setQueue] = createStore<ITrack[]>([]);
+  const [queue, setQueue] = createStore<IQueueItem[]>([]);
   const [isProjecting, setIsProjecting] = createSignal(false);
   const [nowPlaying, setNowPlaying] = createSignal<number>(0);
   const [enableEditing, setEnableEditing] = createSignal<boolean>(false);
@@ -77,7 +77,7 @@ const App: Component = () => {
   };
 
   // Dequeue.
-  const dequeue = (qid: number | undefined, reset?: boolean) => {
+  const dequeue = (qid: number, reset?: boolean) => {
     setQueue(queue.filter((track) => qid !== track.qid));
 
     // Update now playing when a track is dequeued.
@@ -95,7 +95,7 @@ const App: Component = () => {
   // Clear queue
   const flush = () => setQueue(queue.slice(0, 1));
 
-  const alterNowPlaying = (lyrics: string[][], qid: number | undefined) => {
+  const alterNowPlaying = (lyrics: string[][], qid: number) => {
     // Update an item in the queue.
     setQueue(
       (track) => track.qid === qid,

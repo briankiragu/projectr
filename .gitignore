@@ -30,8 +30,6 @@ dist-ssr
 # Environment variables
 .env*
 !.env.example
-!.env.testing
-!.env.production
 
 # Python virtual env
 .venv

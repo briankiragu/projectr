@@ -1,9 +1,9 @@
 import { type Component } from 'solid-js';
-import type { ITrack } from '@interfaces/track';
+import type { IQueueItem } from '@interfaces/track';
 import useFormatting from '@composables/useFormatting';
 
 const NowPlayingCard: Component<{
-  track?: ITrack;
+  track?: IQueueItem;
   handler?: () => void;
 }> = (props) => {
   const { toTitleCase } = useFormatting();

@@ -1,9 +1,9 @@
 import { type Component, createSignal } from 'solid-js';
-import type { ITrack } from '@interfaces/track';
+import type { IQueueItem } from '@interfaces/track';
 import useTracks from '@composables/useTracks';
 
 const TrackForm: Component<{
-  track?: ITrack;
+  track?: IQueueItem;
   handler: (lyrics: string[][], qid: number) => void;
 }> = (props) => {
   const { toEditable, fromEditable } = useTracks();
@@ -14,7 +14,7 @@ const TrackForm: Component<{
       class="flex flex-col gap-3 text-sm text-gray-500"
       onSubmit={(e) => {
         e.preventDefault();
-        props.handler(fromEditable(live()), props.track!.qid!);
+        props.handler(fromEditable(live()), props.track!.qid);
       }}
     >
       <h3 class="font-semibold italic text-teal-800">
