@@ -29,11 +29,6 @@
       "type": "image/png"
     },
     {
-      "src": "/favicons/apple-touch-icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png"
-    },
-    {
       "src": "/favicons/android-chrome-144x144.png",
       "sizes": "144x144",
       "type": "image/png"
