@@ -10,7 +10,7 @@ export default () => {
 
   // The name of the index.
   const indexId = 'tracks';
-  const primaryKey = 'title';
+  const primaryKey = 'id';
 
   const init = async () => {
     // Create the index.

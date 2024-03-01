@@ -16,11 +16,11 @@ const SearchForm: Component<{ handler: (results: ITrack[]) => void }> = (
 
   // DOM reference.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let inputRef: any;
+  let inputRef: HTMLInputElement | undefined;
 
   // Observable from DOM ref that watches user input.
   onMount(() => {
-    fromEvent<InputEvent>(inputRef, 'input')
+    fromEvent<InputEvent>(inputRef!, 'input')
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
@@ -41,7 +41,7 @@ const SearchForm: Component<{ handler: (results: ITrack[]) => void }> = (
           Search for a song by title or lyrics...
         </span>
         <input
-          ref={inputRef}
+          ref={inputRef!}
           id="search"
           type="search"
           name="search"
