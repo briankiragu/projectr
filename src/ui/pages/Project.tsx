@@ -1,15 +1,10 @@
-import { type Component, createSignal, lazy, Show } from 'solid-js';
+import { type Component, createSignal, Show, For } from 'solid-js';
 
 // Import the interfaces
 import type { IQueueItem } from '@interfaces/track';
 
 // Import the composables.
 import useFormatting from '@composables/useFormatting';
-
-// Import components.
-const LyricsPreviewCard = lazy(
-  () => import('@components/cards/LyricsPreviewCard')
-);
 
 const Project: Component = () => {
   // Import the composables.
@@ -33,19 +28,27 @@ const Project: Component = () => {
   });
 
   return (
-    <div class="h-screen p-4">
+    <div class="flex flex-col gap-4 items-stretch h-dvh p-4 bg-gray-100">
       {/* Title */}
       <Show
         when={track()}
-        fallback={<div class="mb-3 h-16 rounded-md bg-gray-200/60"></div>}
+        fallback={<div class="h-20 rounded-md bg-gray-200/60"></div>}
       >
-        <h2 class="mb-3 text-center text-wrap text-4xl underline font-black text-green-900 lg:mb-4 lg:text-6xl 2xl:text-7xl uppercase">
+        <h2 class="h-20 text-center text-wrap text-7xl underline font-black text-green-900 uppercase">
           {toTitleCase(track()!.title)}
         </h2>
       </Show>
 
       {/* Lyrics */}
-      <LyricsPreviewCard verse={currentVerse()} />
+      <div class="flex-auto flex flex-col justify-center gap-4 rounded-lg bg-green-900 px-6 py-4 text-center text-teal-50 shadow-lg shadow-teal-600/20 transition-colors">
+        <For each={currentVerse()}>
+          {(line) => (
+            <p class="text-wrap font-extrabold uppercase text-7xl">
+              {line}
+            </p>
+          )}
+        </For>
+      </div>
     </div>
   );
 };
