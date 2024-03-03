@@ -41,7 +41,7 @@ const App: Component = () => {
 
   const [results, setResults] = createStore<ITrack[]>([]);
   const [queue, setQueue] = createStore<IQueueItem[]>([]);
-  const [isProjecting, setIsProjecting] = createSignal(false);
+  const [isProjecting, setIsProjecting] = createSignal<boolean>(false);
   const [nowPlaying, setNowPlaying] = createSignal<number>(0);
   const [enableEditing, setEnableEditing] = createSignal<boolean>(false);
 

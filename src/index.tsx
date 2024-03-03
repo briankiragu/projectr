@@ -10,8 +10,8 @@ import './index.css';
 
 // Import components.
 import App from '@pages/App';
+import Dashboard from '@pages/Dashboard'
 const Project = lazy(() => import('@pages/Project'));
-const Dashboard = lazy(() => import('@pages/Dashboard'));
 
 // Get the root element
 const root = document.getElementById('root');
