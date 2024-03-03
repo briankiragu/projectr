@@ -88,6 +88,10 @@ const App: Component = () => {
       setNowPlaying(0);
       setEnableEditing(false);
     }
+
+    if (peek() === undefined) {
+      broadcast.postMessage(null)
+    }
   };
 
   // Clear queue
