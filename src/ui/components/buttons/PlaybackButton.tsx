@@ -1,22 +1,22 @@
-import { onMount, type Component } from 'solid-js';
+import { type Component } from 'solid-js';
 
 const PlaybackButton: Component<{
   isEnabled: boolean;
   icon: string;
   text: string;
   handler?: () => void;
-}> = (props) => {
+}> = ({ isEnabled, icon, text, handler }) => {
   return (
     <button
       class="flex h-10 w-10 items-center justify-center gap-2 rounded-full font-semibold transition-colors hover:bg-gray-600/70 hover:text-gray-50 lg:h-auto lg:w-auto lg:rounded-lg lg:px-4"
       classList={{
-        'hover:bg-transparent disabled:text-gray-300': !props.isEnabled,
+        'hover:bg-transparent disabled:text-gray-300': !isEnabled,
       }}
-      disabled={!props.isEnabled}
-      onClick={props.handler}
+      disabled={!isEnabled}
+      onClick={handler}
     >
-      <span class="material-symbols-outlined">{props.icon}</span>
-      <span class="hidden lg:inline">{props.text}</span>
+      <span class="material-symbols-outlined">{icon}</span>
+      <span class="hidden lg:inline">{text}</span>
     </button>
   );
 };

@@ -8,9 +8,9 @@ import type { ITrack } from '@interfaces/track';
 // Import the composables.
 import useMeiliSearch from '@composables/useMeiliSearch';
 
-const SearchForm: Component<{ handler: (results: ITrack[]) => void }> = (
-  props
-) => {
+const SearchForm: Component<{
+  handler: (results: ITrack[]) => void
+}> = ({ handler }) => {
   // Import the composables.
   const { search } = useMeiliSearch();
 
@@ -31,7 +31,7 @@ const SearchForm: Component<{ handler: (results: ITrack[]) => void }> = (
           return hits as ITrack[];
         })
       )
-      .subscribe((hits) => props.handler(hits));
+      .subscribe((hits) => handler(hits));
   });
 
   return (
