@@ -7,12 +7,12 @@ const SearchResultsItem = lazy(() => import('@components/search/SearchResultsIte
 const SearchResults: Component<{
   results: ITrack[];
   handler: (track: ITrack) => void;
-}> = ({ results, handler }) => {
+}> = (props) => {
   return (
     <div class="flex h-40 flex-col gap-2 overflow-y-scroll rounded-md lg:h-52">
-      <For each={results}>
+      <For each={props.results}>
         {(track) => (
-          <SearchResultsItem track={track} handler={[handler, track]} />
+          <SearchResultsItem track={track} handler={[props.handler, track]} />
         )}
       </For>
     </div>

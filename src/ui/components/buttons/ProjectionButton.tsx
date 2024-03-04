@@ -7,7 +7,7 @@ const ProjectionButton: Component<{
   isProjecting: boolean;
   openHandler: () => void;
   closeHandler: () => void;
-}> = ({ isProjecting, openHandler, closeHandler }) => {
+}> = (props) => {
   // Import the composable property.
   const { isSupported } = useWindowManagementAPI();
 
@@ -15,14 +15,16 @@ const ProjectionButton: Component<{
     <Show when={isSupported}>
       <button
         type="button"
-        class="flex h-10 w-10 cursor-pointer gap-3 rounded-full bg-teal-300 p-2 text-teal-800 transition-colors hover:bg-teal-700 hover:text-teal-50 lg:h-auto lg:w-auto lg:px-6"
-        classList={{ 'bg-teal-700': isProjecting }}
-        onClick={isProjecting ? closeHandler : openHandler}
+        class="flex h-10 w-10 cursor-pointer gap-3 rounded-full bg-teal-300 p-2 transition-colors hover:bg-teal-700 hover:text-teal-50 lg:h-auto lg:w-auto lg:px-6"
+        classList={{ 'bg-teal-700 text-teal-50 hover:bg-purple-800 hover:text-purple-50': props.isProjecting }}
+        onClick={props.isProjecting ? props.closeHandler : props.openHandler}
       >
         <span class="material-symbols-outlined">
-          {isProjecting ? 'stop_screen_share' : 'screen_share'}
+          {props.isProjecting ? 'stop_screen_share' : 'screen_share'}
         </span>
-        <span class="hidden font-semibold lg:inline">Project</span>
+        <span class="hidden font-semibold lg:inline">
+          {props.isProjecting ? 'Stop projecting' : 'Project'}
+        </span>
       </button>
     </Show>
   );

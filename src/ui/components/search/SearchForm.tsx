@@ -10,7 +10,7 @@ import useMeiliSearch from '@composables/useMeiliSearch';
 
 const SearchForm: Component<{
   handler: (results: ITrack[]) => void
-}> = ({ handler }) => {
+}> = (props) => {
   // Import the composables.
   const { search } = useMeiliSearch();
 
@@ -31,7 +31,7 @@ const SearchForm: Component<{
           return hits as ITrack[];
         })
       )
-      .subscribe((hits) => handler(hits));
+      .subscribe((hits) => props.handler(hits));
   });
 
   return (

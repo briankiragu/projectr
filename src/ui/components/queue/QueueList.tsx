@@ -11,19 +11,19 @@ const QueueList: Component<{
   queue: IQueueItem[];
   playHandler: (id: number) => void;
   queueHandler: (id: number) => void;
-}> = ({ queue, playHandler, queueHandler }) => {
+}> = (props) => {
   const refs: (HTMLDivElement | undefined)[] = [];
 
   return (
     <div class="flex h-48 flex-col gap-2 overflow-y-scroll rounded-md bg-gray-50/50 lg:h-56">
-      <For each={queue.slice(1)}>
+      <For each={props.queue.slice(1)}>
         {(track: IQueueItem, index) => (
           <QueueListItem
             ref={refs.at(index())}
             track={track}
             dragHandlers={useDragAndDropAPI}
-            playHandler={() => playHandler(track.qid)}
-            queueHandler={() => queueHandler(track.qid)}
+            playHandler={() => props.playHandler(track.qid)}
+            queueHandler={() => props.queueHandler(track.qid)}
           />
         )}
       </For>

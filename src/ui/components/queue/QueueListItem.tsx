@@ -8,16 +8,15 @@ import useFormatting from '@composables/useFormatting';
 import { type IDragHandlers } from '@composables/useDragAndDropAPI';
 
 const QueueListItem: Component<{
-  // ref?: HTMLDivElement;
   track: IQueueItem;
   dragHandlers: () => IDragHandlers;
   playHandler: () => void;
   queueHandler: () => void;
-}> = ({ track, dragHandlers, playHandler, queueHandler }) => {
+}> = (props) => {
   let ref: HTMLDivElement | undefined;
 
   const { toTitleCase } = useFormatting();
-  const { onDragOver, onDragStart } = dragHandlers();
+  const { onDragOver, onDragStart } = props.dragHandlers();
 
   onMount(() => {
     ref?.addEventListener('dragstart', onDragStart);
@@ -32,17 +31,17 @@ const QueueListItem: Component<{
     >
       {/* <span class="material-symbols-outlined cursor-move p-1">drag_pan</span> */}
       <h4 class="col-span-2 w-full py-1 font-semibold">
-        {toTitleCase(track.title)}
+        {toTitleCase(props.track.title)}
       </h4>
       <button
         class="material-symbols-outlined rounded-full p-1 hover:bg-gray-300"
-        onClick={playHandler}
+        onClick={props.playHandler}
       >
         play_arrow
       </button>
       <button
         class="material-symbols-outlined rounded-full p-1 hover:bg-gray-300"
-        onClick={queueHandler}
+        onClick={props.queueHandler}
       >
         playlist_remove
       </button>

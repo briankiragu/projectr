@@ -18,10 +18,10 @@ import useQueue from '@/lib/composables/useQueue';
 import useWindowManagementAPI from '@composables/useWindowManagementAPI';
 
 // Import components.
+import LyricsCardsPreloader from '@components/preloaders/LyricsCardsPreloader';
 import PlaybackButton from '@components/buttons/PlaybackButton';
 import ProjectionButton from '@components/buttons/ProjectionButton';
 import SearchForm from '@components/search/SearchForm';
-import LyricsCardsPreloader from '../preloaders/LyricsCardsPreloader';
 
 // Lazy-loaded components.
 const LyricsCard = lazy(() => import('@components/cards/LyricsCard'));

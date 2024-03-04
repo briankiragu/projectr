@@ -13,6 +13,7 @@ export default (channel: BroadcastChannel) => {
 
   const closeProjection = () => {
     projection()?.close();
+    setProjection(undefined);
   };
 
   return {
