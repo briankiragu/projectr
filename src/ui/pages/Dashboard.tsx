@@ -200,26 +200,30 @@ const App: Component = () => {
               closeHandler={() => closeProjection()}
             />
             <PlaybackButton
-              icon="hide_image"
+              icon="visibility_off"
               text="Clear Projection"
+              shortcut="Shift + C"
               isEnabled={isProjecting()}
               handler={clearProjection}
             />
             <PlaybackButton
               icon="arrow_back"
               text="Previous verse"
+              shortcut="ArrowLeft"
               isEnabled={peek() !== undefined && !isFirstVerse()}
               handler={goToPreviousVerse}
             />
             <PlaybackButton
               icon="arrow_forward"
               text="Next verse"
+              shortcut="ArrowRight"
               isEnabled={peek() !== undefined && !isLastVerse()}
               handler={goToNextVerse}
             />
             <PlaybackButton
               icon="skip_next"
               text="Next track"
+              shortcut="Shift + ArrowRight"
               isEnabled={peek() !== undefined}
               handler={() => dequeue(peek()!.qid, true)}
             />
