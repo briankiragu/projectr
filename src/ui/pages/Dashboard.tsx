@@ -21,6 +21,7 @@ import useWindowManagementAPI from '@composables/useWindowManagementAPI';
 import PlaybackButton from '@components/buttons/PlaybackButton';
 import ProjectionButton from '@components/buttons/ProjectionButton';
 import SearchForm from '@components/search/SearchForm';
+import LyricsCardsPreloader from '../preloaders/LyricsCardsPreloader';
 
 // Lazy-loaded components.
 const LyricsCard = lazy(() => import('@components/cards/LyricsCard'));
@@ -173,19 +174,10 @@ const App: Component = () => {
           </Show>
         </div>
 
-        {/* Lyrics Preloader */}
-        <Show when={!peek()}>
-          <div class="h-42 hidden grid-cols-1 gap-4 lg:grid lg:h-80 lg:grid-cols-3 lg:overflow-y-scroll lg:pb-2">
-            <div class="rounded-md bg-gray-200/40"></div>
-            <div class="rounded-md bg-gray-200/40"></div>
-            <div class="rounded-md bg-gray-200/40"></div>
-          </div>
-        </Show>
-
         {/* Lyrics */}
-        <div class="grid grid-cols-1 gap-4 lg:h-80 lg:grid-cols-3 lg:overflow-y-scroll lg:pb-2">
-          <Show when={peek()}>
-            <For each={peek()?.lyrics}>
+        <Show when={peek()} fallback={<LyricsCardsPreloader />}>
+          <div class="grid grid-cols-1 gap-4 lg:h-80 lg:grid-cols-3 lg:overflow-y-scroll lg:pb-2">
+            <For each={peek()!.lyrics}>
               {(verse, index) => (
                 <LyricsCard
                   verse={verse}
@@ -194,8 +186,8 @@ const App: Component = () => {
                 />
               )}
             </For>
-          </Show>
-        </div>
+          </div>
+        </Show>
 
         {/* Controls */}
         <footer class="fixed bottom-0 left-0 w-full bg-white p-3">
