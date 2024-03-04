@@ -56,15 +56,15 @@
   ],
   "screenshots": [
     {
-      "src": "images/long.png",
+      "src": "images/long.webp",
       "sizes": "2227x3840",
-      "type": "image/png",
+      "type": "image/webp",
       "label": "Projectr Mobile"
     },
     {
-      "src": "images/wide.png",
+      "src": "images/wide.webp",
       "sizes": "3840x2451",
-      "type": "image/png",
+      "type": "image/webp",
       "form_factor": "wide",
       "label": "Projectr Desktop"
     }
