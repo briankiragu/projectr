@@ -44,7 +44,7 @@ const Project: Component = () => {
         when={track()}
         fallback={
           <div
-            class="bg-contain bg-center bg-no-repeat bg-[url('/images/tvc-logo.svg')] rounded-lg flex-auto flex justify-center align-middle"
+            class="bg-contain bg-center bg-no-repeat bg-[url('/images/tvc-logo.svg')] opacity-25 rounded-lg flex-auto flex justify-center align-middle"
           ></div>
         }
       >
