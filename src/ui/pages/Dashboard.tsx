@@ -80,20 +80,22 @@ const App: Component = () => {
     })
   })
 
-  createEffect(() => {
+  createEffect((prev: number | undefined) => {
     // Declare a variable to hold the outgoing data.
     let data: string | null = null
 
-    // If the queue is finished, clear the projection.
-    if (peek() !== undefined) {
-      data = JSON.stringify({
-        track: peek(),
-        nowPlaying: nowPlaying()
-      });
+    // If the currently playing verse has changed...
+    if (nowPlaying() !== prev) {
+      data = peek() !== undefined
+        ? JSON.stringify({ track: peek(), nowPlaying: nowPlaying() })
+        : null;
+
+      // Send the message.
+      broadcast.postMessage(data);
     }
 
-    // Send the message.
-    broadcast.postMessage(data);
+    // Return the now playing to re-use in the next call.
+    return nowPlaying()
   });
 
   // JSX component.
