@@ -34,11 +34,7 @@ const Project: Component = () => {
         when={track()}
         fallback={<div class="h-20 rounded-md bg-gray-200/60"></div>}
       >
-<<<<<<< HEAD
         <h2 class="h-20 text-center text-wrap text-7xl underline font-black text-green-900 uppercase">
-=======
-        <h2 class="text-center text-wrap text-7xl underline font-black text-gray-900 uppercase">
->>>>>>> f34cbfe (ui: Add background image to resting page)
           {toTitleCase(track()!.title)}
         </h2>
       </Show>
@@ -46,7 +42,11 @@ const Project: Component = () => {
       {/* Lyrics */}
       <Show
         when={track()}
-        fallback={<div class="bg-gray-200 rounded-lg flex-auto flex justify-center align-middle"><img src="./images/tvc-logo.webp" /></div>}
+        fallback={
+          <div
+            class="bg-contain bg-center bg-no-repeat bg-gray-300 bg-[url('/images/tvc-logo.webp')] rounded-lg flex-auto flex justify-center align-middle"
+          ></div>
+        }
       >
         <div class="flex-auto flex flex-col justify-center gap-4 rounded-lg px-6 py-4 text-center text-gray-900 shadow-lg shadow-teal-600/20 transition-colors">
           <For each={currentVerse()}>
@@ -57,8 +57,8 @@ const Project: Component = () => {
             )}
           </For>
         </div>
-      </Show>
-    </div>
+      </Show >
+    </div >
   );
 };
 

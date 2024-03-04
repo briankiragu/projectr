@@ -25,7 +25,8 @@ const appShellFiles = [
   "/images/long.png",
   "/images/wide.png",
 
-  "/logo.webp",
+  "/images/logo.webp",
+  "/images/tvc-logo.webp",
   "/apple-touch-icon.png",
   "/safari-pinned-tab.svg",
 ];
