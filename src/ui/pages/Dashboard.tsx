@@ -3,25 +3,24 @@ import {
   For,
   Show,
   createEffect,
-  createSignal,
   lazy,
   onMount,
 } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 // Import interfaces.
-import type { ITrack, IQueueItem } from '@interfaces/track';
+import type { ITrack } from '@interfaces/track';
 
 // Import the composables.
 import useFormatting from '@composables/useFormatting';
+import useProjection from '@/lib/composables/useProjection';
+import useQueue from '@/lib/composables/useQueue';
 import useWindowManagementAPI from '@composables/useWindowManagementAPI';
 
 // Import components.
 import PlaybackButton from '@components/buttons/PlaybackButton';
 import ProjectionButton from '@components/buttons/ProjectionButton';
-import QueueList from '@components/queue/QueueList';
 import SearchForm from '@components/search/SearchForm';
-import SearchResults from '@components/search/SearchResults';
 
 // Lazy-loaded components.
 const LyricsCard = lazy(() => import('@components/cards/LyricsCard'));
@@ -29,122 +28,54 @@ const LyricsPreviewCard = lazy(
   () => import('@components/cards/LyricsPreviewCard')
 );
 const NowPlayingCard = lazy(() => import('@components/cards/NowPlayingCard'));
+const QueueList = lazy(() => import('@components/queue/QueueList'));
+const SearchResults = lazy(() => import('@components/search/SearchResults'));
 const TrackForm = lazy(() => import('@components/forms/TrackForm'));
 
 const App: Component = () => {
   // Create a broadcast channel.
   const broadcast = new BroadcastChannel('projectr');
 
+  // Create the signals.
+  const [results, setResults] = createStore<ITrack[]>([]);
+
+  // Create the derived signals.
+  const hasResults = (): boolean => results.length > 0
+
   // Import the composables.
   const { toTitleCase } = useFormatting();
+  const { isProjecting, setProjection, clearProjection, closeProjection } = useProjection(broadcast);
+  const {
+    queue,
+    nowPlaying,
+    isEditing,
+
+    peek,
+    enqueue,
+    dequeue,
+    flush,
+    playNow,
+    editNowPlaying,
+
+    isFirstVerse,
+    isLastVerse,
+    goToPreviousVerse,
+    goToNextVerse,
+    goToVerse,
+
+    setIsEditing
+  } = useQueue(broadcast);
   const { project } = useWindowManagementAPI();
-
-  const [results, setResults] = createStore<ITrack[]>([]);
-  const [queue, setQueue] = createStore<IQueueItem[]>([]);
-  const [isProjecting, setIsProjecting] = createSignal<boolean>(false);
-  const [nowPlaying, setNowPlaying] = createSignal<number>(0);
-  const [enableEditing, setEnableEditing] = createSignal<boolean>(false);
-
-  // First item in queue (now playing).
-  const peek = () => queue.at(0);
-
-  // Check if the current verse is not the first.
-  const isFirstVerse = (): boolean => nowPlaying() === 0;
-
-  // Check if the current verse is not the last.
-  const isLastVerse = (): boolean => nowPlaying() + 1 === peek()?.lyrics.length;
-
-  // Previous verse.
-  const goToPreviousVerse = () => {
-    if (!isFirstVerse()) {
-      setNowPlaying((nowPlaying) => nowPlaying - 1);
-    }
-  };
-
-  // Next verse.
-  const goToNextVerse = () => {
-    if (!isLastVerse()) {
-      setNowPlaying((nowPlaying) => nowPlaying + 1);
-    }
-  };
-
-  // Go to a specific verse.
-  const goToVerse = (index: number) => {
-    setNowPlaying(index);
-  };
-
-  // Enqueue.
-  const enqueue = (track: ITrack) => {
-    // Create a random ID for the track and add it to the queue.
-    setQueue([...queue, { qid: Date.now(), ...track }]);
-  };
-
-  // Dequeue.
-  const dequeue = (qid: number, shouldReset?: boolean) => {
-    setQueue(queue.filter((track) => qid !== track.qid));
-
-    // Update now playing when a track is dequeued.
-    if (shouldReset) {
-      setNowPlaying(0);
-      setEnableEditing(false);
-    }
-
-    if (peek() === undefined) {
-      broadcast.postMessage(null)
-    }
-  };
-
-  // Clear queue
-  const flush = () => setQueue(queue.slice(0, 1));
-
-  /**
-   * Set a queued playing song as now playing.
-   */
-  const playNow = (qid: number) => {
-    if (peek()) {
-      // Find the item in the queue.
-      const track = queue.find((track) => track.qid === qid)
-
-      // Rebuild the queue.
-      setQueue([
-        peek()!,
-        track!,
-        ...queue.slice(1).filter((track) => track.qid !== qid)
-      ])
-
-      // Dequeue the first item.
-      dequeue(peek()!.qid, true)
-    }
-  }
-
-  /**
-   * Edit the currently playing track lyrics.
-   */
-  const editNowPlaying = (lyrics: string[][], qid: number) => {
-    // Update an item in the queue.
-    setQueue(
-      (track) => track.qid === qid,
-      'lyrics',
-      () => lyrics
-    );
-
-    // Toggle live edit
-    setEnableEditing(false);
-  };
-
-  const onProject = async () => {
-    const proxy = await project('projectr');
-
-    if (proxy) {
-      setIsProjecting(true);
-    }
-  };
 
   onMount(() => {
     window.addEventListener("keydown", (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') goToPreviousVerse()
-      if (e.key === 'ArrowRight') goToNextVerse()
-      if (e.shiftKey && e.key === 'ArrowRight') dequeue(peek()!.qid, true)
+      // Projection events.
+      if (e.shiftKey && e.code === 'KeyC') clearProjection()
+
+      // Playback events.
+      if (e.code === 'ArrowLeft') goToPreviousVerse()
+      if (e.code === 'ArrowRight') goToNextVerse()
+      if (e.shiftKey && e.code === 'ArrowRight') dequeue(peek()!.qid, true)
     })
   })
 
@@ -167,7 +98,7 @@ const App: Component = () => {
   // JSX component.
   return (
     // Main container
-    <div class="grid gap-5 p-6 lg:grid-cols-4">
+    <div class="min-h-screen grid gap-5 p-6 lg:grid-cols-4">
       <aside class="flex flex-col gap-5 rounded-lg lg:mb-20">
         {/* Search Pane */}
         <search class="flex flex-col gap-2 rounded-lg bg-gray-300 px-4 pb-4 pt-3">
@@ -175,7 +106,9 @@ const App: Component = () => {
           <SearchForm handler={setResults} />
 
           {/* Search results */}
-          <SearchResults results={results} handler={enqueue} />
+          <Show when={hasResults()} fallback={<div class="transition h-40 rounded-md bg-gray-50/30 lg:h-52"></div>}>
+            <SearchResults results={results} handler={enqueue} />
+          </Show>
         </search>
 
         {/* Play queue */}
@@ -189,7 +122,7 @@ const App: Component = () => {
             >
               <NowPlayingCard
                 track={peek()}
-                handler={() => setEnableEditing(!enableEditing())}
+                handler={() => setIsEditing(!isEditing())}
               />
             </Show>
           </div>
@@ -209,7 +142,7 @@ const App: Component = () => {
       </aside>
 
       {/* Live edit */}
-      <Show when={enableEditing()}>
+      <Show when={isEditing()}>
         <aside class="mb-12 rounded-lg bg-gray-100 p-3 transition-transform lg:mb-20">
           <TrackForm track={peek()} handler={editNowPlaying} />
         </aside>
@@ -218,7 +151,7 @@ const App: Component = () => {
       {/* View Pane */}
       <main
         class="mb-16 rounded-lg transition-transform lg:col-start-2 lg:col-end-6 lg:mb-20"
-        classList={{ 'lg:col-start-3': enableEditing() }}
+        classList={{ 'lg:col-start-3': isEditing() }}
       >
         {/* Title */}
         <Show
@@ -269,7 +202,14 @@ const App: Component = () => {
           <div class="flex min-h-16 flex-wrap justify-between gap-4 rounded-lg bg-gray-200 p-4 text-gray-700 lg:justify-center">
             <ProjectionButton
               isProjecting={isProjecting()}
-              handler={onProject}
+              openHandler={async () => setProjection(await project('projectr'))}
+              closeHandler={() => closeProjection()}
+            />
+            <PlaybackButton
+              icon="hide_image"
+              text="Clear Projection"
+              isEnabled={isProjecting()}
+              handler={clearProjection}
             />
             <PlaybackButton
               icon="arrow_back"

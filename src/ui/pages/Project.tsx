@@ -23,8 +23,8 @@ const Project: Component = () => {
   broadcast.addEventListener('message', (e: Event) => {
     const data = JSON.parse((e as MessageEvent).data);
 
-    setTrack(data['track']);
-    setNowPlaying(data['nowPlaying']);
+    setTrack(data ? data['track'] : null);
+    setNowPlaying(data ? data['nowPlaying'] : null);
   });
 
   return (
