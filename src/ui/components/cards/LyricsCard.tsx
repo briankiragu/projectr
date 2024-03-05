@@ -9,7 +9,7 @@ const LyricsCard: Component<{
     <div
       class="cursor-pointer rounded-lg border-4 bg-gray-200 px-6 py-4 text-gray-600 shadow-md transition-colors lg:px-4 lg:py-2"
       classList={{
-        'border-teal-600 shadow-lg shadow-teal-600/20': props.isActive,
+        'border-tvc-green bg-tvc-green text-green-50 shadow-lg shadow-tvc-green/20': props.isActive,
       }}
       onClick={props.handler}
     >

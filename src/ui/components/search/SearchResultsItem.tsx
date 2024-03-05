@@ -18,7 +18,7 @@ const SearchResultsItem: Component<{
         <span class="text-sm italic font-light">{toTitleCase(props.track.lyrics[0][0])}</span>
       </div>
       <button
-        class="material-symbols-outlined rounded-full p-1 hover:bg-gray-300"
+        class="material-symbols-outlined rounded-full p-1 hover:bg-gray-300 focus:outline-none"
         onClick={() => fn(args)}
       >
         playlist_add

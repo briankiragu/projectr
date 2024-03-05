@@ -25,9 +25,6 @@ import SearchForm from '@components/search/SearchForm';
 
 // Lazy-loaded components.
 const LyricsCard = lazy(() => import('@components/cards/LyricsCard'));
-const LyricsPreviewCard = lazy(
-  () => import('@components/cards/LyricsPreviewCard')
-);
 const NowPlayingCard = lazy(() => import('@components/cards/NowPlayingCard'));
 const QueueList = lazy(() => import('@components/queue/QueueList'));
 const SearchResults = lazy(() => import('@components/search/SearchResults'));
@@ -117,7 +114,7 @@ const App: Component = () => {
         {/* Play queue */}
         <div class="rounded-lg bg-gray-200 px-4 pb-4 pt-3">
           {/* Now playing */}
-          <div class="mb-1 h-24">
+          <div class="mb-1 min-h-24">
             <h3 class="mb-1 text-sm text-gray-500">Now Playing</h3>
             <Show
               when={peek()}
@@ -161,20 +158,10 @@ const App: Component = () => {
           when={peek()}
           fallback={<div class="mb-3 h-16 rounded-md bg-gray-200/60"></div>}
         >
-          <h2 class="mb-3 text-wrap text-4xl uppercase font-black text-center text-green-900 lg:mb-4 lg:text-6xl">
+          <h2 class="mb-3 text-wrap text-4xl uppercase font-black text-center text-tvc-green lg:mb-4 lg:text-6xl">
             {toTitleCase(peek()!.title)}
           </h2>
         </Show>
-
-        {/* Preview */}
-        <div class="mb-5">
-          <Show
-            when={peek()}
-            fallback={<div class="h-72 rounded-md bg-gray-300/50"></div>}
-          >
-            <LyricsPreviewCard verse={peek()!.lyrics[nowPlaying()]} />
-          </Show>
-        </div>
 
         {/* Lyrics */}
         <Show when={peek()} fallback={<LyricsCardsPreloader />}>
