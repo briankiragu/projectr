@@ -95,26 +95,27 @@ const App: Component = () => {
     return nowPlaying()
   });
 
-  // JSX component.
   return (
     // Main container
-    <div class="min-h-screen grid gap-5 p-6 lg:grid-cols-4">
+    <div class="overflow-hidden grid gap-5 p-6 lg:h-screen md:grid-cols-3 lg:grid-cols-4">
       <aside class="flex flex-col gap-5 rounded-lg lg:mb-20">
         {/* Search Pane */}
-        <search class="flex flex-col gap-2 rounded-lg bg-gray-300 px-4 pb-4 pt-3">
+        <search class="rounded-lg bg-gray-300 px-4 pb-4 pt-3">
           {/* Search Form */}
           <SearchForm handler={setResults} />
 
           {/* Search results */}
-          <Show when={hasResults()} fallback={<div class="transition h-40 rounded-md bg-gray-50/30 lg:h-52"></div>}>
-            <SearchResults results={results} handler={enqueue} />
+          <Show when={hasResults()} fallback={<div class="mt-4 transition h-40 rounded-md bg-gray-50/30 lg:h-52"></div>}>
+            <div class="mt-4 overflow-y-scroll h-40 lg:h-52">
+              <SearchResults results={results} handler={enqueue} />
+            </div>
           </Show>
         </search>
 
         {/* Play queue */}
-        <div class="rounded-lg bg-gray-200 px-4 pb-4 pt-3">
+        <div class="flex-1 flex flex-col rounded-lg bg-gray-200 px-4 pb-4 pt-3 gap-1.5">
           {/* Now playing */}
-          <div class="mb-1 min-h-24">
+          <div class="min-h-24">
             <h3 class="mb-1 text-sm text-gray-500">Now Playing</h3>
             <Show
               when={peek()}
@@ -128,16 +129,18 @@ const App: Component = () => {
           </div>
 
           {/* Up next */}
-          <div class="text-gray-500">
-            <div class="mb-1.5 flex justify-between">
-              <h3 class="text-sm">Up next</h3>
-              <button class="text-sm" onClick={flush}>
-                Clear all
-              </button>
-            </div>
-
-            <QueueList queue={queue} playHandler={playNow} queueHandler={dequeue} />
+          <div class="flex justify-between text-gray-500">
+            <h3 class="text-sm">Up next</h3>
+            <button class="text-sm" onClick={flush}>
+              Clear all
+            </button>
           </div>
+
+          <Show when={queue.length > 1} fallback={<div class="bg-gray-50/50 flex-1"></div>}>
+            <div class="overflow-y-scroll h-48 lg:h-56">
+              <QueueList queue={queue} playHandler={playNow} queueHandler={dequeue} />
+            </div>
+          </Show>
         </div>
       </aside>
 
@@ -150,7 +153,7 @@ const App: Component = () => {
 
       {/* View Pane */}
       <main
-        class="mb-16 rounded-lg transition-transform lg:col-start-2 lg:col-end-6 lg:mb-20"
+        class="mb-16 rounded-lg transition-transform md:col-start-2 md:col-end-5 lg:col-end-6 lg:mb-20"
         classList={{ 'lg:col-start-3': isEditing() }}
       >
         {/* Title */}
@@ -165,7 +168,7 @@ const App: Component = () => {
 
         {/* Lyrics */}
         <Show when={peek()} fallback={<LyricsCardsPreloader />}>
-          <div class="grid grid-cols-1 gap-4 lg:h-80 lg:grid-cols-3 lg:overflow-y-scroll lg:pb-2">
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 md:overflow-y-scroll lg:pb-2">
             <For each={peek()!.lyrics}>
               {(verse, index) => (
                 <LyricsCard

@@ -9,7 +9,7 @@ const SearchResults: Component<{
   handler: (track: ITrack) => void;
 }> = (props) => {
   return (
-    <div class="flex h-40 flex-col gap-2 overflow-y-scroll rounded-md lg:h-52">
+    <div class="flex flex-col gap-2 rounded-md">
       <For each={props.results}>
         {(track) => (
           <SearchResultsItem track={track} handler={[props.handler, track]} />
