@@ -1,11 +1,11 @@
-import usePermissionsAPI from '@composables/usePermissionsAPI';
+import usePermissionsAPI from "@composables/usePermissionsAPI";
 
 export default () => {
   // Check the current mode of the environment.
-  const isInDevelopmentMode: boolean = import.meta.env.MODE === 'development';
+  const isInDevelopmentMode: boolean = import.meta.env.MODE === "development";
 
   // Check if the API is supported.
-  const isSupported = 'getScreens' in window || 'getScreenDetails';
+  const isSupported = "getScreens" in window || "getScreenDetails";
 
   // Import the composable methods.
   const { requestWindowManagementPermissions } = usePermissionsAPI();
@@ -16,7 +16,7 @@ export default () => {
 
     // Request the permissions.
     const isEnabled: boolean =
-      (await requestWindowManagementPermissions()) === 'granted';
+      (await requestWindowManagementPermissions()) === "granted";
 
     // If the permission is blocked, notify the user.
     if (!isEnabled) {
@@ -66,9 +66,9 @@ export default () => {
       `top=${screen.top}`,
       `width=${screen.width}`,
       `height=${screen.height}`,
-    ].join(',');
+    ].join(",");
 
-    return window.open('/project', channel, features);
+    return window.open("/project", channel, features);
   };
 
   return { isSupported, project };
