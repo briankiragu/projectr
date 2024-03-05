@@ -6,6 +6,7 @@ import os
 import re
 import structlog
 import sys
+import unicodedata
 import uuid
 
 from pptx import Presentation
@@ -14,7 +15,7 @@ from typing import Set
 
 # Create an instance of the logger.
 structlog.configure(
-    wrapper_class=structlog.make_filtering_bound_logger(logging.DEBUG),
+    wrapper_class=structlog.make_filtering_bound_logger(logging.INFO),
     processors=[
         structlog.processors.add_log_level,
         structlog.processors.TimeStamper(fmt="iso"),
@@ -74,15 +75,27 @@ def format_extracted_lyrics(
 def extract_title_from_string(title: str) -> str:
     """Remove formatting from titles"""
 
-    return re.sub(
-        r"[\u000b\n]", " ", title.replace("\u2019", "'").replace("\u2013", "-")
-    )
+    return unicodedata.normalize(
+        "NFKC", replace_with_ascii(re.sub(r"[\u000b\n]", " ", title))
+    ).strip()
 
 
 def extract_lyrics_from_string(verse: str) -> list[str]:
     """From a single string, extract each lyric as an item in an array."""
 
-    return re.split(r"[\u000b\n]", verse.replace("\u2019", "'"))
+    return [
+        unicodedata.normalize("NFKC", replace_with_ascii(line)).strip()
+        for line in re.split(r"[\u000b\n]", verse)
+    ]
+
+def replace_with_ascii(phrase: str) -> str:
+    """Replace the tricky unicode characters"""
+
+    return re.sub(
+        r"[\u201c\u201d]",
+        '"',
+        phrase.replace("\u2019", "'").replace("\u2018", "").replace("\u2013", "-")
+    )
 
 
 try:
