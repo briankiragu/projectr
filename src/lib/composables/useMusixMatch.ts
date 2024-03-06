@@ -1,4 +1,4 @@
-import {
+import type {
   IMusixMatchLyrics,
   IMusixMatchLyricsResponse,
   IMusixMatchTrack,
@@ -9,11 +9,13 @@ const apiUrl: string = import.meta.env.VITE_MUSIXMATCH_API_URL;
 const apiKey: string = import.meta.env.VITE_MUSIXMATCH_API_KEY;
 
 export default () => {
-  const searchTracks = async (phrase: string): Promise<IMusixMatchTrack[]> => {
+  const searchMusixMatch = async (
+    phrase: string
+  ): Promise<IMusixMatchTrack[]> => {
     // Create the search params.
     const searchParams = new URLSearchParams({
       apiKey,
-      q_track: phrase,
+      q: phrase,
     });
 
     // Make the request.
@@ -43,5 +45,5 @@ export default () => {
       .lyrics;
   };
 
-  return { searchTracks, getLyrics };
+  return { searchMusixMatch, getLyrics };
 };

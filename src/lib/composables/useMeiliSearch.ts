@@ -14,9 +14,9 @@ export default () => {
   const index = client.index(indexId);
 
   // Make a GET request for the data.
-  const search = async (phrase: string) => index.searchGet(phrase);
+  const searchMeiliSearch = async (phrase: string) => index.searchGet(phrase);
 
   return {
-    search,
+    searchMeiliSearch,
   };
 };
