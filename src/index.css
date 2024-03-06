@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 
+@font-face {
+    font-family: "Inter-fallback";
+    size-adjust: 107.00%;
+    ascent-override: 91%;
+    src: local("Arial");
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,6 +16,7 @@
         system-ui,
         -apple-system,
         BlinkMacSystemFont,
+        'Inter-fallback',
         'Inter',
         'Segoe UI',
         Roboto,

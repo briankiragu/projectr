@@ -98,18 +98,18 @@ const App: Component = () => {
   return (
     // Main container
     <div class="overflow-hidden grid gap-5 p-6 lg:h-screen md:grid-cols-3 lg:grid-cols-4">
-      <aside class="flex flex-col gap-5 rounded-lg lg:mb-20">
+      <aside class="flex flex-col gap-3 rounded-lg lg:mb-20">
         {/* Search Pane */}
         <search class="rounded-lg bg-gray-300 px-4 pb-4 pt-3">
           {/* Search Form */}
           <SearchForm handler={setResults} />
 
           {/* Search results */}
-          <Show when={hasResults()} fallback={<div class="mt-4 transition h-40 rounded-md bg-gray-50/30 lg:h-52"></div>}>
-            <div class="mt-4 overflow-y-scroll h-40 lg:h-52">
+          <div class="mt-4 overflow-y-scroll transition h-40 rounded-md bg-gray-50/30 md:h-36 xl:h-52 2xl:h-2/6">
+            <Show when={hasResults()}>
               <SearchResults results={results} handler={enqueue} />
-            </div>
-          </Show>
+            </Show>
+          </div>
         </search>
 
         {/* Play queue */}
@@ -136,11 +136,11 @@ const App: Component = () => {
             </button>
           </div>
 
-          <Show when={queue.length > 1} fallback={<div class="bg-gray-50/50 flex-1"></div>}>
-            <div class="overflow-y-scroll h-48 lg:h-56">
+          <div class="overflow-y-scroll md:h-36 lg:h-30 xl:h-48 2xl:h-auto">
+            <Show when={queue.length > 1}>
               <QueueList queue={queue} playHandler={playNow} queueHandler={dequeue} />
-            </div>
-          </Show>
+            </Show>
+          </div>
         </div>
       </aside>
 
@@ -153,7 +153,7 @@ const App: Component = () => {
 
       {/* View Pane */}
       <main
-        class="mb-16 rounded-lg transition-transform md:col-start-2 md:col-end-5 lg:col-end-6 lg:mb-20"
+        class="flex flex-col mb-16 rounded-lg transition-transform md:col-start-2 md:col-end-5 lg:col-end-6 lg:mb-20"
         classList={{ 'lg:col-start-3': isEditing() }}
       >
         {/* Title */}
@@ -161,7 +161,7 @@ const App: Component = () => {
           when={peek()}
           fallback={<div class="mb-3 h-16 rounded-md bg-gray-200/60"></div>}
         >
-          <h2 class="mb-3 text-wrap text-4xl uppercase font-black text-center text-tvc-green lg:mb-4 lg:text-6xl">
+          <h2 class="mb-3 text-wrap text-4xl uppercase font-black text-tvc-green lg:mb-4 lg:text-6xl">
             {toTitleCase(peek()!.title)}
           </h2>
         </Show>
@@ -191,30 +191,30 @@ const App: Component = () => {
             />
             <PlaybackButton
               icon="visibility_off"
-              text="Clear Projection"
-              shortcut="Shift + C"
+              text="Clear projection"
               isEnabled={isProjecting()}
+              title="Shift + C"
               handler={clearProjection}
             />
             <PlaybackButton
               icon="arrow_back"
               text="Previous verse"
-              shortcut="ArrowLeft"
               isEnabled={peek() !== undefined && !isFirstVerse()}
+              title="ArrowLeft"
               handler={goToPreviousVerse}
             />
             <PlaybackButton
               icon="arrow_forward"
               text="Next verse"
-              shortcut="ArrowRight"
               isEnabled={peek() !== undefined && !isLastVerse()}
+              title="ArrowRight"
               handler={goToNextVerse}
             />
             <PlaybackButton
               icon="skip_next"
               text="Next track"
-              shortcut="Shift + ArrowRight"
               isEnabled={peek() !== undefined}
+              title="Shift + ArrowRight"
               handler={() => dequeue(peek()!.qid, true)}
             />
           </div>
