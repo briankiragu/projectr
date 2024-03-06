@@ -16,6 +16,11 @@ const Project = lazy(() => import('@pages/Project'));
 // Get the root element
 const root = document.getElementById('root');
 
+// Register service worker.
+if (import.meta.env.MODE !== "development" && 'serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js');
+}
+
 // Vercel insights.
 inject();
 injectSpeedInsights();
