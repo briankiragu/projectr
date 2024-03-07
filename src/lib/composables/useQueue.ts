@@ -1,12 +1,15 @@
 import { createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 
-// Import the composables.
+// Import the interfaces.
 import type { IQueueItem, ITrack } from "@interfaces/track";
 
 export default (channel: BroadcastChannel) => {
   const [queue, setQueue] = createStore<IQueueItem[]>([]);
-  const [nowPlaying, setNowPlaying] = createSignal<number>(0);
+  const [nowPlaying, setNowPlaying] = createSignal<IQueueItem | undefined>(
+    undefined
+  );
+  const [currentVerseIndex, setCurrentVerseIndex] = createSignal<number>(0);
   const [isEditing, setIsEditing] = createSignal<boolean>(false);
 
   // First item in queue (now playing).
@@ -19,94 +22,124 @@ export default (channel: BroadcastChannel) => {
   };
 
   // Dequeue.
-  const dequeue = (qid: number, shouldReset?: boolean) => {
+  const dequeue = (qid: number) => {
     setQueue(queue.filter((track) => qid !== track.qid));
-
-    // Update now playing when a track is dequeued.
-    if (shouldReset) {
-      setNowPlaying(0);
-      setIsEditing(false);
-    }
-
-    // If there is no data in the queue, clear the broadcast.
-    if (peek() === undefined) channel.postMessage(null);
   };
 
   // Clear queue
-  const flush = () => setQueue(queue.slice(0, 1));
+  const flush = () => setQueue([]);
 
   /**
    * Set a queued playing song as now playing.
    */
   const playNow = (qid: number) => {
-    if (peek()) {
-      // Find the item in the queue.
-      const track = queue.find((track) => track.qid === qid);
+    // Find the item in the queue.
+    const track = queue.find((track) => track.qid === qid);
 
-      // Rebuild the queue.
-      setQueue([
-        peek()!,
-        track!,
-        ...queue.slice(1).filter((track) => track.qid !== qid),
-      ]);
+    // Set the current now playing.
+    setNowPlaying(track);
 
-      // Dequeue the first item.
-      dequeue(peek()!.qid, true);
+    // Update the queue.
+    dequeue(qid);
+
+    // Reset the verse and editing.
+    setCurrentVerseIndex(0);
+    setIsEditing(false);
+
+    // Broadcast the data.
+    broadcast();
+  };
+
+  const playNext = () => {
+    // Find the item in the queue.
+    const track = peek();
+
+    // Set the current now playing.
+    setNowPlaying(track);
+
+    if (track !== undefined) {
+      // Update the queue.
+      dequeue(track.qid);
     }
+
+    // Reset the verse and editing.
+    setCurrentVerseIndex(0);
+    setIsEditing(false);
+
+    // Broadcast the data.
+    broadcast();
   };
 
   /**
    * Edit the currently playing track lyrics.
    */
-  const editNowPlaying = (qid: number, lyrics: string[][]) => {
-    // Update an item in the queue.
-    setQueue(
-      (track) => track.qid === qid,
-      "lyrics",
-      () => lyrics
-    );
+  const editLyrics = (track: IQueueItem) => {
+    // Edit the now playing track.
+    setNowPlaying(track);
 
     // Toggle live edit
     setIsEditing(false);
+
+    // Broadcast the data.
+    broadcast();
   };
 
   // Check if the current verse is not the first.
-  const isFirstVerse = (): boolean => nowPlaying() === 0;
+  const isFirstVerse = (): boolean => currentVerseIndex() === 0;
 
   // Check if the current verse is not the last.
-  const isLastVerse = (): boolean => nowPlaying() + 1 === peek()?.lyrics.length;
+  const isLastVerse = (): boolean =>
+    currentVerseIndex() + 1 === nowPlaying()?.lyrics.length;
 
   // Previous verse.
   const goToPreviousVerse = () => {
     if (!isFirstVerse()) {
-      setNowPlaying((nowPlaying) => nowPlaying - 1);
+      setCurrentVerseIndex((currentVerseIndex) => currentVerseIndex - 1);
     }
   };
 
   // Next verse.
   const goToNextVerse = () => {
     if (!isLastVerse()) {
-      setNowPlaying((nowPlaying) => nowPlaying + 1);
+      setCurrentVerseIndex((currentVerseIndex) => currentVerseIndex + 1);
     }
   };
 
   // Go to a specific verse.
   const goToVerse = (index: number) => {
-    setNowPlaying(index);
+    setCurrentVerseIndex(index);
+  };
+
+  // Send the data over the channel.
+  const broadcast = () => {
+    // Declare a variable to hold the outgoing data.
+    const data =
+      nowPlaying() !== undefined
+        ? JSON.stringify({
+            nowPlaying: nowPlaying(),
+            currentVerseIndex: currentVerseIndex(),
+          })
+        : null;
+
+    // Send the message.
+    channel.postMessage(data);
   };
 
   return {
     queue,
     nowPlaying,
     isEditing,
+    currentVerseIndex,
 
-    peek,
     enqueue,
     dequeue,
     flush,
 
     playNow,
-    editNowPlaying,
+    playNext,
+
+    setIsEditing,
+    editLyrics,
 
     isFirstVerse,
     isLastVerse,
@@ -114,6 +147,6 @@ export default (channel: BroadcastChannel) => {
     goToNextVerse,
     goToVerse,
 
-    setIsEditing,
+    broadcast,
   };
 };

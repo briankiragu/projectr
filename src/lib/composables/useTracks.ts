@@ -1,3 +1,5 @@
+import type { IQueueItem } from "@interfaces/track";
+
 export default () => {
   const toEditable = (lyrics?: string[][]): string =>
     lyrics
@@ -8,11 +10,13 @@ export default () => {
         }, ``)
       : ``;
 
-  const fromEditable = (string: string): string[][] =>
-    string
+  const fromEditable = (track: IQueueItem, string: string): IQueueItem => ({
+    ...track,
+    lyrics: string
       .split(/\n\n/g)
       .filter((verse) => verse.length)
-      .map((verse) => verse.split(/\n/g));
+      .map((verse) => verse.split(/\n/g)),
+  });
 
   return { toEditable, fromEditable };
 };

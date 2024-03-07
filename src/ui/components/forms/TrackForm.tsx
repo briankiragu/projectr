@@ -4,7 +4,7 @@ import useTracks from '@composables/useTracks';
 
 const TrackForm: Component<{
   track?: IQueueItem;
-  handler: (qid: number, lyrics: string[][]) => void;
+  handler: (track: IQueueItem) => void;
 }> = (props) => {
   const { toEditable, fromEditable } = useTracks();
   const [live, setLive] = createSignal(toEditable(props.track?.lyrics));
@@ -14,7 +14,7 @@ const TrackForm: Component<{
       class="flex flex-col gap-3 text-sm text-gray-500"
       onSubmit={(e) => {
         e.preventDefault();
-        props.handler(props.track!.qid, fromEditable(live()));
+        props.handler(fromEditable(props.track!, live()));
       }}
     >
       <h3 class="font-semibold italic text-teal-800">

@@ -47,8 +47,8 @@ export default () => {
       return;
     }
 
-    // Get the non-primary (extended) screen.
-    const extendedScreen = screens.find(
+    // Get the non-primary (extended) screen(s).
+    const [extendedScreen] = screens.filter(
       (screen) => isInDevelopmentMode || !screen.isPrimary
     );
 

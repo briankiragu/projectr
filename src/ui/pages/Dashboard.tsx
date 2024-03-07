@@ -15,7 +15,6 @@ import type { ITrack } from '@interfaces/track';
 import useFormatting from '@composables/useFormatting';
 import useProjection from '@/lib/composables/useProjection';
 import useQueue from '@/lib/composables/useQueue';
-import useWindowManagementAPI from '@composables/useWindowManagementAPI';
 
 // Import components.
 import LyricsCardsPreloader from '@components/preloaders/LyricsCardsPreloader';
@@ -31,8 +30,8 @@ const SearchResults = lazy(() => import('@components/search/SearchResults'));
 const TrackForm = lazy(() => import('@components/forms/TrackForm'));
 
 const App: Component = () => {
-  // Create a broadcast channel.
-  const broadcast = new BroadcastChannel('projectr');
+  // Create a BroadcastAPI channel.
+  const channel = new BroadcastChannel(import.meta.env.VITE_BROADCAST_NAME);
 
   // Create the signals.
   const [results, setResults] = createStore<ITrack[]>([]);
@@ -42,18 +41,22 @@ const App: Component = () => {
 
   // Import the composables.
   const { toTitleCase } = useFormatting();
-  const { isProjecting, setProjection, clearProjection, closeProjection } = useProjection(broadcast);
+  const { isProjecting, startProjection, clearProjection, closeProjection } = useProjection(channel);
   const {
     queue,
     nowPlaying,
+    currentVerseIndex,
     isEditing,
 
-    peek,
     enqueue,
     dequeue,
     flush,
+
     playNow,
-    editNowPlaying,
+    playNext,
+
+    setIsEditing,
+    editLyrics,
 
     isFirstVerse,
     isLastVerse,
@@ -61,9 +64,8 @@ const App: Component = () => {
     goToNextVerse,
     goToVerse,
 
-    setIsEditing
-  } = useQueue(broadcast);
-  const { project } = useWindowManagementAPI();
+    broadcast
+  } = useQueue(channel);
 
   onMount(() => {
     window.addEventListener("keydown", (e: KeyboardEvent) => {
@@ -73,26 +75,16 @@ const App: Component = () => {
       // Playback events.
       if (e.code === 'ArrowLeft') goToPreviousVerse()
       if (e.code === 'ArrowRight') goToNextVerse()
-      if (e.shiftKey && e.code === 'ArrowRight') dequeue(peek()!.qid, true)
+      if (e.shiftKey && e.code === 'ArrowRight') playNext()
     })
   })
 
   createEffect((prev: number | undefined) => {
-    // Declare a variable to hold the outgoing data.
-    let data: string | null = null
-
     // If the currently playing verse has changed...
-    if (nowPlaying() !== prev) {
-      data = peek() !== undefined
-        ? JSON.stringify({ track: peek(), nowPlaying: nowPlaying() })
-        : null;
-
-      // Send the message.
-      broadcast.postMessage(data);
-    }
+    if (currentVerseIndex() !== prev) broadcast()
 
     // Return the now playing to re-use in the next call.
-    return nowPlaying()
+    return currentVerseIndex()
   });
 
   return (
@@ -118,11 +110,11 @@ const App: Component = () => {
           <div class="min-h-24">
             <h3 class="mb-1 text-sm text-gray-500">Now Playing</h3>
             <Show
-              when={peek()}
+              when={nowPlaying()}
               fallback={<div class="h-16 rounded-md bg-gray-600/10"></div>}
             >
               <NowPlayingCard
-                track={peek()}
+                track={nowPlaying()}
                 handler={() => setIsEditing(!isEditing())}
               />
             </Show>
@@ -137,7 +129,7 @@ const App: Component = () => {
           </div>
 
           <div class="overflow-y-scroll md:h-36 lg:h-30 xl:h-48 2xl:h-auto">
-            <Show when={queue.length > 1}>
+            <Show when={queue.length > 0}>
               <QueueList queue={queue} playHandler={playNow} queueHandler={dequeue} />
             </Show>
           </div>
@@ -147,7 +139,7 @@ const App: Component = () => {
       {/* Live edit */}
       <Show when={isEditing()}>
         <aside class="mb-12 rounded-lg bg-gray-100 p-3 transition-transform lg:mb-20">
-          <TrackForm track={peek()} handler={editNowPlaying} />
+          <TrackForm track={nowPlaying()} handler={editLyrics} />
         </aside>
       </Show>
 
@@ -158,22 +150,22 @@ const App: Component = () => {
       >
         {/* Title */}
         <Show
-          when={peek()}
+          when={nowPlaying() != undefined}
           fallback={<div class="mb-3 h-16 rounded-md bg-gray-200/60"></div>}
         >
           <h2 class="mb-3 text-wrap text-4xl uppercase font-black text-tvc-green lg:mb-4 lg:text-6xl">
-            {toTitleCase(peek()!.title)}
+            {toTitleCase(nowPlaying()!.title)}
           </h2>
         </Show>
 
         {/* Lyrics */}
-        <Show when={peek()} fallback={<LyricsCardsPreloader />}>
+        <Show when={nowPlaying() !== undefined} fallback={<LyricsCardsPreloader />}>
           <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 md:overflow-y-scroll lg:pb-2">
-            <For each={peek()!.lyrics}>
+            <For each={nowPlaying()!.lyrics}>
               {(verse, index) => (
                 <LyricsCard
                   verse={verse}
-                  isActive={nowPlaying() === index()}
+                  isActive={currentVerseIndex() === index()}
                   handler={() => goToVerse(index())}
                 />
               )}
@@ -186,7 +178,7 @@ const App: Component = () => {
           <div class="flex min-h-16 flex-wrap justify-between gap-4 rounded-lg bg-gray-200 p-4 text-gray-700 lg:justify-center">
             <ProjectionButton
               isProjecting={isProjecting()}
-              openHandler={async () => setProjection(await project('projectr'))}
+              openHandler={startProjection}
               closeHandler={() => closeProjection()}
             />
             <PlaybackButton
@@ -199,23 +191,23 @@ const App: Component = () => {
             <PlaybackButton
               icon="arrow_back"
               text="Previous verse"
-              isEnabled={peek() !== undefined && !isFirstVerse()}
+              isEnabled={nowPlaying() !== undefined && !isFirstVerse()}
               title="ArrowLeft"
               handler={goToPreviousVerse}
             />
             <PlaybackButton
               icon="arrow_forward"
               text="Next verse"
-              isEnabled={peek() !== undefined && !isLastVerse()}
+              isEnabled={nowPlaying() !== undefined && !isLastVerse()}
               title="ArrowRight"
               handler={goToNextVerse}
             />
             <PlaybackButton
               icon="skip_next"
               text="Next track"
-              isEnabled={peek() !== undefined}
+              isEnabled={nowPlaying() !== undefined}
               title="Shift + ArrowRight"
-              handler={() => dequeue(peek()!.qid, true)}
+              handler={playNext}
             />
           </div>
         </footer>
