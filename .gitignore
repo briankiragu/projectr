@@ -33,4 +33,3 @@ dist-ssr
 
 # Python virtual env
 .venv
-.vercel

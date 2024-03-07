@@ -8,7 +8,7 @@
     "allowJs": true,
 
     /* Bundler mode */
-    "moduleResolution": "nodenext",
+    "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -26,7 +26,6 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@api/*": ["./api/*"],
       "@components/*": ["./src/ui/components/*"],
       "@composables/*": ["./src/lib/composables/*"],
       "@interfaces/*": ["./src/lib/interfaces/*"],
@@ -35,6 +34,6 @@
       "@ui/*": ["./src/ui/*"]
     }
   },
-  "include": ["src", "api", "tests", "public/sw.js"],
+  "include": ["src", "tests", "public/sw.js"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
