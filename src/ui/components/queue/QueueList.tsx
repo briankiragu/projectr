@@ -16,7 +16,7 @@ const QueueList: Component<{
 
   return (
     <div class="flex flex-col gap-2 rounded-md">
-      <For each={props.queue.slice(1)}>
+      <For each={props.queue}>
         {(track: IQueueItem, index) => (
           <QueueListItem
             ref={refs.at(index())}

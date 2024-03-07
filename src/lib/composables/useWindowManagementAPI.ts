@@ -5,7 +5,8 @@ export default () => {
   const isInDevelopmentMode: boolean = import.meta.env.MODE === "development";
 
   // Check if the API is supported.
-  const isSupported = "getScreens" in window || "getScreenDetails";
+  const isSupported = () =>
+    "getScreenDetails" in window || "getScreens" in window;
 
   // Import the composable methods.
   const { requestWindowManagementPermissions } = usePermissionsAPI();
@@ -47,8 +48,8 @@ export default () => {
       return;
     }
 
-    // Get the non-primary (extended) screen.
-    const extendedScreen = screens.find(
+    // Get the non-primary (extended) screen(s).
+    const [extendedScreen] = screens.filter(
       (screen) => isInDevelopmentMode || !screen.isPrimary
     );
 

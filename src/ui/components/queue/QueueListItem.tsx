@@ -35,13 +35,13 @@ const QueueListItem: Component<{
       </h4>
       <button
         class="material-symbols-outlined rounded-full p-1 hover:bg-gray-300"
-        onClick={props.playHandler}
+        onClick={() => props.playHandler()}
       >
         play_arrow
       </button>
       <button
         class="material-symbols-outlined rounded-full p-1 hover:bg-gray-300"
-        onClick={props.queueHandler}
+        onClick={() => props.queueHandler()}
       >
         playlist_remove
       </button>

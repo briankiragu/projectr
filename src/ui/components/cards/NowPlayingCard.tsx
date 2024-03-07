@@ -4,7 +4,7 @@ import useFormatting from '@composables/useFormatting';
 
 const NowPlayingCard: Component<{
   track?: IQueueItem;
-  handler?: () => void;
+  handler: () => void;
 }> = (props) => {
   const { toTitleCase } = useFormatting();
 
@@ -17,7 +17,7 @@ const NowPlayingCard: Component<{
       {/* Enable live edit */}
       <span
         class="material-symbols-outlined cursor-pointer rounded-full p-1.5 transition-colors bg-tvc-green hover:bg-tvc-orange hover:text-orange-100"
-        onClick={props.handler}
+        onClick={() => props.handler()}
       >
         edit
       </span>
