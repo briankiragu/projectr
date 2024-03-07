@@ -46,19 +46,22 @@ def format_extracted_lyrics(
 ) -> list[dict[str, int | str | list[str]]]:
     """Format the extracted data to the expected format"""
 
+    titles: list[str] = []
     tracks: list[dict[str, int | str | list[str]]] = []
     current_title: str = ""
     current_lyrics: list[str] = []
 
     for slide in slides:
         if len(slide) >= 2:
-            tracks.append(
-                {
-                    "id": len(tracks) + 1,
-                    "title": current_title,
-                    "lyrics": current_lyrics,
-                }
-            )
+            if current_title not in titles:
+                titles.append(current_title)
+                tracks.append(
+                    {
+                        "id": len(tracks) + 1,
+                        "title": current_title,
+                        "lyrics": current_lyrics,
+                    }
+                )
 
             current_title = extract_title_from_string(slide[0])
             current_lyrics = [  # type: ignore
@@ -99,13 +102,15 @@ def replace_with_ascii(phrase: str) -> str:
 
 
 try:
+    # Find the directory in which the current script resides:
+    dirname = os.path.dirname(os.path.realpath(__file__))
+
     # Get all the .PPTX files supplied in the CLI.
-    # file_paths = "$@".split()
     file_paths = sys.argv[1:]
     log.debug(f"File paths provided.", file_paths=file_paths)
 
     # Set the name of the output file.
-    output_json = "./data/json/lyrics.extracted.json"
+    output_json = f"{dirname}/data/json/lyrics.extracted.json"
     log.info(f"Attempting to extract data...", output=output_json)
 
     # Create a variable to hold all the data.
@@ -130,7 +135,7 @@ try:
     ] = format_extracted_lyrics(extracted_data)
 
     # Set the name of the output file.
-    output_json = "./data/json/lyrics.formatted.json"
+    output_json = f"{dirname}/data/json/lyrics.formatted.json"
     log.info(f"Attempting to format data...", output=output_json)
 
     # Write the json output file.

@@ -7,14 +7,14 @@ import type { ITrack } from '@interfaces/track';
 
 // Import the composables.
 import useMeiliSearch from '@composables/useMeiliSearch';
-import useMusixMatch from '@/lib/composables/useMusixMatch';
+// import useMusixMatch from '@/lib/composables/useMusixMatch';
 
 const SearchForm: Component<{
   handler: (results: ITrack[]) => void
 }> = (props) => {
   // Import the composables.
   const { searchMeiliSearch } = useMeiliSearch();
-  const { searchMusixMatch } = useMusixMatch();
+  // const { searchMusixMatch } = useMusixMatch();
 
   // DOM reference.
   let inputRef: HTMLInputElement | undefined;
@@ -28,7 +28,7 @@ const SearchForm: Component<{
         switchMap(async (event: InputEvent) => {
           const phrase: string = (event.target as HTMLInputElement).value
           const { hits } = await searchMeiliSearch(phrase);
-          console.dir(await searchMusixMatch(phrase));
+          // console.dir(await searchMusixMatch(phrase));
           return hits as ITrack[];
         })
       )
