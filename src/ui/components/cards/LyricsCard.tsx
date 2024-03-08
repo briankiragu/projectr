@@ -11,7 +11,7 @@ const LyricsCard: Component<{
       classList={{
         'border-tvc-green bg-tvc-green text-green-50 shadow-lg shadow-tvc-green/20': props.isActive,
       }}
-      onClick={props.handler}
+      onClick={() => props.handler()}
     >
       <For each={props.verse}>
         {(line) => (

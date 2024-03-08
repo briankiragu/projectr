@@ -4,7 +4,7 @@ import { createStore } from "solid-js/store";
 // Import the interfaces.
 import type { IQueueItem, ITrack } from "@interfaces/track";
 
-export default (channel: BroadcastChannel) => {
+export default () => {
   const [queue, setQueue] = createStore<IQueueItem[]>([]);
   const [nowPlaying, setNowPlaying] = createSignal<IQueueItem | undefined>(
     undefined
@@ -12,7 +12,7 @@ export default (channel: BroadcastChannel) => {
   const [currentVerseIndex, setCurrentVerseIndex] = createSignal<number>(0);
   const [isEditing, setIsEditing] = createSignal<boolean>(false);
 
-  // First item in queue (now playing).
+  // First item in queue.
   const peek = () => queue.at(0);
 
   // Enqueue.
@@ -28,61 +28,6 @@ export default (channel: BroadcastChannel) => {
 
   // Clear queue
   const flush = () => setQueue([]);
-
-  /**
-   * Set a queued playing song as now playing.
-   */
-  const playNow = (qid: number) => {
-    // Find the item in the queue.
-    const track = queue.find((track) => track.qid === qid);
-
-    // Set the current now playing.
-    setNowPlaying(track);
-
-    // Update the queue.
-    dequeue(qid);
-
-    // Reset the verse and editing.
-    setCurrentVerseIndex(0);
-    setIsEditing(false);
-
-    // Broadcast the data.
-    broadcast();
-  };
-
-  const playNext = () => {
-    // Find the item in the queue.
-    const track = peek();
-
-    // Set the current now playing.
-    setNowPlaying(track);
-
-    if (track !== undefined) {
-      // Update the queue.
-      dequeue(track.qid);
-    }
-
-    // Reset the verse and editing.
-    setCurrentVerseIndex(0);
-    setIsEditing(false);
-
-    // Broadcast the data.
-    broadcast();
-  };
-
-  /**
-   * Edit the currently playing track lyrics.
-   */
-  const editLyrics = (track: IQueueItem) => {
-    // Edit the now playing track.
-    setNowPlaying(track);
-
-    // Toggle live edit
-    setIsEditing(false);
-
-    // Broadcast the data.
-    broadcast();
-  };
 
   // Check if the current verse is not the first.
   const isFirstVerse = (): boolean => currentVerseIndex() === 0;
@@ -110,43 +55,25 @@ export default (channel: BroadcastChannel) => {
     setCurrentVerseIndex(index);
   };
 
-  // Send the data over the channel.
-  const broadcast = () => {
-    // Declare a variable to hold the outgoing data.
-    const data =
-      nowPlaying() !== undefined
-        ? JSON.stringify({
-            nowPlaying: nowPlaying(),
-            currentVerseIndex: currentVerseIndex(),
-          })
-        : null;
-
-    // Send the message.
-    channel.postMessage(data);
-  };
-
   return {
     queue,
     nowPlaying,
     isEditing,
     currentVerseIndex,
 
+    setQueue,
+    setNowPlaying,
+    setIsEditing,
+    setCurrentVerseIndex,
+
     enqueue,
     dequeue,
     flush,
-
-    playNow,
-    playNext,
-
-    setIsEditing,
-    editLyrics,
 
     isFirstVerse,
     isLastVerse,
     goToPreviousVerse,
     goToNextVerse,
     goToVerse,
-
-    broadcast,
   };
 };

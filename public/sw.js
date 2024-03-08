@@ -1,7 +1,7 @@
 const cacheName = "projectr-v1.0.3";
 const appShellFiles = [
-  "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200",
-  "https://tracking.musixmatch.com/t1.0/AMa6hJCIEzn1v8RuOP",
+  "/apple-touch-icon.png",
+  "/safari-pinned-tab.svg",
 
   "/favicons/favicon-32x32.png",
   "/favicons/favicon-16x16.png",
@@ -27,9 +27,8 @@ const appShellFiles = [
   "/images/wide.png",
 
   "/images/logo.webp",
-  "/images/tvc-logo.webp",
-  "/apple-touch-icon.png",
-  "/safari-pinned-tab.svg",
+  "/images/tvc-logo.svg",
+  "/images/tvc-logo.webp", ,
 ];
 
 self.addEventListener("install", (e) => {
@@ -38,7 +37,7 @@ self.addEventListener("install", (e) => {
     (async () => {
       const cache = await caches.open(cacheName);
       console.info("[Service Worker] Caching all...");
-      await cache.addAll([...appShellFiles]);
+      await cache.addAll(appShellFiles);
     })()
   );
 });

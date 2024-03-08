@@ -5,7 +5,8 @@ export default () => {
   const isInDevelopmentMode: boolean = import.meta.env.MODE === "development";
 
   // Check if the API is supported.
-  const isSupported = "getScreens" in window || "getScreenDetails";
+  const isSupported = () =>
+    "getScreenDetails" in window || "getScreens" in window;
 
   // Import the composable methods.
   const { requestWindowManagementPermissions } = usePermissionsAPI();

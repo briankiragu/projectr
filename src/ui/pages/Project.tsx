@@ -1,10 +1,10 @@
-import { type Component, createSignal, Show, For } from 'solid-js';
+import { type Component, createSignal, Show, For } from "solid-js";
 
 // Import the interfaces
-import type { IQueueItem } from '@interfaces/track';
+import type { IQueueItem } from "@interfaces/track";
 
 // Import the composables.
-import useFormatting from '@composables/useFormatting';
+import useFormatting from "@composables/useFormatting";
 
 const Project: Component = () => {
   // Create a BroadcastAPI channel.
@@ -20,11 +20,11 @@ const Project: Component = () => {
   const currentVerse = (): string[] | undefined => nowPlaying()?.lyrics.at(currentVerseIndex())
 
   // When a message relays on the channel.
-  channel.addEventListener('message', (e: Event) => {
+  channel.addEventListener("message", (e: Event) => {
     const data = JSON.parse((e as MessageEvent).data);
 
-    setNowPlaying(data ? data['nowPlaying'] : null);
-    setCurrentVerseIndex(data ? data['currentVerseIndex'] : null);
+    setNowPlaying(data !== null ? data["nowPlaying"] : undefined);
+    setCurrentVerseIndex(data !== null ? data["currentVerseIndex"] : undefined);
   });
 
   return (
@@ -40,15 +40,12 @@ const Project: Component = () => {
       </Show>
 
       {/* Lyrics */}
-      <Show
-        when={nowPlaying() !== undefined}
-        fallback={
-          <div
-            class="m-6 md:m-10 xl:m-20 bg-contain bg-center bg-no-repeat bg-[url('/images/tvc-logo.svg')] opacity-50 rounded-lg flex-auto flex justify-center align-middle"
-          ></div>
-        }
+      <div
+        class="m-6 md:m-10 xl:m-20 bg-contain bg-center bg-no-repeat bg-[url('/images/tvc-logo.svg')] opacity-100 flex-auto flex align-middle flex-col justify-center gap-4 rounded-lg px-6 py-4 text-center text-tvc-orange transition-colors"
+        classList={{ 'bg-none opacity-full': nowPlaying() !== undefined }}
       >
-        <div class="flex-auto flex flex-col justify-center gap-4 rounded-lg px-6 py-4 text-center text-tvc-orange shadow-lg shadow-teal-600/20 transition-colors">
+        <Show
+          when={nowPlaying() !== undefined}>
           <For each={currentVerse()}>
             {(line) => (
               <p class="text-wrap font-extrabold uppercase text-2xl md:text-4xl lg:text-6xl xl:text-7xl 2xl:text-9xl">
@@ -56,8 +53,8 @@ const Project: Component = () => {
               </p>
             )}
           </For>
-        </div>
-      </Show >
+        </Show>
+      </div>
     </div >
   );
 };

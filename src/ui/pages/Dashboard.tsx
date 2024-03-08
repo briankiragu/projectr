@@ -8,21 +8,23 @@ import {
 } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
-// Import interfaces.
-import type { ITrack } from '@interfaces/track';
+// Import the interfaces.
+import type { IQueueItem, ITrack } from '@interfaces/track';
+import type { IProjectionPayload } from '@interfaces/projection';
 
 // Import the composables.
 import useFormatting from '@composables/useFormatting';
 import useProjection from '@/lib/composables/useProjection';
 import useQueue from '@/lib/composables/useQueue';
 
-// Import components.
+// Import the components.
+import DisplayButton from '@components/buttons/DisplayButton';
 import LyricsCardsPreloader from '@components/preloaders/LyricsCardsPreloader';
 import PlaybackButton from '@components/buttons/PlaybackButton';
 import ProjectionButton from '@components/buttons/ProjectionButton';
 import SearchForm from '@components/search/SearchForm';
 
-// Lazy-loaded components.
+// Import the lazy-loaded components.
 const LyricsCard = lazy(() => import('@components/cards/LyricsCard'));
 const NowPlayingCard = lazy(() => import('@components/cards/NowPlayingCard'));
 const QueueList = lazy(() => import('@components/queue/QueueList'));
@@ -41,36 +43,114 @@ const App: Component = () => {
 
   // Import the composables.
   const { toTitleCase } = useFormatting();
-  const { isProjecting, startProjection, clearProjection, closeProjection } = useProjection(channel);
+  const {
+    isSupported,
+    isProjecting,
+    isVisible,
+    openProjection,
+    showProjection,
+    hideProjection,
+    closeProjection
+  } = useProjection(channel);
   const {
     queue,
     nowPlaying,
     currentVerseIndex,
     isEditing,
 
+    setNowPlaying,
+    setCurrentVerseIndex,
+
+    peek,
     enqueue,
     dequeue,
     flush,
 
-    playNow,
-    playNext,
-
     setIsEditing,
-    editLyrics,
 
     isFirstVerse,
     isLastVerse,
     goToPreviousVerse,
     goToNextVerse,
-    goToVerse,
+    goToVerse
+  } = useQueue();
 
-    broadcast
-  } = useQueue(channel);
+  // Send the data over the channel.
+  const broadcast = () => {
+    if (isVisible()) {
+      // Declare a variable to hold the outgoing data.
+      const data: IProjectionPayload | null =
+        nowPlaying() !== undefined
+          ? {
+            nowPlaying: nowPlaying(),
+            currentVerseIndex: currentVerseIndex(),
+          }
+          : null;
+
+      // Send the message.
+      channel.postMessage(JSON.stringify(data));
+    }
+  };
+
+  /**
+   * Set a queued playing song as now playing.
+   */
+  const playNow = (qid: number) => {
+    // Find the item in the queue.
+    const track = queue.find((track) => track.qid === qid);
+
+    // Set the current now playing.
+    setNowPlaying(track);
+
+    // Update the queue.
+    dequeue(qid);
+
+    // Reset the verse and editing.
+    setCurrentVerseIndex(0);
+    setIsEditing(false);
+
+    // Broadcast the data.
+    broadcast();
+  };
+
+  const playNext = () => {
+    // Find the item in the queue.
+    const track = peek();
+
+    // Set the current now playing.
+    setNowPlaying(track);
+
+    if (track !== undefined) {
+      // Update the queue.
+      dequeue(track.qid);
+    }
+
+    // Reset the verse and editing.
+    setCurrentVerseIndex(0);
+    setIsEditing(false);
+
+    // Broadcast the data.
+    broadcast();
+  };
+
+  /**
+   * Edit the currently playing track lyrics.
+   */
+  const editLyrics = (track: IQueueItem) => {
+    // Edit the now playing track.
+    setNowPlaying(track);
+
+    // Toggle live edit
+    setIsEditing(false);
+
+    // Broadcast the data.
+    broadcast();
+  };
 
   onMount(() => {
     window.addEventListener("keydown", (e: KeyboardEvent) => {
       // Projection events.
-      if (e.shiftKey && e.code === 'KeyC') clearProjection()
+      if (e.shiftKey && e.code === 'KeyP') isProjecting() ? closeProjection() : openProjection()
 
       // Playback events.
       if (e.code === 'ArrowLeft') goToPreviousVerse()
@@ -123,7 +203,7 @@ const App: Component = () => {
           {/* Up next */}
           <div class="flex justify-between text-gray-500">
             <h3 class="text-sm">Up next</h3>
-            <button class="text-sm" onClick={flush}>
+            <button class="text-sm" onClick={() => flush()}>
               Clear all
             </button>
           </div>
@@ -175,38 +255,42 @@ const App: Component = () => {
 
         {/* Controls */}
         <footer class="fixed bottom-0 left-0 w-full bg-white p-3">
-          <div class="flex min-h-16 flex-wrap justify-between gap-4 rounded-lg bg-gray-200 p-4 text-gray-700 lg:justify-center">
+          <div class="flex min-h-16 flex-wrap justify-center gap-6 md:gap-4 rounded-lg bg-gray-200 p-4 text-gray-700 md:justify-between lg:justify-center">
             <ProjectionButton
+              title="Shift + P"
+              isEnabled={isSupported()}
               isProjecting={isProjecting()}
-              openHandler={startProjection}
-              closeHandler={() => closeProjection()}
+              startHandler={openProjection}
+              stopHandler={closeProjection}
             />
-            <PlaybackButton
-              icon="visibility_off"
-              text="Clear projection"
+            <DisplayButton
               isEnabled={isProjecting()}
-              title="Shift + C"
-              handler={clearProjection}
+              isDisplaying={isVisible()}
+              showHandler={() => showProjection({
+                nowPlaying: nowPlaying(),
+                currentVerseIndex: currentVerseIndex()
+              })}
+              hideHandler={hideProjection}
             />
             <PlaybackButton
               icon="arrow_back"
               text="Previous verse"
-              isEnabled={nowPlaying() !== undefined && !isFirstVerse()}
               title="ArrowLeft"
+              isEnabled={nowPlaying() !== undefined && !isFirstVerse()}
               handler={goToPreviousVerse}
             />
             <PlaybackButton
               icon="arrow_forward"
               text="Next verse"
-              isEnabled={nowPlaying() !== undefined && !isLastVerse()}
               title="ArrowRight"
+              isEnabled={nowPlaying() !== undefined && !isLastVerse()}
               handler={goToNextVerse}
             />
             <PlaybackButton
               icon="skip_next"
               text="Next track"
-              isEnabled={nowPlaying() !== undefined}
               title="Shift + ArrowRight"
+              isEnabled={nowPlaying() !== undefined}
               handler={playNext}
             />
           </div>

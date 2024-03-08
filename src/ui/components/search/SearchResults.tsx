@@ -12,7 +12,7 @@ const SearchResults: Component<{
     <div class="flex flex-col gap-2 rounded-md">
       <For each={props.results}>
         {(track) => (
-          <SearchResultsItem track={track} handler={[props.handler, track]} />
+          <SearchResultsItem track={track} handler={() => props.handler(track)} />
         )}
       </For>
     </div>
