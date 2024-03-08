@@ -179,7 +179,16 @@ const App: Component = () => {
           {/* Search results */}
           <div class="mt-4 overflow-y-scroll transition h-40 rounded-md bg-gray-50/30 md:h-36 xl:h-52 2xl:h-2/6">
             <Show when={hasResults()}>
-              <SearchResults results={results} handler={enqueue} />
+              <SearchResults results={results} handler={(track: ITrack) => {
+                const item: IQueueItem = { qid: Date.now(), ...track };
+
+                if (nowPlaying() === undefined) {
+                  setNowPlaying(item);
+                  broadcast()
+                } else {
+                  enqueue(track);
+                }
+              }} />
             </Show>
           </div>
         </search>
