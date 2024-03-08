@@ -290,7 +290,7 @@ const App: Component = () => {
               icon="skip_next"
               text="Next track"
               title="Shift + ArrowRight"
-              isEnabled={nowPlaying() !== undefined}
+              isEnabled={peek() !== undefined || nowPlaying() !== undefined}
               handler={playNext}
             />
           </div>

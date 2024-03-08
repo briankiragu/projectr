@@ -66,6 +66,7 @@ export default () => {
     setIsEditing,
     setCurrentVerseIndex,
 
+    peek,
     enqueue,
     dequeue,
     flush,
