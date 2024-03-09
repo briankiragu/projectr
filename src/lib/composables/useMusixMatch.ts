@@ -9,24 +9,25 @@ const apiUrl: string = import.meta.env.VITE_MUSIXMATCH_API_URL;
 const apiKey: string = import.meta.env.VITE_MUSIXMATCH_API_KEY;
 
 export default () => {
-  const searchMusixMatch = async (
-    phrase: string
-  ): Promise<IMusixMatchTrack[]> => {
-    // Create the search params.
-    const searchParams = new URLSearchParams({
-      apiKey,
-      q: phrase,
-    });
+  const searchMusixMatch = async () =>
+    // phrase: string
+    {
+      // Create the search params.
+      // const searchParams = new URLSearchParams({
+      //   apiKey,
+      //   q: phrase,
+      // });
 
-    // Make the request.
-    const response = await fetch(
-      `${apiUrl}/track.search?${searchParams.toString()}`
-    );
+      // Make the request.
+      // const response = await fetch(
+      //   `${apiUrl}/track.search?${searchParams.toString()}`
+      // );
+      return await fetch(`/api/musixmatch`);
 
-    // Return the response.
-    return (response as unknown as IMusixMatchTrackListResponse).message.body
-      .track_list;
-  };
+      // Return the response.
+      // return (response as unknown as IMusixMatchTrackListResponse).message.body
+      //   .track_list;
+    };
 
   const getLyrics = async (trackId: string): Promise<IMusixMatchLyrics> => {
     // Create the search params.
