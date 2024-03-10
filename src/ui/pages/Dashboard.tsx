@@ -217,7 +217,7 @@ const App: Component = () => {
             </button>
           </div>
 
-          <div class="overflow-y-scroll md:h-36 lg:h-30 bg-gray-300/40 rounded-lg xl:h-48 2xl:h-auto">
+          <div class="overflow-y-scroll md:h-36 lg:h-30 bg-gray-300/40 rounded-lg xl:h-44 2xl:h-auto">
             <Show when={queue.length > 0}>
               <QueueList queue={queue} playHandler={playNow} queueHandler={dequeue} />
             </Show>
@@ -242,7 +242,6 @@ const App: Component = () => {
           <h2 class="mb-3 text-wrap text-4xl uppercase font-black text-tvc-green lg:mb-4 lg:text-6xl">
             {toTitleCase(nowPlaying()!.title)}
           </h2>
-
 
           {/* Lyrics */}
           <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 md:overflow-y-scroll lg:pb-2">
