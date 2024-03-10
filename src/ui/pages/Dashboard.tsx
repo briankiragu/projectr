@@ -23,13 +23,13 @@ import LyricsCardsPreloader from '@components/preloaders/LyricsCardsPreloader';
 import PlaybackButton from '@components/buttons/PlaybackButton';
 import ProjectionButton from '@components/buttons/ProjectionButton';
 import SearchForm from '@components/search/SearchForm';
+import TrackForm from '@components/forms/TrackForm';
 
 // Import the lazy-loaded components.
 const LyricsCard = lazy(() => import('@components/cards/LyricsCard'));
 const NowPlayingCard = lazy(() => import('@components/cards/NowPlayingCard'));
 const QueueList = lazy(() => import('@components/queue/QueueList'));
 const SearchResults = lazy(() => import('@components/search/SearchResults'));
-const TrackForm = lazy(() => import('@components/forms/TrackForm'));
 
 const App: Component = () => {
   // Create a BroadcastAPI channel.
