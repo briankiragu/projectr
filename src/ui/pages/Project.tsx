@@ -41,7 +41,7 @@ const Project: Component = () => {
 
       {/* Lyrics */}
       <div
-        class="bg-contain bg-center bg-no-repeat bg-[url('/images/tvc-logo.svg')] opacity-100 flex-auto flex items-center flex-col justify-center gap-4 rounded-lg px-6 py-4 text-center text-tvc-orange transition-colors"
+        class="bg-contain bg-center bg-no-repeat bg-[url('/images/tvc-logo.svg')] opacity-100 flex-auto flex items-center flex-col justify-center gap-2 rounded-lg text-center text-tvc-orange transition-colors"
         classList={{ 'bg-none opacity-full': nowPlaying() !== undefined }}
       >
         <Show
