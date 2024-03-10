@@ -169,7 +169,7 @@ const App: Component = () => {
 
   return (
     // Main container
-    <div class="overflow-hidden grid gap-5 p-6 lg:h-screen md:grid-cols-3 lg:grid-cols-4">
+    <div class="grid gap-5 p-6 lg:h-screen md:grid-cols-3 lg:grid-cols-4">
       <aside class="flex flex-col gap-3 rounded-lg lg:mb-20">
         {/* Search Pane */}
         <search class="rounded-lg bg-gray-300 px-4 pb-4 pt-3">
@@ -177,7 +177,7 @@ const App: Component = () => {
           <SearchForm handler={setResults} />
 
           {/* Search results */}
-          <div class="mt-4 overflow-y-scroll transition h-40 rounded-md bg-gray-50/30 md:h-36 xl:h-52 2xl:h-2/6">
+          <div class="mt-4 overflow-y-scroll transition h-40 rounded-md bg-gray-50/10 md:h-36 xl:h-52 2xl:h-2/6">
             <Show when={hasResults()}>
               <SearchResults results={results} handler={(track: ITrack) => {
                 const item: IQueueItem = { qid: Date.now(), ...track };
@@ -217,7 +217,7 @@ const App: Component = () => {
             </button>
           </div>
 
-          <div class="overflow-y-scroll md:h-36 lg:h-30 xl:h-48 2xl:h-auto">
+          <div class="overflow-y-scroll md:h-36 lg:h-30 bg-gray-300/40 rounded-lg xl:h-48 2xl:h-auto">
             <Show when={queue.length > 0}>
               <QueueList queue={queue} playHandler={playNow} queueHandler={dequeue} />
             </Show>
@@ -238,17 +238,13 @@ const App: Component = () => {
         classList={{ 'lg:col-start-3': isEditing() }}
       >
         {/* Title */}
-        <Show
-          when={nowPlaying() != undefined}
-          fallback={<div class="mb-3 h-16 rounded-md bg-gray-200/60"></div>}
-        >
+        <Show when={nowPlaying() !== undefined} fallback={<LyricsCardsPreloader />}>
           <h2 class="mb-3 text-wrap text-4xl uppercase font-black text-tvc-green lg:mb-4 lg:text-6xl">
             {toTitleCase(nowPlaying()!.title)}
           </h2>
-        </Show>
 
-        {/* Lyrics */}
-        <Show when={nowPlaying() !== undefined} fallback={<LyricsCardsPreloader />}>
+
+          {/* Lyrics */}
           <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 md:overflow-y-scroll lg:pb-2">
             <For each={nowPlaying()!.lyrics}>
               {(verse, index) => (
@@ -263,8 +259,8 @@ const App: Component = () => {
         </Show>
 
         {/* Controls */}
-        <footer class="fixed bottom-0 left-0 w-full bg-white p-3">
-          <div class="flex min-h-16 flex-wrap justify-center gap-6 md:gap-4 rounded-lg bg-gray-200 p-4 text-gray-700 md:justify-between lg:justify-center">
+        <footer class="fixed bottom-0 left-0 w-full p-3">
+          <div class="flex min-h-16 flex-wrap justify-center gap-6 md:gap-4 rounded-lg bg-tvc-green p-4 text-gray-700 md:justify-between lg:justify-center">
             <ProjectionButton
               title="Shift + P"
               isEnabled={isSupported()}

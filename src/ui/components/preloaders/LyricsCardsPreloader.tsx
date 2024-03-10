@@ -2,13 +2,10 @@ import { type Component } from 'solid-js';
 
 const LyricsCardsPreloader: Component = () => {
   return (
-    <div class="flex-1 hidden grid-cols-1 gap-4 md:grid md:grid-cols-3 md:overflow-y-scroll">
-      <div class="rounded-md bg-gray-200/40"></div>
-      <div class="rounded-md bg-gray-200/40"></div>
-      <div class="rounded-md bg-gray-200/40"></div>
-      <div class="rounded-md bg-gray-200/40"></div>
-      <div class="rounded-md bg-gray-200/40"></div>
-      <div class="rounded-md bg-gray-200/40"></div>
+    <div class="flex-1 flex justify-center items-center">
+      <h3 class="text-lg font-semibold text-gray-400">
+        No track is currently playing...
+      </h3>
     </div>
   );
 };

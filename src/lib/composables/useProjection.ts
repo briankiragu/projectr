@@ -33,7 +33,7 @@ export default (channel: BroadcastChannel) => {
     projection()?.close();
 
     setProjection(undefined);
-    setIsVisible(false);
+    setIsVisible(true);
   };
 
   return {
