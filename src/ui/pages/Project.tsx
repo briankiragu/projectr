@@ -48,7 +48,7 @@ const Project: Component = () => {
           when={nowPlaying() !== undefined}>
           <For each={currentVerse()}>
             {(line) => (
-              <p class="text-wrap font-extrabold uppercase text-2xl md:text-4xl lg:text-6xl xl:text-7xl 2xl:text-6xl">
+              <p class="text-wrap font-extrabold uppercase text-2xl md:text-4xl lg:text-6xl">
                 {line}
               </p>
             )}
