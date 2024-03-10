@@ -34,7 +34,7 @@ const Project: Component = () => {
         when={nowPlaying() !== undefined}
         fallback={<div class="h-20 rounded-md bg-gray-200/60"></div>}
       >
-        <h2 class="min-h-20 text-center text-wrap text-2xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-9xl underline font-black text-tvc-green uppercase">
+        <h2 class="text-center text-wrap text-2xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-9xl underline font-black text-tvc-green uppercase">
           {toTitleCase(nowPlaying()?.title)}
         </h2>
       </Show>
