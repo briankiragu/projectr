@@ -28,7 +28,9 @@ const appShellFiles = [
 
   "/images/logo.webp",
   "/images/tvc-logo.svg",
-  "/images/tvc-logo.webp", ,
+  "/images/tvc-logo.webp",
+
+  "/images/musixmatch-logo.webp",
 ];
 
 self.addEventListener("install", (e) => {

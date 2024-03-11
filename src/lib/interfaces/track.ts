@@ -1,7 +1,14 @@
+export enum ISource {
+  meili = "MeiliSearch",
+  musix = "MusixMatch",
+}
+
 export type ITrack = {
   id: number;
   title: string;
   lyrics: string[][];
+
+  source: ISource;
 
   created_at: string;
   updated_at: string;

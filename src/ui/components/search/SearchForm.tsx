@@ -3,7 +3,7 @@ import { type Component, onMount } from 'solid-js';
 import { debounceTime, distinctUntilChanged, fromEvent, switchMap } from 'rxjs';
 
 // Import the interfaces.
-import type { ITrack } from '@interfaces/track';
+import { type ITrack } from '@interfaces/track';
 
 // Import the composables.
 import useMeiliSearch from '@composables/useMeiliSearch';
@@ -25,8 +25,7 @@ const SearchForm: Component<{
         distinctUntilChanged(),
         switchMap(async (event: InputEvent) => {
           const phrase: string = (event.target as HTMLInputElement).value
-          const { hits } = await searchMeiliSearch(phrase);
-          return hits as ITrack[];
+          return searchMeiliSearch(phrase);
         })
       )
       .subscribe((hits) => props.handler(hits));
