@@ -7,6 +7,7 @@ import {
   onMount,
 } from 'solid-js';
 import { createStore } from 'solid-js/store';
+import { Portal } from 'solid-js/web';
 
 // Import the interfaces.
 import type { IQueueItem, ITrack } from '@interfaces/track';
@@ -20,6 +21,7 @@ import useQueue from '@/lib/composables/useQueue';
 // Import the components.
 import DisplayButton from '@components/buttons/DisplayButton';
 import LyricsCardsPreloader from '@components/preloaders/LyricsCardsPreloader';
+import NewTrackDialog from '@components/dialogs/NewTrackDialog';
 import PlaybackButton from '@components/buttons/PlaybackButton';
 import ProjectionButton from '@components/buttons/ProjectionButton';
 import SearchForm from '@components/search/SearchForm';
@@ -34,6 +36,10 @@ const SearchResults = lazy(() => import('@components/search/SearchResults'));
 const App: Component = () => {
   // Create a BroadcastAPI channel.
   const channel = new BroadcastChannel(import.meta.env.VITE_BROADCAST_NAME);
+
+  // Create the ID and ref to the dialog element.
+  let dialogEl: HTMLDialogElement | undefined;
+  const dialogId: string = "newTrackDialog";
 
   // Create the signals.
   const [results, setResults] = createStore<ITrack[]>([]);
@@ -93,7 +99,7 @@ const App: Component = () => {
   };
 
   /**
-   * Set a queued playing song as now playing.
+   * Set a queued playing track as now playing.
    */
   const playNow = (qid: number) => {
     // Find the item in the queue.
@@ -146,6 +152,10 @@ const App: Component = () => {
     // Broadcast the data.
     broadcast();
   };
+
+  const addNewTrack = () => {
+
+  }
 
   onMount(() => {
     window.addEventListener("keydown", (e: KeyboardEvent) => {
@@ -299,14 +309,18 @@ const App: Component = () => {
             />
             <PlaybackButton
               icon="add_circle"
-              text="Add a new song"
+              text="Add a new track"
               title="Shift + N"
               isEnabled={true}
-              handler={goToPreviousVerse}
+              handler={() => dialogEl?.showModal()}
             />
           </div>
         </footer>
       </main>
+
+      <Portal>
+        <NewTrackDialog uid={dialogId} ref={dialogEl} handler={addNewTrack} />
+      </Portal>
     </div>
   );
 };

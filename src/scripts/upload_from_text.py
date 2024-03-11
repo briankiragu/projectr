@@ -101,7 +101,7 @@ if __name__ == "__main__":
         # Get the path to the file from the CLI.
         path_to_file:str = sys.argv[1]
 
-        # Get the title of the song from the CLI.
+        # Get the title of the track from the CLI.
         title:str = sys.argv[2]
 
         lyrics = convert_text_to_lyrics(path_to_file)
