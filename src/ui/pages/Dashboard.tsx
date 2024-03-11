@@ -39,8 +39,7 @@ const App: Component = () => {
   const channel = new BroadcastChannel(import.meta.env.VITE_BROADCAST_NAME);
 
   // Create the ID and ref to the dialog element.
-  let dialogEl: HTMLDialogElement | undefined;
-  const dialogId: string = "newTrackDialog";
+  let dialogEl: HTMLDialogElement;
 
   // Create the signals.
   const [results, setResults] = createStore<ISearchItem[]>([]);
@@ -317,7 +316,7 @@ const App: Component = () => {
       </main>
 
       <Portal>
-        <NewTrackDialog uid={dialogId} ref={dialogEl} handler={addTrack} />
+        <NewTrackDialog uid="new-track-dialog" ref={dialogEl!} handler={addTrack} />
       </Portal>
     </div>
   );
