@@ -30,10 +30,7 @@ const Project: Component = () => {
   return (
     <div class="flex flex-col gap-4 items-stretch h-dvh p-6 bg-gray-100">
       {/* Title */}
-      <Show
-        when={nowPlaying() !== undefined}
-        fallback={<div class="h-20 rounded-md bg-gray-200/60"></div>}
-      >
+      <Show when={(nowPlaying() !== undefined) && (currentVerseIndex() === 0)}>
         <h2 class="text-center text-wrap text-2xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-9xl underline font-black text-tvc-green uppercase">
           {toTitleCase(nowPlaying()?.title)}
         </h2>
