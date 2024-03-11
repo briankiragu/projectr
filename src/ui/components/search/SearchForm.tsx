@@ -15,7 +15,7 @@ const SearchForm: Component<{
   const { searchTracks } = useTracks();
 
   // DOM reference.
-  let inputRef: HTMLInputElement | undefined;
+  let inputRef: HTMLInputElement;
 
   // Observable from DOM ref that watches user input.
   onMount(() => {
