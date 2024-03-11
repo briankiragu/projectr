@@ -37,7 +37,7 @@ const NewTrackDialog: Component<{
           </button>
         </header>
 
-        <article class="flex flex-col gap-4 px-4 py-2.5">
+        <article class="flex flex-col gap-4 px-4 py-2.5 xl:p-8">
           <label for="title" class="text-sm text-gray-700">
             Title<sup class="text-red-500">*</sup>
             <input

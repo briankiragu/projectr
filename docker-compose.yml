@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 services:
   mysql:
@@ -7,24 +7,48 @@ services:
     restart: always
     command: --binlog-format=ROW --default-authentication-plugin=mysql_native_password
     ports:
-      - '3306:3306'
-      - '33060:33060'
+      - "3306:${DB_PORT}"
     volumes:
       - ./docker/mysql:/docker-entrypoint-initdb.d
     environment:
-      MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
-      MYSQL_USER: '${MYSQL_USER}'
-      MYSQL_PASSWORD: '${MYSQL_PASSWORD}'
-      MYSQL_DATABASE: '${MYSQL_DATABASE}'
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+      MYSQL_USER: "${DB_USER}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_DATABASE: "${DB_DATABASE}"
+
+  directus:
+    image: directus/directus:latest
+    container_name: projectr_directus
+    restart: always
+    ports:
+      - "8055:8055"
+    volumes:
+      - ./docker/directus/database:/directus/database
+      - ./docker/directus/uploads:/directus/uploads
+      - ./docker/directus/extensions:/directus/extensions
+    environment:
+      DB_CLIENT: "mysql"
+      DB_HOST: "projectr_mysql"
+      DB_PORT: "${DB_PORT}"
+      DB_DATABASE: "${DB_DATABASE}"
+      DB_USER: "${DB_USER}"
+      DB_PASSWORD: "${DB_PASSWORD}"
+      KEY: "${DIRECTUS_KEY}"
+      SECRET: "${DIRECTUS_SECRET}"
+      ADMIN_EMAIL: "${DIRECTUS_ADMIN_EMAIL}"
+      ADMIN_PASSWORD: "${DIRECTUS_ADMIN_PASSWORD}"
+      WEBSOCKETS_ENABLED: "true"
+    depends_on:
+      - mysql
 
   meilisearch:
     image: getmeili/meilisearch:latest
     container_name: projectr_meilisearch
     restart: always
     ports:
-      - '7700:7700'
+      - "7700:7700"
     environment:
-      MEILI_MASTER_KEY: '${VITE_MEILI_MASTER_KEY}'
+      MEILI_MASTER_KEY: "${VITE_MEILI_MASTER_KEY}"
 
   meilisync:
     image: long2ice/meilisync:latest

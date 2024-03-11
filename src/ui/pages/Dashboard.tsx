@@ -15,8 +15,8 @@ import type { IProjectionPayload } from '@interfaces/projection';
 
 // Import the composables.
 import useFormatting from '@composables/useFormatting';
-import useProjection from '@/lib/composables/useProjection';
-import useQueue from '@/lib/composables/useQueue';
+import useProjection from '@composables/useProjection';
+import useQueue from '@composables/useQueue';
 import useTracks from '@composables/useTracks';
 
 // Import the components.

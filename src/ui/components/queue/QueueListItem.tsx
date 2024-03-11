@@ -34,16 +34,16 @@ const QueueListItem: Component<{
         {toTitleCase(props.track.title)}
       </h4>
       <button
-        class="material-symbols-outlined rounded-full px-0.5 py-0.5 hover:bg-gray-300"
+        class="material-symbols-outlined rounded-full p-1.5 hover:bg-gray-500 hover:text-gray-50 transition"
         onClick={() => props.playHandler()}
       >
         play_arrow
       </button>
       <button
-        class="material-symbols-outlined rounded-full px-0.5 py-0.5 hover:bg-gray-300"
+        class="material-symbols-outlined rounded-full p-1.5 hover:bg-gray-500 hover:text-gray-50 transition"
         onClick={() => props.queueHandler()}
       >
-        playlist_remove
+        remove_from_queue
       </button>
     </div>
   );
