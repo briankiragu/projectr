@@ -11,6 +11,7 @@ import sys
 from time import time
 from dotenv import load_dotenv
 from pathlib import Path
+from urllib.parse import quote
 
 # Load the environment variables.
 load_dotenv()
@@ -43,15 +44,15 @@ def convert_text_to_lyrics(path_to_file: str) -> list[list[str]]:
         raise(e)
 
 
-def add_to_meilisearch(title:str, lyrics: list[list[str]]):
+def update_or_create_in_meilisearch(title: str, lyrics: list[list[str]]):
     """Add the lyrics and title to Meilisearch"""
 
     try:
         log.info("Attempting to add track to Meilisearch...", title=title)
 
         # Get the environment variables.
-        VITE_MEILI_HOST = os.getenv('VITE_MEILI_HOST')
-        VITE_MEILI_MASTER_KEY = os.getenv('VITE_MEILI_MASTER_KEY')
+        VITE_MEILI_HOST = os.getenv("VITE_MEILI_HOST")
+        VITE_MEILI_MASTER_KEY = os.getenv("VITE_MEILI_MASTER_KEY")
 
         # Raise an error if any of the environment variables is missing.
         if ((VITE_MEILI_HOST == None) or (VITE_MEILI_MASTER_KEY == None)):
@@ -60,13 +61,25 @@ def add_to_meilisearch(title:str, lyrics: list[list[str]]):
         # Instantiate the client and get the correct index.
         client = meilisearch.Client(VITE_MEILI_HOST, VITE_MEILI_MASTER_KEY)
         index = client.get_index("tracks")
-        log.debug("Created instance of client and index.", client=client, index=index)
+        log.debug("Created instance of client and index.", index="tracks")
 
-        # Construct the new document.
-        new_document = [
-            {"id": round(time()), "title": title, "lyrics": lyrics}
-        ]
-        log.debug(f"Created new document.", new_document=new_document)
+        # Find all matching document(s) by the title.
+        response = index.get_documents({
+          "fields": ["id","title", "lyrics"],
+          "filter": f"title='{title}'"
+        })
+        log.debug(f"Found documents with matching title.", index="tracks", count=len(response.results))
+
+        # If there are one or more matches, take the ID of the first document as our update_or_create.
+        if len(response.results) > 0:
+            log.info(f"Updating document with matching ID...", id=response.results[0].id)
+            id = response.results[0].id
+        else:
+            id = round(time())
+
+        # Construct the document.
+        new_document = [{"id": id, "title": title, "lyrics": lyrics}]
+        log.debug(f"Updating or creating new document...", new_document=new_document)
 
         # Upload the data to meilisearch.
         task = index.add_documents(new_document)
@@ -75,7 +88,7 @@ def add_to_meilisearch(title:str, lyrics: list[list[str]]):
         log.info(
             f"Successfully added track.",
             title=title,
-            new_document=new_document[0]['id'],
+            new_document=new_document[0]["id"],
             task_uid=task.task_uid
         )
     except Exception as e:
@@ -94,6 +107,6 @@ if __name__ == "__main__":
         lyrics = convert_text_to_lyrics(path_to_file)
 
         if lyrics:
-            add_to_meilisearch(title, lyrics)
+            update_or_create_in_meilisearch(title, lyrics)
     except Exception as e:
         log.exception("Failed to import track from text file.")
