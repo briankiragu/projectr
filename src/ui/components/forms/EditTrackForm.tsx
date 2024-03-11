@@ -1,20 +1,24 @@
 import { type Component, createSignal } from 'solid-js';
-import type { IQueueItem } from '@interfaces/track';
-import useTracks from '@composables/useTracks';
 
-const TrackForm: Component<{
-  track?: IQueueItem;
+// Import the interfaces...
+import type { IQueueItem } from '@interfaces/track';
+
+// Import the composables...
+import useFormatting from '@composables/useFormatting';
+
+const EditTrackForm: Component<{
+  track: IQueueItem;
   handler: (track: IQueueItem) => void;
 }> = (props) => {
-  const { toEditableLyrics, fromEditable } = useTracks();
-  const [live, setLive] = createSignal(toEditableLyrics(props.track?.lyrics));
+  const { toEditableLyrics, fromEditableLyrics } = useFormatting();
+  const [live, setLive] = createSignal<string>(toEditableLyrics(props.track.lyrics));
 
   return (
     <form
       class="flex flex-col gap-3 text-sm text-gray-500"
       onSubmit={(e) => {
         e.preventDefault();
-        props.handler(fromEditable(props.track!, live()));
+        props.handler({ ...props.track!, lyrics: fromEditableLyrics(live()) });
       }}
     >
       <h3 class="font-semibold italic text-teal-800">
@@ -45,4 +49,4 @@ const TrackForm: Component<{
   );
 };
 
-export default TrackForm;
+export default EditTrackForm;

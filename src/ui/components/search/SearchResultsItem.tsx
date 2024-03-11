@@ -1,13 +1,13 @@
 import { type Component, Show } from 'solid-js';
 
 // Import the interfaces...
-import { ISource, type ITrack } from '@interfaces/track';
+import { type ISearchItem, ISource } from '@interfaces/track';
 
 // Import the composables...
 import useFormatting from '@composables/useFormatting';
 
 const SearchResultsItem: Component<{
-  track: ITrack;
+  track: ISearchItem;
   handler: () => void;
 }> = (props) => {
   const { toTitleCase } = useFormatting();

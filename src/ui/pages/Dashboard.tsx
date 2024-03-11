@@ -10,13 +10,14 @@ import { createStore } from 'solid-js/store';
 import { Portal } from 'solid-js/web';
 
 // Import the interfaces.
-import type { IQueueItem, ITrack } from '@interfaces/track';
+import type { IQueueItem, ISearchItem } from '@interfaces/track';
 import type { IProjectionPayload } from '@interfaces/projection';
 
 // Import the composables.
 import useFormatting from '@composables/useFormatting';
 import useProjection from '@/lib/composables/useProjection';
 import useQueue from '@/lib/composables/useQueue';
+import useTracks from '@composables/useTracks';
 
 // Import the components.
 import DisplayButton from '@components/buttons/DisplayButton';
@@ -25,7 +26,7 @@ import NewTrackDialog from '@components/dialogs/NewTrackDialog';
 import PlaybackButton from '@components/buttons/PlaybackButton';
 import ProjectionButton from '@components/buttons/ProjectionButton';
 import SearchForm from '@components/search/SearchForm';
-import TrackForm from '@components/forms/TrackForm';
+import EditTrackForm from '@components/forms/EditTrackForm';
 
 // Import the lazy-loaded components.
 const LyricsCard = lazy(() => import('@components/cards/LyricsCard'));
@@ -42,7 +43,7 @@ const App: Component = () => {
   const dialogId: string = "newTrackDialog";
 
   // Create the signals.
-  const [results, setResults] = createStore<ITrack[]>([]);
+  const [results, setResults] = createStore<ISearchItem[]>([]);
 
   // Create the derived signals.
   const hasResults = (): boolean => results.length > 0
@@ -80,6 +81,7 @@ const App: Component = () => {
     goToNextVerse,
     goToVerse
   } = useQueue();
+  const { addTrack } = useTracks()
 
   // Send the data over the channel.
   const broadcast = () => {
@@ -153,10 +155,6 @@ const App: Component = () => {
     broadcast();
   };
 
-  const addNewTrack = () => {
-
-  }
-
   onMount(() => {
     window.addEventListener("keydown", (e: KeyboardEvent) => {
       // Projection events.
@@ -189,7 +187,7 @@ const App: Component = () => {
           {/* Search results */}
           <div class="mt-4 overflow-y-scroll transition h-40 rounded-md bg-gray-50/10 md:h-36 xl:h-52 2xl:h-2/6">
             <Show when={hasResults()}>
-              <SearchResults results={results} handler={(track: ITrack) => {
+              <SearchResults results={results} handler={(track: ISearchItem) => {
                 const item: IQueueItem = { qid: Date.now(), ...track };
 
                 if (nowPlaying() === undefined) {
@@ -209,11 +207,11 @@ const App: Component = () => {
           <div class="min-h-24">
             <h3 class="mb-1 text-sm text-gray-500">Now Playing</h3>
             <Show
-              when={nowPlaying()}
+              when={nowPlaying() !== undefined}
               fallback={<div class="h-16 rounded-md bg-gray-600/10"></div>}
             >
               <NowPlayingCard
-                track={nowPlaying()}
+                track={nowPlaying()!}
                 handler={() => setIsEditing(!isEditing())}
               />
             </Show>
@@ -238,7 +236,7 @@ const App: Component = () => {
       {/* Live edit */}
       <Show when={isEditing()}>
         <aside class="mb-12 rounded-lg bg-gray-100 p-3 transition-transform lg:mb-20">
-          <TrackForm track={nowPlaying()} handler={editLyrics} />
+          <EditTrackForm track={nowPlaying()!} handler={editLyrics} />
         </aside>
       </Show>
 
@@ -319,7 +317,7 @@ const App: Component = () => {
       </main>
 
       <Portal>
-        <NewTrackDialog uid={dialogId} ref={dialogEl} handler={addNewTrack} />
+        <NewTrackDialog uid={dialogId} ref={dialogEl} handler={addTrack} />
       </Portal>
     </div>
   );

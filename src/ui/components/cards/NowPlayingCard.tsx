@@ -3,7 +3,7 @@ import type { IQueueItem } from '@interfaces/track';
 import useFormatting from '@composables/useFormatting';
 
 const NowPlayingCard: Component<{
-  track?: IQueueItem;
+  track: IQueueItem;
   handler: () => void;
 }> = (props) => {
   const { toTitleCase } = useFormatting();
@@ -11,7 +11,7 @@ const NowPlayingCard: Component<{
   return (
     <div class="relative flex min-h-16 items-center truncate rounded-lg bg-tvc-green px-5 align-middle text-sm shadow-lg shadow-tvc-green/20 md:px-4 xl:px-4">
       <h4 class="w-[90%] text-wrap text-lg md:text-sm xl:text-lg font-extrabold text-green-50">
-        {toTitleCase(props.track?.title)}
+        {toTitleCase(props.track.title)}
       </h4>
 
       {/* Enable live edit */}
