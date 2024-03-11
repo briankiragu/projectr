@@ -1,5 +1,8 @@
 import { MeiliSearch } from "meilisearch";
 
+// Import the interfaces...
+import type { ITrack } from "@interfaces/track";
+
 // The name of the index.
 const indexId = "tracks";
 
@@ -16,7 +19,11 @@ export default () => {
   // Make a GET request for the data.
   const searchMeiliSearch = async (phrase: string) => index.searchGet(phrase);
 
+  // Make a POST request to save the data.
+  const addDocuments = async (tracks: ITrack[]) => index.addDocuments(tracks);
+
   return {
     searchMeiliSearch,
+    addDocuments,
   };
 };

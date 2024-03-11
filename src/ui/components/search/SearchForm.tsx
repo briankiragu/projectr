@@ -3,13 +3,13 @@ import { type Component, onMount } from 'solid-js';
 import { debounceTime, distinctUntilChanged, fromEvent, switchMap } from 'rxjs';
 
 // Import the interfaces.
-import { type ITrack } from '@interfaces/track';
+import { type ISearchItem } from '@interfaces/track';
 
 // Import the composables.
 import useTracks from '@composables/useTracks';
 
 const SearchForm: Component<{
-  handler: (results: ITrack[]) => void
+  handler: (results: ISearchItem[]) => void
 }> = (props) => {
   // Import the composables.
   const { searchTracks } = useTracks();

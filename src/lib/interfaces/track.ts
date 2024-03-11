@@ -8,16 +8,18 @@ export type ITrack = {
   title: string;
   lyrics: string[][];
 
-  source: ISource;
-
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
   published_at?: string;
 
-  created_by_id: number;
-  updated_by_id: number;
+  created_by_id?: number;
+  updated_by_id?: number;
 };
 
-export interface IQueueItem extends ITrack {
+export interface ISearchItem extends ITrack {
+  source: ISource;
+}
+
+export interface IQueueItem extends ISearchItem {
   qid: number;
 }
