@@ -1,7 +1,24 @@
-import type { IQueueItem } from "@interfaces/track";
+// Import the interfaces...
+import { ISource, type IQueueItem, type ITrack } from "@interfaces/track";
+
+// Import the composables...
+import useMeiliSearch from "@composables/useMeiliSearch";
 
 export default () => {
-  const toEditable = (lyrics?: string[][]): string =>
+  // Import the composables.
+  const { searchMeiliSearch } = useMeiliSearch();
+
+  const searchTracks = async (phrase: string): Promise<ITrack[]> => {
+    // Search MeiliSearch for tracks.
+    const { hits } = await searchMeiliSearch(phrase);
+
+    // Return the combined results.
+    return [
+      ...(hits as ITrack[]).map((hit) => ({ ...hit, source: ISource.meili })),
+    ];
+  };
+
+  const toEditableLyrics = (lyrics?: string[][]): string =>
     lyrics
       ? lyrics.reduce((acc1, verse) => {
           const stanza = verse.reduce((acc2, line) => `${acc2}\n${line}`);
@@ -18,5 +35,5 @@ export default () => {
       .map((verse) => verse.split(/\n/g)),
   });
 
-  return { toEditable, fromEditable };
+  return { searchTracks, toEditableLyrics, fromEditable };
 };

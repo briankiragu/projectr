@@ -6,8 +6,8 @@ const TrackForm: Component<{
   track?: IQueueItem;
   handler: (track: IQueueItem) => void;
 }> = (props) => {
-  const { toEditable, fromEditable } = useTracks();
-  const [live, setLive] = createSignal(toEditable(props.track?.lyrics));
+  const { toEditableLyrics, fromEditable } = useTracks();
+  const [live, setLive] = createSignal(toEditableLyrics(props.track?.lyrics));
 
   return (
     <form

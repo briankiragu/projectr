@@ -259,7 +259,7 @@ const App: Component = () => {
 
         {/* Controls */}
         <footer class="fixed bottom-0 left-0 w-full p-3">
-          <div class="flex min-h-16 flex-wrap justify-center gap-6 md:gap-4 rounded-lg bg-tvc-green p-4 text-gray-700 md:justify-between lg:justify-center">
+          <div class="flex min-h-16 flex-wrap justify-center gap-4 md:gap-4 rounded-lg bg-tvc-green p-4 text-gray-700 md:justify-between lg:justify-center">
             <ProjectionButton
               title="Shift + P"
               isEnabled={isSupported()}
@@ -296,6 +296,13 @@ const App: Component = () => {
               title="Shift + ArrowRight"
               isEnabled={peek() !== undefined || nowPlaying() !== undefined}
               handler={playNext}
+            />
+            <PlaybackButton
+              icon="add_circle"
+              text="Add a new song"
+              title="Shift + N"
+              isEnabled={true}
+              handler={goToPreviousVerse}
             />
           </div>
         </footer>

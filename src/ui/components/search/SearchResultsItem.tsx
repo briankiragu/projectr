@@ -18,7 +18,7 @@ const SearchResultsItem: Component<{
         <h4 class="font-semibold">{toTitleCase(props.track.title)}</h4>
         <span class="text-sm italic font-light">{toTitleCase(props.track.lyrics[0][0])}</span>
       </div>
-      <div class="flex justify-end items-center gap-2">
+      <div class="flex justify-end items-center gap-1.5">
         <Show when={props.track.source !== ISource.meili}>
           <img
             src={`/images/${props.track.source}-logo.webp`}
@@ -27,10 +27,10 @@ const SearchResultsItem: Component<{
           />
         </Show>
         <button
-          class="material-symbols-outlined rounded-full w-8 h-8 p-1 hover:bg-tvc-orange hover:text-green-50 transition-colors focus:outline-none"
+          class="material-symbols-outlined rounded-full w-9 h-9 p-1.5 hover:bg-tvc-orange hover:text-green-50 transition-colors focus:outline-none"
           onClick={() => props.handler()}
         >
-          playlist_add
+          add_to_queue
         </button>
       </div>
     </div>
