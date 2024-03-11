@@ -35,7 +35,7 @@ const SearchForm: Component<{
     <form onSubmit={(e) => e.preventDefault()}>
       <label for="search">
         <span class="text-sm italic text-gray-800">
-          Search for a song by title or lyrics...
+          Search for a track by title or lyrics...
         </span>
         <input
           ref={inputRef!}
@@ -43,7 +43,7 @@ const SearchForm: Component<{
           type="search"
           name="search"
           class="mt-1 w-full rounded-lg px-4 py-3 text-sm text-gray-600 focus:outline-none"
-          placeholder="Search for a song by title or lyrics..."
+          placeholder="Search for a track by title or lyrics..."
           autofocus
         />
       </label>
