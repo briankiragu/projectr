@@ -6,13 +6,13 @@ import { debounceTime, distinctUntilChanged, fromEvent, switchMap } from 'rxjs';
 import { type ITrack } from '@interfaces/track';
 
 // Import the composables.
-import useMeiliSearch from '@composables/useMeiliSearch';
+import useTracks from '@composables/useTracks';
 
 const SearchForm: Component<{
   handler: (results: ITrack[]) => void
 }> = (props) => {
   // Import the composables.
-  const { searchMeiliSearch } = useMeiliSearch();
+  const { searchTracks } = useTracks();
 
   // DOM reference.
   let inputRef: HTMLInputElement | undefined;
@@ -25,7 +25,7 @@ const SearchForm: Component<{
         distinctUntilChanged(),
         switchMap(async (event: InputEvent) => {
           const phrase: string = (event.target as HTMLInputElement).value
-          return searchMeiliSearch(phrase);
+          return searchTracks(phrase);
         })
       )
       .subscribe((hits) => props.handler(hits));
