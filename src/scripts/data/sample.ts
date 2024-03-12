@@ -52,11 +52,11 @@ const data: ITrack[] = [
       ],
     ],
 
+    created_by: 1,
     created_at: Date.now().toString(),
-    updated_at: Date.now().toString(),
 
-    created_by_id: 1,
-    updated_by_id: 1,
+    updated_by: 1,
+    updated_at: Date.now().toString(),
   },
 ];
 

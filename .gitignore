@@ -36,3 +36,6 @@ dist-ssr
 
 # Vercel Build Output
 .vercel
+
+# Meilisync progress file
+progress.json

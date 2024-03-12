@@ -3,17 +3,24 @@ export enum ISource {
   musix = "MusixMatch",
 }
 
+export enum IStatus {
+  DRAFT = "draft",
+  PUBLISHED = "published",
+}
+
 export type ITrack = {
   id: number;
   title: string;
   lyrics: string[][];
 
-  created_at?: string;
-  updated_at?: string;
-  published_at?: string;
+  status?: IStatus;
+  sort?: number;
 
-  created_by_id?: number;
-  updated_by_id?: number;
+  created_by?: string;
+  created_at?: string;
+
+  updated_by?: string;
+  updated_at?: string;
 };
 
 export interface ISearchItem extends ITrack {
