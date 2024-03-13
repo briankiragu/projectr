@@ -47,6 +47,8 @@ services:
     restart: always
     ports:
       - "7700:7700"
+    volumes:
+      - ./docker/meilisearch:/meili_data
     environment:
       MEILI_MASTER_KEY: "${VITE_MEILI_MASTER_KEY}"
 
