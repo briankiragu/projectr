@@ -1,5 +1,5 @@
 // Import the interfaces...
-import { type ISearchItem, ISource, type ITrack } from "@interfaces/track";
+import { type ISearchItem, ISource } from "@interfaces/track";
 
 // Import the composables...
 import useFormatting from "@composables/useFormatting";
@@ -8,7 +8,7 @@ import useMeiliSearch from "@composables/useMeiliSearch";
 export default () => {
   // Import the composables.
   const { fromEditableLyrics } = useFormatting();
-  const { searchMeiliSearch, addDocuments } = useMeiliSearch();
+  const { searchMeiliSearch } = useMeiliSearch();
 
   const searchTracks = async (phrase: string): Promise<ISearchItem[]> => {
     // Search MeiliSearch for tracks.
@@ -24,13 +24,5 @@ export default () => {
     ];
   };
 
-  const addTrack = async (title: string, lyrics: string) => {
-    // Create the document.
-    const track = { id: Date.now(), title, lyrics: fromEditableLyrics(lyrics) };
-
-    // Make the request to Meilisearch.
-    addDocuments([track]);
-  };
-
-  return { searchTracks, addTrack };
+  return { searchTracks };
 };

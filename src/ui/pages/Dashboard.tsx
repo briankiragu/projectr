@@ -1,51 +1,39 @@
-import {
-  Component,
-  For,
-  Show,
-  createEffect,
-  lazy,
-  onMount,
-} from 'solid-js';
-import { createStore } from 'solid-js/store';
-import { Portal } from 'solid-js/web';
+import { Component, For, Show, createEffect, lazy, onMount } from "solid-js";
+import { createStore } from "solid-js/store";
 
 // Import the interfaces.
-import type { IQueueItem, ISearchItem } from '@interfaces/track';
-import type { IProjectionPayload } from '@interfaces/projection';
+import type { IQueueItem, ISearchItem } from "@interfaces/track";
+import type { IProjectionPayload } from "@interfaces/projection";
 
 // Import the composables.
-import useFormatting from '@composables/useFormatting';
-import useProjection from '@composables/useProjection';
-import useQueue from '@composables/useQueue';
-import useTracks from '@composables/useTracks';
+import useFormatting from "@composables/useFormatting";
+import useProjection from "@composables/useProjection";
+import useQueue from "@composables/useQueue";
+import useTracks from "@composables/useTracks";
 
 // Import the components.
-import DisplayButton from '@components/buttons/DisplayButton';
-import LyricsCardsPreloader from '@components/preloaders/LyricsCardsPreloader';
-import NewTrackDialog from '@components/dialogs/NewTrackDialog';
-import PlaybackButton from '@components/buttons/PlaybackButton';
-import ProjectionButton from '@components/buttons/ProjectionButton';
-import SearchForm from '@components/search/SearchForm';
-import EditTrackForm from '@components/forms/EditTrackForm';
+import DisplayButton from "@components/buttons/DisplayButton";
+import LyricsCardsPreloader from "@components/preloaders/LyricsCardsPreloader";
+import PlaybackButton from "@components/buttons/PlaybackButton";
+import ProjectionButton from "@components/buttons/ProjectionButton";
+import SearchForm from "@components/search/SearchForm";
+import EditTrackForm from "@components/forms/EditTrackForm";
 
 // Import the lazy-loaded components.
-const LyricsCard = lazy(() => import('@components/cards/LyricsCard'));
-const NowPlayingCard = lazy(() => import('@components/cards/NowPlayingCard'));
-const QueueList = lazy(() => import('@components/queue/QueueList'));
-const SearchResults = lazy(() => import('@components/search/SearchResults'));
+const LyricsCard = lazy(() => import("@components/cards/LyricsCard"));
+const NowPlayingCard = lazy(() => import("@components/cards/NowPlayingCard"));
+const QueueList = lazy(() => import("@components/queue/QueueList"));
+const SearchResults = lazy(() => import("@components/search/SearchResults"));
 
 const App: Component = () => {
   // Create a BroadcastAPI channel.
   const channel = new BroadcastChannel(import.meta.env.VITE_BROADCAST_NAME);
 
-  // Create the ID and ref to the dialog element.
-  let dialogEl: HTMLDialogElement;
-
   // Create the signals.
   const [results, setResults] = createStore<ISearchItem[]>([]);
 
   // Create the derived signals.
-  const hasResults = (): boolean => results.length > 0
+  const hasResults = (): boolean => results.length > 0;
 
   // Import the composables.
   const { toTitleCase } = useFormatting();
@@ -56,7 +44,7 @@ const App: Component = () => {
     openProjection,
     showProjection,
     hideProjection,
-    closeProjection
+    closeProjection,
   } = useProjection(channel);
   const {
     queue,
@@ -78,9 +66,9 @@ const App: Component = () => {
     isLastVerse,
     goToPreviousVerse,
     goToNextVerse,
-    goToVerse
+    goToVerse,
   } = useQueue();
-  const { addTrack } = useTracks()
+  const { addTrack } = useTracks();
 
   // Send the data over the channel.
   const broadcast = () => {
@@ -89,9 +77,9 @@ const App: Component = () => {
       const data: IProjectionPayload | null =
         nowPlaying() !== undefined
           ? {
-            nowPlaying: nowPlaying(),
-            currentVerseIndex: currentVerseIndex(),
-          }
+              nowPlaying: nowPlaying(),
+              currentVerseIndex: currentVerseIndex(),
+            }
           : null;
 
       // Send the message.
@@ -157,26 +145,27 @@ const App: Component = () => {
   onMount(() => {
     window.addEventListener("keydown", (e: KeyboardEvent) => {
       // Projection events.
-      if (e.shiftKey && e.code === 'KeyP') isProjecting() ? closeProjection() : openProjection()
+      if (e.shiftKey && e.code === "KeyP")
+        isProjecting() ? closeProjection() : openProjection();
 
       // Playback events.
-      if (e.code === 'ArrowLeft') goToPreviousVerse()
-      if (e.code === 'ArrowRight') goToNextVerse()
-      if (e.shiftKey && e.code === 'ArrowRight') playNext()
-    })
-  })
+      if (e.code === "ArrowLeft") goToPreviousVerse();
+      if (e.code === "ArrowRight") goToNextVerse();
+      if (e.shiftKey && e.code === "ArrowRight") playNext();
+    });
+  });
 
   createEffect((prev: number | undefined) => {
     // If the currently playing verse has changed...
-    if (currentVerseIndex() !== prev) broadcast()
+    if (currentVerseIndex() !== prev) broadcast();
 
     // Return the now playing to re-use in the next call.
-    return currentVerseIndex()
+    return currentVerseIndex();
   });
 
   return (
     // Main container
-    <div class="grid gap-5 p-6 lg:h-screen md:grid-cols-3 lg:grid-cols-4">
+    <div class="grid gap-5 p-6 md:grid-cols-3 lg:h-screen lg:grid-cols-4">
       <aside class="flex flex-col gap-3 rounded-lg lg:mb-20">
         {/* Search Pane */}
         <search class="rounded-lg bg-gray-300 px-4 pb-4 pt-3">
@@ -184,24 +173,27 @@ const App: Component = () => {
           <SearchForm handler={setResults} />
 
           {/* Search results */}
-          <div class="mt-4 overflow-y-scroll transition h-40 rounded-md bg-gray-50/10 md:h-36 xl:h-52 2xl:h-2/6">
+          <div class="mt-4 h-40 overflow-y-scroll rounded-md bg-gray-50/10 transition md:h-36 xl:h-52 2xl:h-2/6">
             <Show when={hasResults()}>
-              <SearchResults results={results} handler={(track: ISearchItem) => {
-                const item: IQueueItem = { qid: Date.now(), ...track };
+              <SearchResults
+                results={results}
+                handler={(track: ISearchItem) => {
+                  const item: IQueueItem = { qid: Date.now(), ...track };
 
-                if (nowPlaying() === undefined) {
-                  setNowPlaying(item);
-                  broadcast()
-                } else {
-                  enqueue(track);
-                }
-              }} />
+                  if (nowPlaying() === undefined) {
+                    setNowPlaying(item);
+                    broadcast();
+                  } else {
+                    enqueue(track);
+                  }
+                }}
+              />
             </Show>
           </div>
         </search>
 
         {/* Play queue */}
-        <div class="flex-1 flex flex-col rounded-lg bg-gray-200 px-4 pb-4 pt-3 gap-1.5">
+        <div class="flex flex-1 flex-col gap-1.5 rounded-lg bg-gray-200 px-4 pb-4 pt-3">
           {/* Now playing */}
           <div class="min-h-24">
             <h3 class="mb-1 text-sm text-gray-500">Now Playing</h3>
@@ -224,9 +216,13 @@ const App: Component = () => {
             </button>
           </div>
 
-          <div class="overflow-y-scroll md:h-36 lg:h-30 bg-gray-300/40 rounded-lg xl:h-44 2xl:h-auto">
+          <div class="lg:h-30 overflow-y-scroll rounded-lg bg-gray-300/40 md:h-36 xl:h-44 2xl:h-auto">
             <Show when={queue.length > 0}>
-              <QueueList queue={queue} playHandler={playNow} queueHandler={dequeue} />
+              <QueueList
+                queue={queue}
+                playHandler={playNow}
+                queueHandler={dequeue}
+              />
             </Show>
           </div>
         </div>
@@ -241,17 +237,20 @@ const App: Component = () => {
 
       {/* View Pane */}
       <main
-        class="flex flex-col mb-16 rounded-lg transition-transform md:col-start-2 md:col-end-5 lg:col-end-6 lg:mb-20"
-        classList={{ 'lg:col-start-3': isEditing() }}
+        class="mb-16 flex flex-col rounded-lg transition-transform md:col-start-2 md:col-end-5 lg:col-end-6 lg:mb-20"
+        classList={{ "lg:col-start-3": isEditing() }}
       >
         {/* Title */}
-        <Show when={nowPlaying() !== undefined} fallback={<LyricsCardsPreloader />}>
-          <h2 class="mb-3 text-wrap text-4xl uppercase font-black text-tvc-green lg:mb-4 lg:text-6xl">
+        <Show
+          when={nowPlaying() !== undefined}
+          fallback={<LyricsCardsPreloader />}
+        >
+          <h2 class="text-tvc-green mb-3 text-wrap text-4xl font-black uppercase lg:mb-4 lg:text-6xl">
             {toTitleCase(nowPlaying()!.title)}
           </h2>
 
           {/* Lyrics */}
-          <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 md:overflow-y-scroll lg:pb-2">
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:overflow-y-scroll lg:grid-cols-3 lg:pb-2">
             <For each={nowPlaying()!.lyrics}>
               {(verse, index) => (
                 <LyricsCard
@@ -266,7 +265,7 @@ const App: Component = () => {
 
         {/* Controls */}
         <footer class="fixed bottom-0 left-0 w-full p-3">
-          <div class="flex min-h-16 flex-wrap justify-center gap-4 md:gap-4 rounded-lg bg-tvc-green p-4 text-gray-700 md:justify-between lg:justify-center">
+          <div class="bg-tvc-green flex min-h-16 flex-wrap justify-center gap-4 rounded-lg p-4 text-gray-700 md:justify-between md:gap-4 lg:justify-center">
             <ProjectionButton
               title="Shift + P"
               isEnabled={isSupported()}
@@ -277,10 +276,12 @@ const App: Component = () => {
             <DisplayButton
               isEnabled={isProjecting()}
               isDisplaying={isVisible()}
-              showHandler={() => showProjection({
-                nowPlaying: nowPlaying(),
-                currentVerseIndex: currentVerseIndex()
-              })}
+              showHandler={() =>
+                showProjection({
+                  nowPlaying: nowPlaying(),
+                  currentVerseIndex: currentVerseIndex(),
+                })
+              }
               hideHandler={hideProjection}
             />
             <PlaybackButton
@@ -304,20 +305,9 @@ const App: Component = () => {
               isEnabled={peek() !== undefined || nowPlaying() !== undefined}
               handler={playNext}
             />
-            <PlaybackButton
-              icon="add_circle"
-              text="Add a new track"
-              title="Shift + N"
-              isEnabled={true}
-              handler={() => dialogEl?.showModal()}
-            />
           </div>
         </footer>
       </main>
-
-      <Portal>
-        <NewTrackDialog uid="new-track-dialog" ref={dialogEl!} handler={addTrack} />
-      </Portal>
     </div>
   );
 };
