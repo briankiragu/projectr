@@ -59,7 +59,7 @@ def format_extracted_lyrics(
                     {
                         "id": len(tracks) + 1,
                         "title": current_title,
-                        "lyrics": current_lyrics,
+                        "lyrics": "\n\n".join(current_lyrics),
                     }
                 )
 
@@ -83,13 +83,13 @@ def extract_title_from_string(title: str) -> str:
     ).strip()
 
 
-def extract_lyrics_from_string(verse: str) -> list[str]:
+def extract_lyrics_from_string(verse: str) -> str:
     """From a single string, extract each lyric as an item in an array."""
 
-    return [
-        unicodedata.normalize("NFKC", replace_with_ascii(line)).strip()
-        for line in re.split(r"[\u000b\n]", verse)
-    ]
+    return unicodedata.normalize(
+        "NFKC", replace_with_ascii(re.sub(r"[\u000b\n]", "\n", verse))
+    ).strip()
+
 
 def replace_with_ascii(phrase: str) -> str:
     """Replace the tricky unicode characters"""
