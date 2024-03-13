@@ -6,6 +6,7 @@ export enum ISource {
 export enum IStatus {
   DRAFT = "draft",
   PUBLISHED = "published",
+  ARCHIVED = "archived",
 }
 
 export type ITrack = {
@@ -17,10 +18,10 @@ export type ITrack = {
   sort?: number;
 
   created_by?: string;
-  created_at?: string;
+  created_on?: string;
 
   updated_by?: string;
-  updated_at?: string;
+  updated_on?: string;
 };
 
 export interface ISearchItem extends ITrack {

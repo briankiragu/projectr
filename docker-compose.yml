@@ -1,9 +1,9 @@
-version: "3.7"
+version: "3"
 
 services:
   mysql:
     image: mysql:latest
-    container_name: projectr_db
+    container_name: db
     restart: always
     command: --binlog-format=ROW --default-authentication-plugin=mysql_native_password
     ports:
@@ -18,7 +18,7 @@ services:
 
   directus:
     image: directus/directus:latest
-    container_name: projectr_admin
+    container_name: admin
     restart: always
     ports:
       - "8055:8055"
@@ -28,7 +28,7 @@ services:
       - ./docker/directus/extensions:/directus/extensions
     environment:
       DB_CLIENT: "mysql"
-      DB_HOST: "projectr_db"
+      DB_HOST: "host.docker.internal"
       DB_PORT: "${DB_PORT}"
       DB_DATABASE: "${DB_DATABASE}"
       DB_USER: "${DB_USER}"
@@ -43,7 +43,7 @@ services:
 
   meilisearch:
     image: getmeili/meilisearch:latest
-    container_name: projectr_search
+    container_name: search
     restart: always
     ports:
       - "7700:7700"
@@ -51,12 +51,15 @@ services:
       MEILI_MASTER_KEY: "${VITE_MEILI_MASTER_KEY}"
 
   meilisync:
-    platform: linux/x86_64
     image: long2ice/meilisync:latest
-    container_name: projectr_meilisync
+    container_name: meilisync
     restart: always
     volumes:
       - ./docker/meilisync/config.yml:/meilisync/config.yml
+    environment:
+      DB_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+      DB_DATABASE: "${DB_DATABASE}"
+      MEILI_MASTER_KEY: "${VITE_MEILI_MASTER_KEY}"
     depends_on:
       - mysql
       - meilisearch

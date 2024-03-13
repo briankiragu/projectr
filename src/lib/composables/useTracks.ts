@@ -16,7 +16,11 @@ export default () => {
 
     // Return the combined results.
     return [
-      ...(hits as ITrack[]).map((hit) => ({ ...hit, source: ISource.meili })),
+      ...hits.map((hit) => ({
+        ...hit,
+        lyrics: fromEditableLyrics(hit.lyrics),
+        source: ISource.meili,
+      })),
     ];
   };
 
