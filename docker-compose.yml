@@ -28,7 +28,7 @@ services:
       - ./docker/directus/extensions:/directus/extensions
     environment:
       DB_CLIENT: "mysql"
-      DB_HOST: "host.docker.internal"
+      DB_HOST: 127.0.0.1
       DB_PORT: "${DB_PORT}"
       DB_DATABASE: "${DB_DATABASE}"
       DB_USER: "${DB_USER}"

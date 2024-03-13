@@ -3,13 +3,13 @@ progress:
   type: file
 source:
   type: mysql
-  host: host.docker.internal
+  host: 127.0.0.1
   port: 3306
   user: root
   password: "75YncgwrIg"
   database: projectrCMS
 meilisearch:
-  api_url: http://host.docker.internal:7700
+  api_url: http://127.0.0.1:7700
   api_key: "018db27a-b774-78af-9756-6531be6607a3"
   insert_size: 1000
   insert_interval: 10
