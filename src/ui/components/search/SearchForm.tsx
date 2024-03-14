@@ -13,7 +13,6 @@ const SearchForm: Component<{
   handler: (results: ISearchItem[]) => void;
 }> = (props) => {
   // Import the composables.
-  const { fromEditableLyrics } = useFormatting();
   const { searchTracks } = useTracks();
 
   // DOM reference.
@@ -27,11 +26,7 @@ const SearchForm: Component<{
         distinctUntilChanged(),
         switchMap(async (event: InputEvent) => {
           const phrase: string = (event.target as HTMLInputElement).value;
-          const hits = await searchTracks(phrase);
-          return hits.map((hit) => ({
-            ...hit,
-            lyrics: fromEditableLyrics(hit.lyrics),
-          })) as ISearchItem[];
+          return searchTracks(phrase);
         })
       )
       .subscribe((hits) => props.handler(hits));
