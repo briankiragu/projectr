@@ -7,10 +7,10 @@ services:
     restart: always
     command: --binlog-format=ROW --authentication-policy=mysql_native_password
     ports:
-      - "3306:${DB_PORT}"
+      - "${DB_PORT:-3306}:3306"
       - "33060:33060"
     volumes:
-      - ./docker/mysql:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
       MYSQL_USER: "${DB_USER}"
@@ -22,14 +22,12 @@ services:
     container_name: admin
     restart: always
     ports:
-      - "8055:8055"
+      - "${DIRECTUS_PORT:-8055}:8055"
     volumes:
-      - ./docker/directus/database:/directus/database
-      - ./docker/directus/uploads:/directus/uploads
-      - ./docker/directus/extensions:/directus/extensions
+      - directus_data:/directus/extensions
     environment:
       DB_CLIENT: "mysql"
-      DB_HOST: "host.docker.internal"
+      DB_HOST: db
       DB_PORT: "${DB_PORT}"
       DB_DATABASE: "${DB_DATABASE}"
       DB_USER: "${DB_USER}"
@@ -47,9 +45,9 @@ services:
     container_name: search
     restart: always
     ports:
-      - "7700:7700"
+      - "${MEILI_PORT:-7700}:7700"
     volumes:
-      - ./docker/meilisearch:/meili_data
+      - meili_data:/meili_data
     environment:
       MEILI_MASTER_KEY: "${VITE_MEILI_MASTER_KEY}"
 
@@ -58,6 +56,7 @@ services:
     container_name: meilisync
     restart: always
     volumes:
+      - meilisync_data:/meilisync
       - ./docker/meilisync/config.yml:/meilisync/config.yml
     environment:
       DB_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
@@ -66,3 +65,9 @@ services:
     depends_on:
       - mysql
       - meilisearch
+
+volumes:
+  mysql_data:
+  directus_data:
+  meili_data:
+  meilisync_data:

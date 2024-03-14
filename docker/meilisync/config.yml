@@ -1,6 +1,7 @@
 debug: true
 progress:
   type: file
+  path: ./meilisync/progress.json
 source:
   type: mysql
   host: host.docker.internal
