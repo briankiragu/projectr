@@ -16,6 +16,8 @@ services:
       MYSQL_USER: "${DB_USER}"
       MYSQL_PASSWORD: "${DB_PASSWORD}"
       MYSQL_DATABASE: "${DB_DATABASE}"
+    networks:
+      - projectr
 
   directus:
     image: directus/directus:latest
@@ -37,6 +39,8 @@ services:
       ADMIN_EMAIL: "${DIRECTUS_ADMIN_EMAIL}"
       ADMIN_PASSWORD: "${DIRECTUS_ADMIN_PASSWORD}"
       WEBSOCKETS_ENABLED: "true"
+    networks:
+      - projectr
     depends_on:
       - mysql
 
@@ -50,6 +54,8 @@ services:
       - meili_data:/meili_data
     environment:
       MEILI_MASTER_KEY: "${VITE_MEILI_MASTER_KEY}"
+    networks:
+      - projectr
 
   meilisync:
     image: long2ice/meilisync:latest
@@ -58,10 +64,8 @@ services:
     volumes:
       - meilisync_data:/meilisync
       - ./docker/meilisync/config.yml:/meilisync/config.yml
-    environment:
-      DB_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
-      DB_DATABASE: "${DB_DATABASE}"
-      MEILI_MASTER_KEY: "${VITE_MEILI_MASTER_KEY}"
+    networks:
+      - projectr
     depends_on:
       - mysql
       - meilisearch
@@ -71,3 +75,6 @@ volumes:
   directus_data:
   meili_data:
   meilisync_data:
+
+networks:
+  projectr:
