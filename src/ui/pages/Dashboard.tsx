@@ -9,7 +9,6 @@ import type { IProjectionPayload } from "@interfaces/projection";
 import useFormatting from "@composables/useFormatting";
 import useProjection from "@composables/useProjection";
 import useQueue from "@composables/useQueue";
-import useTracks from "@composables/useTracks";
 
 // Import the components.
 import DisplayButton from "@components/buttons/DisplayButton";
@@ -68,7 +67,6 @@ const App: Component = () => {
     goToNextVerse,
     goToVerse,
   } = useQueue();
-  const { addTrack } = useTracks();
 
   // Send the data over the channel.
   const broadcast = () => {
@@ -84,6 +82,20 @@ const App: Component = () => {
 
       // Send the message.
       channel.postMessage(JSON.stringify(data));
+    }
+  };
+
+  const addToQueue = (track: ISearchItem) => {
+    const item: IQueueItem = {
+      ...track,
+      qid: Date.now(),
+    };
+
+    if (nowPlaying() === undefined) {
+      setNowPlaying(item);
+      broadcast();
+    } else {
+      enqueue(item);
     }
   };
 
@@ -175,19 +187,7 @@ const App: Component = () => {
           {/* Search results */}
           <div class="mt-4 h-40 overflow-y-scroll rounded-md bg-gray-50/10 transition md:h-36 xl:h-52 2xl:h-2/6">
             <Show when={hasResults()}>
-              <SearchResults
-                results={results}
-                handler={(track: ISearchItem) => {
-                  const item: IQueueItem = { qid: Date.now(), ...track };
-
-                  if (nowPlaying() === undefined) {
-                    setNowPlaying(item);
-                    broadcast();
-                  } else {
-                    enqueue(track);
-                  }
-                }}
-              />
+              <SearchResults results={results} handler={addToQueue} />
             </Show>
           </div>
         </search>

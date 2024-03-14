@@ -2,7 +2,7 @@ import { createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 
 // Import the interfaces.
-import type { IQueueItem, ITrack } from "@interfaces/track";
+import type { IQueueItem } from "@interfaces/track";
 
 export default () => {
   const [queue, setQueue] = createStore<IQueueItem[]>([]);
@@ -16,9 +16,9 @@ export default () => {
   const peek = () => queue.at(0);
 
   // Enqueue.
-  const enqueue = (track: ITrack) => {
+  const enqueue = (track: IQueueItem) => {
     // Create a random ID for the track and add it to the queue.
-    setQueue([...queue, { qid: Date.now(), ...track }]);
+    setQueue([...queue, { ...track, qid: Date.now() }]);
   };
 
   // Dequeue.

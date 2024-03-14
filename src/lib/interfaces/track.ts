@@ -10,21 +10,12 @@ export enum IStatus {
 }
 
 export type ITrack = {
-  id: number;
   title: string;
-  lyrics: string[][];
-
-  status?: IStatus;
-  sort?: number;
-
-  created_by?: string;
-  created_on?: string;
-
-  updated_by?: string;
-  updated_on?: string;
+  lyrics: string;
 };
 
-export interface ISearchItem extends ITrack {
+export interface ISearchItem extends Omit<ITrack, "lyrics"> {
+  lyrics: string[][];
   source: ISource;
 }
 

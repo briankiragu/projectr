@@ -1,17 +1,19 @@
 // Import the modules.
-import { type Component, onMount } from 'solid-js';
-import { debounceTime, distinctUntilChanged, fromEvent, switchMap } from 'rxjs';
+import { type Component, onMount } from "solid-js";
+import { debounceTime, distinctUntilChanged, fromEvent, switchMap } from "rxjs";
 
 // Import the interfaces.
-import { type ISearchItem } from '@interfaces/track';
+import { type ISearchItem } from "@interfaces/track";
 
 // Import the composables.
-import useTracks from '@composables/useTracks';
+import useTracks from "@composables/useTracks";
+import useFormatting from "@/lib/composables/useFormatting";
 
 const SearchForm: Component<{
-  handler: (results: ISearchItem[]) => void
+  handler: (results: ISearchItem[]) => void;
 }> = (props) => {
   // Import the composables.
+  const { fromEditableLyrics } = useFormatting();
   const { searchTracks } = useTracks();
 
   // DOM reference.
@@ -19,13 +21,17 @@ const SearchForm: Component<{
 
   // Observable from DOM ref that watches user input.
   onMount(() => {
-    fromEvent<InputEvent>(inputRef!, 'input')
+    fromEvent<InputEvent>(inputRef!, "input")
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
         switchMap(async (event: InputEvent) => {
-          const phrase: string = (event.target as HTMLInputElement).value
-          return searchTracks(phrase);
+          const phrase: string = (event.target as HTMLInputElement).value;
+          const hits = await searchTracks(phrase);
+          return hits.map((hit) => ({
+            ...hit,
+            lyrics: fromEditableLyrics(hit.lyrics),
+          })) as ISearchItem[];
         })
       )
       .subscribe((hits) => props.handler(hits));
