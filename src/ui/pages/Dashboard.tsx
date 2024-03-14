@@ -245,7 +245,7 @@ const App: Component = () => {
           when={nowPlaying() !== undefined}
           fallback={<LyricsCardsPreloader />}
         >
-          <h2 class="text-tvc-green mb-3 text-wrap text-4xl font-black uppercase lg:mb-4 lg:text-6xl">
+          <h2 class="mb-3 text-wrap text-4xl font-black uppercase text-tvc-green lg:mb-4 lg:text-6xl">
             {toTitleCase(nowPlaying()!.title)}
           </h2>
 
@@ -265,7 +265,7 @@ const App: Component = () => {
 
         {/* Controls */}
         <footer class="fixed bottom-0 left-0 w-full p-3">
-          <div class="bg-tvc-green flex min-h-16 flex-wrap justify-center gap-4 rounded-lg p-4 text-gray-700 md:justify-between md:gap-4 lg:justify-center">
+          <div class="flex min-h-16 flex-wrap justify-center gap-4 rounded-lg bg-tvc-green p-4 text-gray-700 md:justify-between md:gap-4 lg:justify-center">
             <ProjectionButton
               title="Shift + P"
               isEnabled={isSupported()}
