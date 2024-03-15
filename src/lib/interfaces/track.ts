@@ -15,6 +15,12 @@ export type ITrack = {
 
   status: IStatus;
   sort: number | null;
+
+  created_on?: string;
+  created_by?: string;
+
+  updated_on?: string;
+  updated_by?: string;
 };
 
 export interface ISearchItem extends Omit<ITrack, "lyrics"> {
