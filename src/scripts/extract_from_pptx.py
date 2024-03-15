@@ -47,7 +47,7 @@ def format_extracted_lyrics(
     """Format the extracted data to the expected format"""
 
     titles: list[str] = []
-    tracks: list[dict[str, int | str | list[str]]] = []
+    tracks: list[dict[str, int | str | list[str] | None]] = []
     current_title: str = ""
     current_lyrics: list[str] = []
 
@@ -60,6 +60,8 @@ def format_extracted_lyrics(
                         "id": len(tracks) + 1,
                         "title": current_title,
                         "lyrics": "\n\n".join(current_lyrics),
+                        "status": "published",
+                        "sort": None
                     }
                 )
 

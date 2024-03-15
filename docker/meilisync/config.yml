@@ -6,8 +6,8 @@ source:
   host: host.docker.internal
   port: 3306
   user: root
-  password: "75YncgwrIg"
-  database: projectrCMS
+  password: "ZBDWmHHDrIxilNQY"
+  database: projectr
 meilisearch:
   api_url: http://host.docker.internal:7700
   api_key: "018db27a-b774-78af-9756-6531be6607a3"

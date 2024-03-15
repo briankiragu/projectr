@@ -12,6 +12,9 @@ export enum IStatus {
 export type ITrack = {
   title: string;
   lyrics: string;
+
+  status: IStatus;
+  sort: number | null;
 };
 
 export interface ISearchItem extends Omit<ITrack, "lyrics"> {
