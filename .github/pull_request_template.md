@@ -1,27 +1,28 @@
-### 🛠 Changes being made
+# Summary
 
-Here give examples of the changes you've made in this pull request. Include an itemized list if you can. It'll help the reviewer
+> [!TIP]
+> Gives the reviewer some context about the work and why this change is being made, the WHY you are doing this. This field goes more into the product perspective.
 
-### ✨ What's the context?
+## Changelog
 
-What's the context for the changes? Are there any
+> [!TIP]
+> This is where becomes technical. Here is where you can be more focused on the engineering side of your solution. Include information about the functionality they are adding or modifying, as well as any refactoring or improvement of existing code.
 
-### 🧠 Rationale behind the change
+> [!IMPORTANT] [ ] Changes outside the codebase (e.g. environment variables, database, external service, etc...)? If yes, provide context?
 
-Why did you choose to make these changes? Were there any trade-offs you had to consider?
+---
 
-### 🧪 Test plan
+# Testing
 
-How do you know the changes are safe to ship to production?
+> [!IMPORTANT] [ ] Unit tested. If not, why?
 
-### 📸 Screenshots (optional)
+> [!IMPORTANT] [ ] Integration tested. If not, why?
 
-If you made UI changes, what are the before an afters?
+## Screenshots
 
-### 🏎 Quality check
+---
 
-- [ ] Are your changes following SOLID principles?
+## Additional notes
 
-- [ ] Are there any erroneous console logs, debuggers or leftover code in your changes?
-
-- [ ] Walk away, take a break, re-read what you filled out above does it make sense if you were coming in cold? What extra context could you provide?
+> [!TIP]
+> Links to relevant documentation and/or articles.
