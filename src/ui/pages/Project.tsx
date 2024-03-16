@@ -17,7 +17,8 @@ const Project: Component = () => {
   const [nowPlaying, setNowPlaying] = createSignal<IQueueItem | undefined>();
   const [currentVerseIndex, setCurrentVerseIndex] = createSignal(0);
 
-  const currentVerse = (): string[] | undefined => nowPlaying()?.lyrics.at(currentVerseIndex())
+  const currentVerse = (): string[] | undefined =>
+    nowPlaying()?.lyrics.at(currentVerseIndex());
 
   // When a message relays on the channel.
   channel.addEventListener("message", (e: Event) => {
@@ -28,31 +29,30 @@ const Project: Component = () => {
   });
 
   return (
-    <div class="flex flex-col gap-4 items-stretch h-dvh p-6 bg-gray-100">
+    <div class="flex h-dvh flex-col items-stretch gap-4 bg-gray-100 p-6">
       {/* Title */}
-      <Show when={(nowPlaying() !== undefined) && (currentVerseIndex() === 0)}>
-        <h2 class="text-center text-wrap text-2xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-9xl underline font-black text-tvc-green uppercase">
+      <Show when={nowPlaying() !== undefined && currentVerseIndex() === 0}>
+        <h2 class="text-wrap text-center text-2xl font-black uppercase text-tvc-orange underline md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-9xl">
           {toTitleCase(nowPlaying()?.title)}
         </h2>
       </Show>
 
       {/* Lyrics */}
       <div
-        class="bg-contain bg-center bg-no-repeat bg-[url('/images/tvc-logo.svg')] opacity-100 flex-auto flex items-center flex-col justify-center gap-2 rounded-lg text-center text-tvc-orange transition-colors"
-        classList={{ 'bg-none opacity-full': nowPlaying() !== undefined }}
+        class="flex flex-auto flex-col items-center justify-center gap-2 rounded-lg bg-[url('/images/tvc-logo.svg')] bg-contain bg-center bg-no-repeat text-center text-tvc-green opacity-100 transition-colors"
+        classList={{ "bg-none opacity-full": nowPlaying() !== undefined }}
       >
-        <Show
-          when={nowPlaying() !== undefined}>
+        <Show when={nowPlaying() !== undefined}>
           <For each={currentVerse()}>
             {(line) => (
-              <p class="text-wrap font-extrabold uppercase text-2xl md:text-4xl lg:text-6xl">
+              <p class="text-wrap text-2xl font-extrabold uppercase md:text-4xl lg:text-6xl">
                 {line}
               </p>
             )}
           </For>
         </Show>
       </div>
-    </div >
+    </div>
   );
 };
 
