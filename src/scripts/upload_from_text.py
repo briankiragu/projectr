@@ -8,9 +8,10 @@ import os
 import structlog
 import sys
 
-from time import time
+from datetime import datetime
 from dotenv import load_dotenv
 from pathlib import Path
+from time import time
 from urllib.parse import quote
 
 # Load the environment variables.
@@ -28,23 +29,19 @@ structlog.configure(
 log = structlog.get_logger()
 
 
-def convert_text_to_lyrics(path_to_file: str) -> list[list[str]]:
+def convert_text_as_lyrics(path_to_file: str) -> str:
     """Capture the lyrics from the text file and parse them as a list of lyrics"""
 
     try:
         log.info("Attempting to extract lyrics from text file...")
         with open(path_to_file, "r") as file:
-            lyrics = file.read()
-            return [
-                list(filter(lambda line: len(line) > 0, verse.split("\n")))
-                for verse in lyrics.split("\n\n")
-            ]
+            return file.read()
     except Exception as e:
         log.exception("Failed to extract lyrics from text file.")
         raise(e)
 
 
-def update_or_create_in_meilisearch(title: str, lyrics: list[list[str]]):
+def update_or_create_in_meilisearch(title: str, lyrics: str):
     """Add the lyrics and title to Meilisearch"""
 
     try:
@@ -78,7 +75,15 @@ def update_or_create_in_meilisearch(title: str, lyrics: list[list[str]]):
             id = round(time())
 
         # Construct the document.
-        new_document = [{"id": id, "title": title, "lyrics": lyrics}]
+        new_document = [{
+            "id": id,
+            "title": title,
+            "lyrics": lyrics,
+            "status": "published",
+            "sort": None,
+            "created_on": datetime.now().isoformat(),
+            "updated_on": datetime.now().isoformat(),
+        }]
         log.debug(f"Updating or creating new document...", new_document=new_document)
 
         # Upload the data to meilisearch.
@@ -104,7 +109,7 @@ if __name__ == "__main__":
         # Get the title of the track from the CLI.
         title:str = sys.argv[2]
 
-        lyrics = convert_text_to_lyrics(path_to_file)
+        lyrics = convert_text_as_lyrics(path_to_file)
 
         if lyrics:
             update_or_create_in_meilisearch(title, lyrics)
