@@ -177,7 +177,7 @@ const App: Component = () => {
 
   return (
     // Main container
-    <div class="grid gap-5 p-6 md:grid-cols-3 lg:h-screen lg:grid-cols-4">
+    <div class="grid gap-5 p-6 md:grid-cols-3 lg:grid-cols-4">
       <aside class="flex flex-col gap-3 rounded-lg lg:mb-20">
         {/* Search Pane */}
         <search class="rounded-lg bg-gray-300 px-4 pb-4 pt-3">
