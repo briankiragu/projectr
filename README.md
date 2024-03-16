@@ -1,3 +1,3 @@
 # Projectr
 
-Simple projection software
+A simple lyrics projection application.
