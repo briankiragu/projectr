@@ -53,6 +53,7 @@ services:
     volumes:
       - meili_data:/meili_data
     environment:
+      MEILI_ENV: "${MEILI_ENV:-development}"
       MEILI_MASTER_KEY: "${VITE_MEILI_MASTER_KEY}"
     networks:
       - projectr
