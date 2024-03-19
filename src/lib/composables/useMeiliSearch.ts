@@ -8,7 +8,7 @@ const indexId = "tracks";
 
 // Create the client
 const client = new MeiliSearch({
-  host: `${import.meta.env.VITE_MEILI_HOST}:${import.meta.env.VITE_MEILI_PORT}`,
+  host: `${import.meta.env.VITE_MEILI_HOST}`,
   apiKey: import.meta.env.VITE_MEILI_MASTER_KEY,
 });
 
