@@ -1,0 +1,3 @@
+# Ignore local certificate files
+fullchain.pem
+privkey.pem
