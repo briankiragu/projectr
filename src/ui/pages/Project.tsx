@@ -32,14 +32,14 @@ const Project: Component = () => {
     <div class="flex h-dvh flex-col items-stretch gap-4 bg-gray-100 p-6">
       {/* Title */}
       <Show when={nowPlaying() !== undefined && currentVerseIndex() === 0}>
-        <h2 class="text-wrap text-center text-2xl font-black uppercase text-tvc-orange underline md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-9xl">
+        <h2 class="text-wrap text-center text-2xl font-black uppercase text-[#D15F20] underline md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-9xl">
           {toTitleCase(nowPlaying()?.title)}
         </h2>
       </Show>
 
       {/* Lyrics */}
       <div
-        class="flex flex-auto flex-col items-center justify-center gap-2 rounded-lg bg-[url('/images/tvc-logo.svg')] bg-contain bg-center bg-no-repeat text-center text-tvc-green opacity-100 transition-colors"
+        class="flex flex-auto flex-col items-center justify-center gap-2 rounded-lg bg-[url('/images/tvc-logo.svg')] bg-contain bg-center bg-no-repeat text-center text-[#000435] opacity-100 transition-colors"
         classList={{ "bg-none opacity-full": nowPlaying() !== undefined }}
       >
         <Show when={nowPlaying() !== undefined}>
