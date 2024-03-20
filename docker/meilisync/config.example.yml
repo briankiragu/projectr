@@ -1,0 +1,18 @@
+debug: true
+progress:
+  type: file
+source:
+  type: mysql
+  host: host.docker.internal
+  port: 3306
+  user: root
+  password: ""
+  database:
+meilisearch:
+  api_url: http://host.docker.internal:7700
+  api_key: ""
+sync:
+  - table: tracks
+    index: tracks
+    pk: id
+    full: true
