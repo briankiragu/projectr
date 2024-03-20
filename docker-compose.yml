@@ -10,7 +10,7 @@ services:
       - "${DB_PORT:-3306}:3306"
       - "33060:33060"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql:rw
     environment:
       MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
       MYSQL_USER: "${DB_USER}"
@@ -26,7 +26,7 @@ services:
     ports:
       - "${DIRECTUS_PORT:-8055}:8055"
     volumes:
-      - directus_data:/directus/extensions
+      - directus_data:/directus:rw
     environment:
       DB_CLIENT: "mysql"
       DB_HOST: db
@@ -51,7 +51,7 @@ services:
     ports:
       - "${MEILI_PORT:-7700}:7700"
     volumes:
-      - meili_data:/meili_data
+      - meili_data:/meili_data:rw
     environment:
       MEILI_ENV: "${MEILI_ENV:-development}"
       MEILI_MASTER_KEY: "${VITE_MEILI_MASTER_KEY}"
@@ -63,8 +63,8 @@ services:
     container_name: meilisync
     restart: always
     volumes:
-      - meilisync_data:/meilisync
-      - ./docker/meilisync/config.yml:/meilisync/config.yml
+      - meilisync_data:/meilisync:rw
+      - ./docker/meilisync/config.yml:/meilisync/config.yml:ro
     networks:
       - projectr
     depends_on:
@@ -88,7 +88,7 @@ services:
     volumes:
       - certbot_data:/var/www/certbot:ro
       - ./docker/certbot/conf:/etc/nginx/ssl:ro
-      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     networks:
       - projectr
     depends_on:
