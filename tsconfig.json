@@ -14,8 +14,8 @@
       "@types/webscreens-window-placement"
     ],
 
-    /* Bundler mode */
-    "moduleResolution": "bundler",
+    /* Node mode */
+    "moduleResolution": "node",
     "allowImportingTsExtensions": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
@@ -46,6 +46,7 @@
   },
   "include": [
     "src",
+    "api",
     "tests",
     "vite.config.ts",
     "tests.config.ts",
