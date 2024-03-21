@@ -9,13 +9,13 @@ services:
     ports:
       - "${DB_PORT:-3306}:3306"
       - "33060:33060"
-    volumes:
-      - mysql_data:/var/lib/mysql:rw
     environment:
       MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
       MYSQL_USER: "${DB_USER}"
       MYSQL_PASSWORD: "${DB_PASSWORD}"
       MYSQL_DATABASE: "${DB_DATABASE}"
+    volumes:
+      - mysql_data:/var/lib/mysql:rw
     networks:
       - projectr
 
@@ -25,8 +25,6 @@ services:
     restart: always
     ports:
       - "${DIRECTUS_PORT:-8055}:8055"
-    volumes:
-      - directus_data:/directus:rw
     environment:
       DB_CLIENT: "mysql"
       DB_HOST: db
@@ -39,6 +37,8 @@ services:
       ADMIN_EMAIL: "${DIRECTUS_ADMIN_EMAIL}"
       ADMIN_PASSWORD: "${DIRECTUS_ADMIN_PASSWORD}"
       WEBSOCKETS_ENABLED: "true"
+    volumes:
+      - directus_data:/directus:rw
     networks:
       - projectr
     depends_on:
@@ -50,11 +50,11 @@ services:
     restart: always
     ports:
       - "${MEILI_PORT:-7700}:7700"
-    volumes:
-      - meili_data:/meili_data:rw
     environment:
       MEILI_ENV: "${MEILI_ENV:-development}"
       MEILI_MASTER_KEY: "${VITE_MEILI_MASTER_KEY}"
+    volumes:
+      - meili_data:/meili_data:rw
     networks:
       - projectr
 
@@ -77,6 +77,7 @@ services:
     volumes:
       - certbot_data:/var/www/certbot:rw
       - ./docker/certbot/conf:/etc/letsencrypt:rw
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 89d & wait $${!}; done;'"
 
   nginx:
     image: nginx:alpine
@@ -100,10 +101,6 @@ services:
       timeout: 10s
       retries: 3
 
-networks:
-  projectr:
-    driver: bridge
-
 volumes:
   mysql_data:
     driver: local
@@ -115,3 +112,7 @@ volumes:
     driver: local
   certbot_data:
     driver: local
+
+networks:
+  projectr:
+    driver: bridge
