@@ -1,9 +1,20 @@
-import { Component, For, Show, createEffect, lazy, onMount } from "solid-js";
+import {
+  Component,
+  For,
+  Match,
+  Show,
+  Switch,
+  createEffect,
+  createSignal,
+  lazy,
+  onMount,
+} from "solid-js";
 import { createStore } from "solid-js/store";
 
 // Import the interfaces.
-import type { IQueueItem, ISearchItem } from "@interfaces/track";
 import type { IProjectionPayload } from "@interfaces/projection";
+import type { ISearchItem } from "@interfaces/track";
+import type { IQueueItem } from "@interfaces/queue";
 
 // Import the composables.
 import useFormatting from "@composables/useFormatting";
@@ -15,24 +26,24 @@ import DisplayButton from "@components/buttons/DisplayButton";
 import LyricsCardsPreloader from "@components/preloaders/LyricsCardsPreloader";
 import PlaybackButton from "@components/buttons/PlaybackButton";
 import ProjectionButton from "@components/buttons/ProjectionButton";
-import SearchForm from "@components/search/SearchForm";
 import EditTrackForm from "@components/forms/EditTrackForm";
+
+// Search components.
+import LyricsSearch from "@components/search/lyrics/LyricsSearch";
+import ScripturesSearch from "@components/search/scriptures/ScripturesSearch";
 
 // Import the lazy-loaded components.
 const LyricsCard = lazy(() => import("@components/cards/LyricsCard"));
 const NowPlayingCard = lazy(() => import("@components/cards/NowPlayingCard"));
 const QueueList = lazy(() => import("@components/queue/QueueList"));
-const SearchResults = lazy(() => import("@components/search/SearchResults"));
 
 const App: Component = () => {
   // Create a BroadcastAPI channel.
   const channel = new BroadcastChannel(import.meta.env.VITE_BROADCAST_NAME);
 
   // Create the signals.
+  const [isLyrics, setIsLyrics] = createSignal<boolean>(true);
   const [results, setResults] = createStore<ISearchItem[]>([]);
-
-  // Create the derived signals.
-  const hasResults = (): boolean => results.length > 0;
 
   // Import the composables.
   const { toTitleCase } = useFormatting();
@@ -85,12 +96,7 @@ const App: Component = () => {
     }
   };
 
-  const addToQueue = (track: ISearchItem) => {
-    const item: IQueueItem = {
-      ...track,
-      qid: Date.now(),
-    };
-
+  const addToQueue = (item: IQueueItem) => {
     if (nowPlaying() === undefined) {
       setNowPlaying(item);
       broadcast();
@@ -180,16 +186,51 @@ const App: Component = () => {
     <div class="grid gap-5 p-6 md:grid-cols-3 lg:grid-cols-4">
       <aside class="flex flex-col gap-3 rounded-lg lg:mb-20">
         {/* Search Pane */}
-        <search class="rounded-lg bg-gray-300 px-4 pb-4 pt-3">
-          {/* Search Form */}
-          <SearchForm handler={setResults} />
+        <search class="flex flex-col gap-2 rounded-lg bg-gray-300 px-4 pb-4 pt-3">
+          <div class="flex gap-4 text-sm text-gray-800">
+            <label for="lyrics" class="flex gap-1">
+              <input
+                id="lyrics"
+                type="radio"
+                name="data"
+                value="lyrics"
+                onChange={() => setIsLyrics(true)}
+                checked={isLyrics() === true}
+                required
+              />
+              Lyrics
+            </label>
 
-          {/* Search results */}
-          <div class="mt-4 h-40 overflow-y-scroll rounded-md bg-gray-50/10 transition md:h-36 xl:h-52 2xl:h-2/6">
-            <Show when={hasResults()}>
-              <SearchResults results={results} handler={addToQueue} />
-            </Show>
+            <label for="scripture" class="flex gap-1">
+              <input
+                id="scripture"
+                type="radio"
+                name="data"
+                value="scripture"
+                onChange={() => setIsLyrics(false)}
+                checked={isLyrics() === false}
+                required
+              />
+              Scripture
+            </label>
           </div>
+
+          {/* Search components */}
+          <Switch>
+            {/* Search lyrics */}
+            <Match when={isLyrics()}>
+              <LyricsSearch
+                results={results}
+                searchHandler={setResults}
+                enqueueHandler={addToQueue}
+              />
+            </Match>
+
+            {/* Search scriptures */}
+            <Match when={!isLyrics()}>
+              <ScripturesSearch enqueueHandler={addToQueue} />
+            </Match>
+          </Switch>
         </search>
 
         {/* Play queue */}
@@ -202,7 +243,7 @@ const App: Component = () => {
               fallback={<div class="h-16 rounded-md bg-gray-600/10"></div>}
             >
               <NowPlayingCard
-                track={nowPlaying()!}
+                item={nowPlaying()!}
                 handler={() => setIsEditing(!isEditing())}
               />
             </Show>
@@ -251,7 +292,7 @@ const App: Component = () => {
 
           {/* Lyrics */}
           <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:overflow-y-scroll lg:grid-cols-3 lg:pb-2">
-            <For each={nowPlaying()!.lyrics}>
+            <For each={nowPlaying()!.content}>
               {(verse, index) => (
                 <LyricsCard
                   verse={verse}

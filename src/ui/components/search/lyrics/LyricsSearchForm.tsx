@@ -2,15 +2,14 @@
 import { type Component, onMount } from "solid-js";
 import { debounceTime, distinctUntilChanged, fromEvent, switchMap } from "rxjs";
 
-// Import the interfaces.
-import { type ISearchItem } from "@interfaces/track";
+// Import the interfaces...
+import type { ISearchItem } from "@interfaces/track";
 
-// Import the composables.
+// Import the composables...
 import useTracks from "@composables/useTracks";
-import useFormatting from "@/lib/composables/useFormatting";
 
-const SearchForm: Component<{
-  handler: (results: ISearchItem[]) => void;
+const LyricsSearchForm: Component<{
+  searchHandler: (results: ISearchItem[]) => void;
 }> = (props) => {
   // Import the composables.
   const { searchTracks } = useTracks();
@@ -29,7 +28,7 @@ const SearchForm: Component<{
           return searchTracks(phrase);
         })
       )
-      .subscribe((hits) => props.handler(hits));
+      .subscribe((hits) => props.searchHandler(hits));
   });
 
   return (
@@ -43,7 +42,7 @@ const SearchForm: Component<{
           id="search"
           type="search"
           name="search"
-          class="mt-1 w-full rounded-lg px-4 py-3 text-sm text-gray-600 focus:outline-none"
+          class="w-full rounded-lg px-4 py-3 text-sm text-gray-600 focus:outline-none"
           placeholder="Search for a track by title or lyrics..."
           autofocus
         />
@@ -52,4 +51,4 @@ const SearchForm: Component<{
   );
 };
 
-export default SearchForm;
+export default LyricsSearchForm;

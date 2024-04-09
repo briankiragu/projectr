@@ -1,7 +1,7 @@
 import { createSignal } from "solid-js";
 
 // Import composables.
-import useWindowManagementAPI from "@composables/useWindowManagementAPI";
+import useWindowManagementAPI from "@composables/apis/useWindowManagementAPI";
 import { IProjectionPayload } from "../interfaces/projection";
 
 export default (channel: BroadcastChannel) => {

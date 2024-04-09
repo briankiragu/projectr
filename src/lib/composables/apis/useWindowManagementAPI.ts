@@ -1,4 +1,4 @@
-import usePermissionsAPI from "@composables/usePermissionsAPI";
+import usePermissionsAPI from "@composables/apis/usePermissionsAPI";
 
 export default () => {
   // Check the current mode of the environment.

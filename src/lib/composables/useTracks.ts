@@ -1,9 +1,10 @@
 // Import the interfaces...
-import { ISearchItem, ISource, type ITrack } from "@interfaces/track";
+import { type ISearchItem, ISource, type ITrack } from "@interfaces/track";
+import type { IQueueItem } from "@interfaces/queue";
 
 // Import the composables...
 import useFormatting from "@composables/useFormatting";
-import useMeiliSearch from "@composables/useMeiliSearch";
+import useMeiliSearch from "@composables/apis/useMeiliSearch";
 
 export default () => {
   // Import the composables.
@@ -24,5 +25,11 @@ export default () => {
     ];
   };
 
-  return { searchTracks };
+  const searchItemToQueueItem = (item: ISearchItem): IQueueItem => ({
+    qid: Date.now(),
+    title: item.title,
+    content: item.lyrics,
+  });
+
+  return { searchTracks, searchItemToQueueItem };
 };

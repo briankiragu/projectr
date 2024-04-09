@@ -1,9 +1,9 @@
 import { type Component, createSignal, Show, For } from "solid-js";
 
-// Import the interfaces
-import type { IQueueItem } from "@interfaces/track";
+// Import the interfaces...
+import type { IQueueItem } from "@interfaces/queue";
 
-// Import the composables.
+// Import the composables...
 import useFormatting from "@composables/useFormatting";
 
 const Project: Component = () => {
@@ -18,7 +18,7 @@ const Project: Component = () => {
   const [currentVerseIndex, setCurrentVerseIndex] = createSignal(0);
 
   const currentVerse = (): string[] | undefined =>
-    nowPlaying()?.lyrics.at(currentVerseIndex());
+    nowPlaying()?.content.at(currentVerseIndex());
 
   // When a message relays on the channel.
   channel.addEventListener("message", (e: Event) => {
@@ -39,15 +39,17 @@ const Project: Component = () => {
 
       {/* Lyrics */}
       <div
+        style={{ "font-size": "1em" }}
         class="flex flex-auto flex-col items-center justify-center gap-2 rounded-lg bg-[url('/images/tvc-logo.svg')] bg-contain bg-center bg-no-repeat text-center text-[#000435] opacity-100 transition-colors"
         classList={{ "bg-none opacity-full": nowPlaying() !== undefined }}
       >
         <Show when={nowPlaying() !== undefined}>
           <For each={currentVerse()}>
             {(line) => (
-              <p class="text-wrap text-2xl font-extrabold uppercase md:text-4xl lg:text-6xl">
-                {line}
-              </p>
+              <div
+                class="md:text-large lg:text-larger 2xl:text-largest text-wrap text-2xl font-extrabold uppercase"
+                innerHTML={line}
+              ></div>
             )}
           </For>
         </Show>

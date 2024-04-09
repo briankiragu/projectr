@@ -27,7 +27,3 @@ export interface ISearchItem extends Omit<ITrack, "lyrics"> {
   lyrics: string[][];
   source: ISource;
 }
-
-export interface IQueueItem extends ISearchItem {
-  qid: number;
-}

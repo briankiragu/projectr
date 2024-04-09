@@ -1,11 +1,13 @@
-import { type Component, For, lazy } from 'solid-js';
+import { type Component, For, lazy } from "solid-js";
 
-// Import interfaces.
-import type { IQueueItem } from '@interfaces/track';
-import useDragAndDropAPI from '@composables/useDragAndDropAPI';
+// Import interfaces...
+import type { IQueueItem } from "@interfaces/queue";
+
+// Import the composables...
+import useDragAndDropAPI from "@composables/apis/useDragAndDropAPI";
 
 // Import the components.
-const QueueListItem = lazy(() => import('./QueueListItem'));
+const QueueListItem = lazy(() => import("@components/queue/QueueListItem"));
 
 const QueueList: Component<{
   queue: IQueueItem[];

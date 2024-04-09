@@ -1,4 +1,4 @@
-import type { IQueueItem } from "@interfaces/track";
+import type { IQueueItem } from "@interfaces/queue";
 
 export type IProjectionPayload = {
   nowPlaying: IQueueItem | undefined;

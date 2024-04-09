@@ -8,6 +8,9 @@ interface ImportMetaEnv {
 
   readonly VITE_MUSIXMATCH_API_URL: string;
   readonly VITE_MUSIXMATCH_API_KEY: string;
+
+  readonly VITE_BIBLE_API_URL: string;
+  readonly VITE_BIBLE_API_KEY: string;
 }
 
 interface ImportMeta {

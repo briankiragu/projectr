@@ -2,7 +2,7 @@ import { createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 
 // Import the interfaces.
-import type { IQueueItem } from "@interfaces/track";
+import type { IQueueItem } from "@interfaces/queue";
 
 export default () => {
   const [queue, setQueue] = createStore<IQueueItem[]>([]);
@@ -34,7 +34,7 @@ export default () => {
 
   // Check if the current verse is not the last.
   const isLastVerse = (): boolean =>
-    currentVerseIndex() + 1 === nowPlaying()?.lyrics.length;
+    currentVerseIndex() + 1 === nowPlaying()?.content.length;
 
   // Previous verse.
   const goToPreviousVerse = () => {
