@@ -50,6 +50,7 @@ const App: Component = () => {
     isProjecting,
     isVisible,
     openProjection,
+    expandToFullscreen,
     showProjection,
     hideProjection,
     closeProjection,
@@ -163,6 +164,15 @@ const App: Component = () => {
       // Projection events.
       if (e.shiftKey && e.code === "KeyP")
         isProjecting() ? closeProjection() : openProjection();
+      if (e.shiftKey && e.code === "KeyS")
+        isVisible()
+          ? hideProjection()
+          : showProjection({
+              nowPlaying: nowPlaying(),
+              currentVerseIndex: currentVerseIndex(),
+            });
+      if (e.shiftKey && e.code === "KeyF")
+        isProjecting() && expandToFullscreen();
 
       // Playback events.
       if (e.code === "ArrowLeft") goToPreviousVerse();
@@ -313,6 +323,7 @@ const App: Component = () => {
               stopHandler={closeProjection}
             />
             <DisplayButton
+              title="Shift + S"
               isEnabled={isProjecting()}
               isDisplaying={isVisible()}
               showHandler={() =>
@@ -322,6 +333,13 @@ const App: Component = () => {
                 })
               }
               hideHandler={hideProjection}
+            />
+            <PlaybackButton
+              icon="fullscreen"
+              text="Fullscreen"
+              title="Shift + F"
+              isEnabled={isProjecting()}
+              handler={expandToFullscreen}
             />
             <PlaybackButton
               icon="arrow_back"
