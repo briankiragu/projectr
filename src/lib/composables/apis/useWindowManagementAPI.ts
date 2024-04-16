@@ -1,5 +1,10 @@
 import usePermissionsAPI from "@composables/apis/usePermissionsAPI";
 
+type IProjectionPayload = {
+  extendedScreen: ScreenDetailed;
+  proxy: WindowProxy | undefined;
+};
+
 export default () => {
   // Check the current mode of the environment.
   const isInDevelopmentMode: boolean = import.meta.env.MODE === "development";
@@ -11,7 +16,9 @@ export default () => {
   // Import the composable methods.
   const { requestWindowManagementPermissions } = usePermissionsAPI();
 
-  const project = async (channel: string): Promise<WindowProxy | undefined> => {
+  const project = async (
+    channel: string
+  ): Promise<IProjectionPayload | undefined> => {
     // If the API is not supported, do not project.
     if (!isSupported) return;
 
@@ -54,7 +61,10 @@ export default () => {
     );
 
     // Open the popup with the correct data.
-    return openPopup(extendedScreen!, channel) ?? undefined;
+    return {
+      extendedScreen,
+      proxy: openPopup(extendedScreen!, channel) ?? undefined,
+    };
   };
 
   const openPopup = (
