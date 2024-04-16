@@ -322,6 +322,13 @@ const App: Component = () => {
               startHandler={openProjection}
               stopHandler={closeProjection}
             />
+            <PlaybackButton
+              icon="fullscreen"
+              text="Fullscreen"
+              title="Shift + F"
+              isEnabled={isProjecting()}
+              handler={expandToFullscreen}
+            />
             <DisplayButton
               title="Shift + S"
               isEnabled={isProjecting()}
@@ -333,13 +340,6 @@ const App: Component = () => {
                 })
               }
               hideHandler={hideProjection}
-            />
-            <PlaybackButton
-              icon="fullscreen"
-              text="Fullscreen"
-              title="Shift + F"
-              isEnabled={isProjecting()}
-              handler={expandToFullscreen}
             />
             <PlaybackButton
               icon="arrow_back"
