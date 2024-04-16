@@ -22,10 +22,13 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Testing
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/coverage
 
 # Environment variables
 .env*
