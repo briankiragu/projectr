@@ -142,7 +142,10 @@ const ScripturesSearchForm: Component<{
           <For each={versions()}>
             {(version) => (
               <option value={version.id}>
-                ({version.abbreviationLocal}) {version.nameLocal}
+                {version.abbreviationLocal} - {version.nameLocal}
+                {version.descriptionLocal
+                  ? ` (${version.descriptionLocal})`
+                  : null}
               </option>
             )}
           </For>
