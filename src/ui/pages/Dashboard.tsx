@@ -11,25 +11,23 @@ import {
 } from "solid-js";
 import { createStore } from "solid-js/store";
 
-// Import the interfaces.
+// Import the interfaces...
 import type { IProjectionPayload } from "@interfaces/projection";
 import type { ISearchItem } from "@interfaces/track";
 import type { IQueueItem } from "@interfaces/queue";
 
-// Import the composables.
+// Import the composables...
 import useFormatting from "@composables/useFormatting";
 import useProjection from "@composables/useProjection";
 import useQueue from "@composables/useQueue";
 
-// Import the components.
+// Import the components...
 import DisplayButton from "@components/buttons/DisplayButton";
+import EditQueueItemForm from "@components/forms/EditQueueItemForm";
 import LyricsCardsPreloader from "@components/preloaders/LyricsCardsPreloader";
+import LyricsSearch from "@components/search/lyrics/LyricsSearch";
 import PlaybackButton from "@components/buttons/PlaybackButton";
 import ProjectionButton from "@components/buttons/ProjectionButton";
-import EditTrackForm from "@components/forms/EditTrackForm";
-
-// Search components.
-import LyricsSearch from "@components/search/lyrics/LyricsSearch";
 import ScripturesSearch from "@components/search/scriptures/ScripturesSearch";
 
 // Import the lazy-loaded components.
@@ -272,7 +270,7 @@ const App: Component = () => {
       {/* Live edit */}
       <Show when={isEditing()}>
         <aside class="mb-12 rounded-lg bg-gray-100 p-3 transition-transform lg:mb-20">
-          <EditTrackForm track={nowPlaying()!} handler={editLyrics} />
+          <EditQueueItemForm track={nowPlaying()!} handler={editLyrics} />
         </aside>
       </Show>
 

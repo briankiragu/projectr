@@ -6,7 +6,7 @@ import type { IQueueItem } from "@interfaces/queue";
 // Import the composables...
 import useFormatting from "@composables/useFormatting";
 
-const EditTrackForm: Component<{
+const EditQueueItemForm: Component<{
   track: IQueueItem;
   handler: (track: IQueueItem) => void;
 }> = (props) => {
@@ -51,4 +51,4 @@ const EditTrackForm: Component<{
   );
 };
 
-export default EditTrackForm;
+export default EditQueueItemForm;
