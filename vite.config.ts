@@ -36,13 +36,14 @@ export default defineConfig({
     },
     // if you have few tests, try commenting this
     // out to improve performance:
-    // isolate: false,
+    isolate: true,
     pool: "forks",
-    poolOptions: { forks: { isolate: false } },
+    poolOptions: { forks: { isolate: true } },
     deps: {
       optimizer: {
         web: { exclude: ["solid-js"] },
       },
     },
+    clearMocks: true,
   },
 });
