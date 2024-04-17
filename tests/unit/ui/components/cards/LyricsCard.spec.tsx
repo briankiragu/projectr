@@ -1,4 +1,4 @@
-import LyricsCard from "@/ui/components/cards/LyricsCard";
+import LyricsCard from "@components/cards/LyricsCard";
 import { cleanup, render, screen } from "@solidjs/testing-library";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, test, vi } from "vitest";
