@@ -7,12 +7,12 @@ import type { IQueueItem } from "@interfaces/queue";
 import useFormatting from "@composables/useFormatting";
 
 const EditQueueItemForm: Component<{
-  track: IQueueItem;
-  handler: (track: IQueueItem) => void;
+  item: IQueueItem;
+  handler: (item: IQueueItem) => void;
 }> = (props) => {
   const { toEditableLyrics, fromEditableLyrics } = useFormatting();
   const [live, setLive] = createSignal<string>(
-    toEditableLyrics(props.track.content)
+    toEditableLyrics(props.item.content)
   );
 
   return (
@@ -20,11 +20,11 @@ const EditQueueItemForm: Component<{
       class="flex flex-col gap-3 text-sm text-gray-500"
       onSubmit={(e) => {
         e.preventDefault();
-        props.handler({ ...props.track!, content: fromEditableLyrics(live()) });
+        props.handler({ ...props.item!, content: fromEditableLyrics(live()) });
       }}
     >
       <h3 class="font-semibold italic text-teal-800">
-        Make live changes to the current track
+        Make live changes to the current item
       </h3>
 
       {/* Lyrics */}
