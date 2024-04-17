@@ -64,8 +64,9 @@ describe("<PlaybackButton />", () => {
     ));
 
     const el = screen.getByRole("button");
-    await user.click(el);
+    await user.pointer({ keys: "[MouseLeft]", target: el });
+    await user.pointer({ keys: "[MouseLeft]", target: el });
 
-    expect(fn).toHaveBeenCalledOnce();
+    expect(fn).toHaveBeenCalledTimes(2);
   });
 });
