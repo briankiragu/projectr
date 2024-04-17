@@ -1,25 +1,25 @@
 export default () => {
   const requestWindowManagementPermissions = async (): Promise<string> => {
-    let state: string = 'default';
+    let state: string = "default";
 
     // The new permission name.
     try {
       ({ state } = await navigator.permissions.query({
-        name: 'window-management',
+        name: "window-management" as PermissionName,
       }));
     } catch (err) {
-      if ((err as Error).name !== 'TypeError') {
+      if ((err as Error).name !== "TypeError") {
         return `${(err as Error).name}: ${(err as Error).message}`;
       }
 
       // The old permission name.
       try {
         ({ state } = await navigator.permissions.query({
-          name: 'window-placement',
+          name: "window-placement",
         }));
       } catch (err) {
-        if ((err as Error).name === 'TypeError') {
-          return 'Window management not supported.';
+        if ((err as Error).name === "TypeError") {
+          return "Window management not supported.";
         }
 
         return `${(err as Error).name}: ${(err as Error).message}`;
