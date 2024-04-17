@@ -3,9 +3,6 @@ import { cleanup, render, screen } from "@solidjs/testing-library";
 import { userEvent } from "@testing-library/user-event";
 import { afterEach, describe, expect, test, vi } from "vitest";
 
-// After each test, clean up the mounted vDOM.
-afterEach(() => cleanup());
-
 describe("<PlaybackButton />", () => {
   // Define the component values.
   const icon = "arrow_back";
@@ -15,6 +12,9 @@ describe("<PlaybackButton />", () => {
 
   // Setup user events.
   const user = userEvent.setup();
+
+  // After each test, clean up the mounted vDOM.
+  afterEach(() => cleanup());
 
   test("it should render an icon, text and a title", () => {
     // Render the button onto the virtual DOM.

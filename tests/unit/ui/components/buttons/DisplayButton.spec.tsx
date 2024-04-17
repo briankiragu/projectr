@@ -3,9 +3,6 @@ import { cleanup, render, screen } from "@solidjs/testing-library";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, test, vi } from "vitest";
 
-// After each test, clean up the mounted vDOM.
-afterEach(() => cleanup());
-
 describe("<DisplayButton />", () => {
   // Define the mock data.
   const showIcon = "visibility";
@@ -18,6 +15,9 @@ describe("<DisplayButton />", () => {
 
   // Setup the user for events.
   const user = userEvent.setup();
+
+  // After each test, clean up the mounted vDOM.
+  afterEach(() => cleanup());
 
   test("it should render the show state correctly", () => {
     // Render the component onto the vDOM.

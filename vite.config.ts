@@ -24,7 +24,7 @@ export default defineConfig({
     globals: true,
     setupFiles: ["node_modules/@testing-library/jest-dom/vitest"],
     coverage: {
-      reporter: ["html", "text", "json-summary", "json"],
+      reporter: ["text", "json-summary", "json"],
       reportOnFailure: true,
       thresholds: {
         // lines: 80,
