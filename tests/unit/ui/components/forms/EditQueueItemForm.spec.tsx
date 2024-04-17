@@ -46,7 +46,7 @@ describe("<EditQueueItemForm />", () => {
     expect(fn).toHaveBeenCalledOnce();
   });
 
-  test("it calls the handler with the correct data if edits are made", async () => {
+  test("it calls the handler with additional content data", async () => {
     // Render the component on the vDOM.
     render(() => <EditQueueItemForm item={item} handler={fn} />);
 
@@ -61,5 +61,22 @@ describe("<EditQueueItemForm />", () => {
 
     // Make the assertions.
     expect(fn.mock.calls[0][0].content.length).toBe(3);
+  });
+
+  test("it calls the handler with empty content data", async () => {
+    // Render the component on the vDOM.
+    render(() => <EditQueueItemForm item={item} handler={fn} />);
+
+    // Get the elements from the vDOM.
+    const inputEl = screen.getByRole("textbox");
+    const buttonEl = screen.getByRole("button");
+
+    // Interact with the vDOM.
+    await user.click(inputEl);
+    await user.keyboard("{Control>}[KeyA]{Control/}[Delete]");
+    await user.click(buttonEl);
+
+    // Make the assertions.
+    expect(fn.mock.calls[0][0].content.length).toBe(0);
   });
 });
