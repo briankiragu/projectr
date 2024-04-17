@@ -1,5 +1,5 @@
-import type { IQueueItem } from "@/lib/interfaces/queue";
 import NowPlayingCard from "@components/cards/NowPlayingCard";
+import type { IQueueItem } from "@interfaces/queue";
 import { cleanup, render, screen, within } from "@solidjs/testing-library";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, test, vi } from "vitest";
