@@ -280,7 +280,7 @@ const App: Component = () => {
       {/* Live edit */}
       <Show when={isEditing()}>
         <aside class="mb-12 rounded-lg bg-gray-100 p-3 transition-transform lg:mb-20">
-          <EditQueueItemForm track={nowPlaying()!} handler={editLyrics} />
+          <EditQueueItemForm item={nowPlaying()!} handler={editLyrics} />
         </aside>
       </Show>
 
