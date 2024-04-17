@@ -16,6 +16,7 @@ jobs:
       matrix:
         branch:
           - ${{ github.head_ref }}
+          - "main"
         node-version: [20.x]
 
     steps:
@@ -47,6 +48,10 @@ jobs:
         with:
           name: coverage
           path: coverage
+      - uses: actions/download-artifact@v4
+        with:
+          name: coverage-main
+          path: coverage-main
       - name: "Report Coverage"
         uses: davelosert/vitest-coverage-report-action@v2
         with:
