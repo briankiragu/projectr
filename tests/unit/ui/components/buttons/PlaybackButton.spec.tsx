@@ -1,22 +1,27 @@
 import PlaybackButton from "@components/buttons/PlaybackButton";
 import { render, screen } from "@solidjs/testing-library";
-import { describe, expect, test } from "vitest";
+import { userEvent } from "@testing-library/user-event";
+import { describe, expect, test, vi } from "vitest";
 
 describe("<PlaybackButton />", () => {
   // Define the component values.
   const icon = "arrow_back";
   const text = "Previous verse";
   const title = "ArrowLeft";
+  const fn = vi.fn();
 
-  test("it will render an icon, text and a title", () => {
+  // Setup user events.
+  const user = userEvent.setup();
+
+  test("it should render an icon, text and a title", () => {
     // Render the button onto the virtual DOM.
     render(() => (
       <PlaybackButton
+        isEnabled={true}
         icon={icon}
         text={text}
         title={title}
-        isEnabled={true}
-        handler={() => ({})}
+        handler={fn}
       />
     ));
 
@@ -24,6 +29,7 @@ describe("<PlaybackButton />", () => {
     const el = screen.getByRole("button");
 
     // Run the assertions.
+    expect(el.innerHTML).toMatchSnapshot();
     expect(el).toContainHTML(
       `<span class="material-symbols-outlined transition">${icon}</span>`
     );
@@ -31,19 +37,35 @@ describe("<PlaybackButton />", () => {
     expect(el).toHaveAttribute("title", title);
   });
 
-  test("it will be disabled", () => {
+  test("it should be disabled", () => {
     render(() => (
       <PlaybackButton
+        isEnabled={false}
         icon={icon}
         text={text}
         title={title}
-        isEnabled={false}
-        handler={() => ({})}
+        handler={fn}
       />
     ));
 
     const el = screen.getByRole("button");
-
     expect(el).toBeDisabled();
+  });
+
+  test("it should perform a function when clicked", async () => {
+    render(() => (
+      <PlaybackButton
+        isEnabled={true}
+        icon={icon}
+        text={text}
+        title={title}
+        handler={fn}
+      />
+    ));
+
+    const el = screen.getByRole("button");
+    await user.click(el);
+
+    expect(fn).toHaveBeenCalledOnce();
   });
 });

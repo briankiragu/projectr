@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<PlaybackButton /> > it should render an icon, text and a title 1`] = `"<span class="material-symbols-outlined transition">arrow_back</span><span class="hidden md:inline">Previous verse</span>"`;

@@ -51,6 +51,7 @@ html:has(dialog[open][modal-mode="mega"]) {
 }
 
 .v {
+  color: #1e40af;
   font-size: 0.64em;
   margin-right: 0.1em;
   vertical-align: super;
