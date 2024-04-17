@@ -13,7 +13,6 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": resolve(__dirname, "./src"),
       "@components": resolve(__dirname, "./src/ui/components"),
       "@composables": resolve(__dirname, "./src/lib/composables"),
       "@interfaces": resolve(__dirname, "./src/lib/interfaces"),
