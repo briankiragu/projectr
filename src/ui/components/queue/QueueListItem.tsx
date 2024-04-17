@@ -11,7 +11,7 @@ const QueueListItem: Component<{
   item: IQueueItem;
   dragHandlers: () => IDragHandlers;
   playHandler: () => void;
-  queueHandler: () => void;
+  dequeueHandler: () => void;
 }> = (props) => {
   let ref: HTMLDivElement;
 
@@ -45,7 +45,7 @@ const QueueListItem: Component<{
         type="button"
         title="remove"
         class="material-symbols-outlined rounded-full p-1.5 transition hover:bg-gray-500 hover:text-gray-50"
-        onClick={() => props.queueHandler()}
+        onClick={() => props.dequeueHandler()}
       >
         remove_from_queue
       </button>

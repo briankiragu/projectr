@@ -25,7 +25,7 @@ const QueueList: Component<{
             item={track}
             dragHandlers={useDragAndDropAPI}
             playHandler={() => props.playHandler(track.qid)}
-            queueHandler={() => props.queueHandler(track.qid)}
+            dequeueHandler={() => props.queueHandler(track.qid)}
           />
         )}
       </For>

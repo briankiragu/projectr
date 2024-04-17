@@ -1,6 +1,7 @@
 import QueueListItem from "@components/queue/QueueListItem";
 import type { IQueueItem } from "@interfaces/queue";
 import { cleanup, render, screen, within } from "@solidjs/testing-library";
+import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, test, vi } from "vitest";
 
 describe("<QueueListItem />", () => {
@@ -14,7 +15,10 @@ describe("<QueueListItem />", () => {
   };
   const dragFn = () => ({ onDragOver: vi.fn(), onDragStart: vi.fn() });
   const playFn = vi.fn();
-  const queueFn = vi.fn();
+  const dequeueFn = vi.fn();
+
+  // Define the user for events.
+  const user = userEvent.setup();
 
   // Clean up the vDOM after each test.
   afterEach(() => cleanup());
@@ -26,7 +30,7 @@ describe("<QueueListItem />", () => {
         item={item}
         dragHandlers={dragFn}
         playHandler={playFn}
-        queueHandler={queueFn}
+        dequeueHandler={dequeueFn}
       />
     ));
 
@@ -40,5 +44,45 @@ describe("<QueueListItem />", () => {
     expect(titleEl).toHaveTextContent("This Is The Title");
     expect(playButton).toHaveClass("material-symbols-outlined");
     expect(removeButton).toHaveClass("material-symbols-outlined");
+  });
+
+  test("it calls the play function when clicked", async () => {
+    // Render the component on the vDOM.
+    render(() => (
+      <QueueListItem
+        item={item}
+        dragHandlers={dragFn}
+        playHandler={playFn}
+        dequeueHandler={dequeueFn}
+      />
+    ));
+
+    // Get the elements from the vDOM.
+    const el = screen.getByTitle("play");
+    await user.click(el);
+    await user.click(el);
+
+    // Make the assertions.
+    expect(playFn).toHaveBeenCalledTimes(2);
+  });
+
+  test("it calls the remove function when clicked", async () => {
+    // Render the component on the vDOM.
+    render(() => (
+      <QueueListItem
+        item={item}
+        dragHandlers={dragFn}
+        playHandler={playFn}
+        dequeueHandler={dequeueFn}
+      />
+    ));
+
+    // Get the elements from the vDOM.
+    const el = screen.getByTitle("remove");
+    await user.click(el);
+    await user.click(el);
+
+    // Make the assertions.
+    expect(dequeueFn).toHaveBeenCalledTimes(2);
   });
 });
