@@ -32,8 +32,3 @@ jobs:
         run: pnpm install
       - name: "Run Tests with Coverage"
         run: pnpm coverage
-      - name: "Upload Coverage Results"
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-${{ matrix.branch }}
-          path: coverage

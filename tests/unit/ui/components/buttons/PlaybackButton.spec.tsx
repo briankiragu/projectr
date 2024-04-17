@@ -64,9 +64,29 @@ describe("<PlaybackButton />", () => {
     ));
 
     const el = screen.getByRole("button");
-    await user.pointer({ keys: "[MouseLeft]", target: el });
-    await user.pointer({ keys: "[MouseLeft]", target: el });
+    await user.click(el);
+    await user.click(el);
 
     expect(fn).toHaveBeenCalledTimes(2);
+  });
+
+  test("it should not be clickable while disabled", async () => {
+    // Render the component onto the vDOM.
+    render(() => (
+      <PlaybackButton
+        isEnabled={false}
+        icon={icon}
+        text={text}
+        title={title}
+        handler={fn}
+      />
+    ));
+
+    // Get the element from the vDOM.
+    const el = screen.getByRole("button");
+    await user.click(el);
+
+    // Make the assertions.
+    expect(fn).not.toHaveBeenCalled();
   });
 });
