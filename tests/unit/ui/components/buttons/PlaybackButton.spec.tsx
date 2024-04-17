@@ -3,12 +3,12 @@ import { render, screen } from "@solidjs/testing-library";
 import { describe, expect, test } from "vitest";
 
 describe("<PlaybackButton />", () => {
-  test("it will render an icon, text and a title", () => {
-    // Define the component values.
-    const icon = "arrow_back";
-    const text = "Previous verse";
-    const title = "ArrowLeft";
+  // Define the component values.
+  const icon = "arrow_back";
+  const text = "Previous verse";
+  const title = "ArrowLeft";
 
+  test("it will render an icon, text and a title", () => {
     // Render the button onto the virtual DOM.
     render(() => (
       <PlaybackButton
@@ -29,5 +29,21 @@ describe("<PlaybackButton />", () => {
     );
     expect(el).toHaveAccessibleName(`${icon} ${text}`);
     expect(el).toHaveAttribute("title", title);
+  });
+
+  test("it will be disabled", () => {
+    render(() => (
+      <PlaybackButton
+        icon={icon}
+        text={text}
+        title={title}
+        isEnabled={false}
+        handler={() => ({})}
+      />
+    ));
+
+    const el = screen.getByRole("button");
+
+    expect(el).toBeDisabled();
   });
 });
