@@ -1,4 +1,4 @@
-import { type Component } from 'solid-js';
+import { type Component } from "solid-js";
 
 const DisplayButton: Component<{
   title?: string;
@@ -10,12 +10,15 @@ const DisplayButton: Component<{
   <button
     type="button"
     title={props.title}
-    class="flex items-center justify-center gap-2 p-2 rounded-full font-semibold transition hover:bg-gray-600/70 hover:text-gray-50 md:h-auto md:w-auto md:rounded-lg md:px-4 focus:outline-none"
+    class="flex items-center justify-center gap-2 rounded-full p-2 font-semibold transition hover:bg-gray-600/70 hover:text-gray-50 focus:outline-none md:h-auto md:w-auto md:rounded-lg md:px-4"
     classList={{
-      'hover:bg-transparent disabled:text-gray-300 hover:cursor-not-allowed': !props.isEnabled,
+      "hover:bg-transparent disabled:text-gray-300 hover:cursor-not-allowed":
+        !props.isEnabled,
     }}
     disabled={!props.isEnabled}
-    onClick={() => props.isDisplaying ? props.hideHandler() : props.showHandler()}
+    onClick={() =>
+      props.isDisplaying ? props.hideHandler() : props.showHandler()
+    }
   >
     <span class="material-symbols-outlined transition">
       {props.isDisplaying ? "visibility_off" : "visibility"}
