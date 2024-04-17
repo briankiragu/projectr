@@ -13,7 +13,6 @@ describe("<QueueListItem />", () => {
     title,
     content: [[line]],
   };
-  const dragFn = () => ({ onDragOver: vi.fn(), onDragStart: vi.fn() });
   const playFn = vi.fn();
   const dequeueFn = vi.fn();
 
@@ -28,7 +27,6 @@ describe("<QueueListItem />", () => {
     render(() => (
       <QueueListItem
         item={item}
-        dragHandlers={dragFn}
         playHandler={playFn}
         dequeueHandler={dequeueFn}
       />
@@ -51,7 +49,6 @@ describe("<QueueListItem />", () => {
     render(() => (
       <QueueListItem
         item={item}
-        dragHandlers={dragFn}
         playHandler={playFn}
         dequeueHandler={dequeueFn}
       />
@@ -71,7 +68,6 @@ describe("<QueueListItem />", () => {
     render(() => (
       <QueueListItem
         item={item}
-        dragHandlers={dragFn}
         playHandler={playFn}
         dequeueHandler={dequeueFn}
       />

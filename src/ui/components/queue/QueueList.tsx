@@ -10,23 +10,18 @@ const QueueList: Component<{
   queue: IQueueItem[];
   playHandler: (id: number) => void;
   queueHandler: (id: number) => void;
-}> = (props) => {
-  const refs: (HTMLDivElement | undefined)[] = [];
-
-  return (
-    <div class="flex flex-col gap-2 rounded-md">
-      <For each={props.queue}>
-        {(track: IQueueItem, index) => (
-          <QueueListItem
-            ref={refs.at(index())}
-            item={track}
-            playHandler={() => props.playHandler(track.qid)}
-            dequeueHandler={() => props.queueHandler(track.qid)}
-          />
-        )}
-      </For>
-    </div>
-  );
-};
+}> = (props) => (
+  <div data-testId="queue-list" class="flex flex-col gap-2 rounded-md">
+    <For each={props.queue}>
+      {(track: IQueueItem) => (
+        <QueueListItem
+          item={track}
+          playHandler={() => props.playHandler(track.qid)}
+          dequeueHandler={() => props.queueHandler(track.qid)}
+        />
+      )}
+    </For>
+  </div>
+);
 
 export default QueueList;
