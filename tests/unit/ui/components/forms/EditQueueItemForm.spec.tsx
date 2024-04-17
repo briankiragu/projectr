@@ -1,6 +1,7 @@
 import EditQueueItemForm from "@components/forms/EditQueueItemForm";
 import type { IQueueItem } from "@interfaces/queue";
 import { cleanup, render, screen } from "@solidjs/testing-library";
+import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, test, vi } from "vitest";
 
 describe("<EditQueueItemForm />", () => {
@@ -13,6 +14,9 @@ describe("<EditQueueItemForm />", () => {
     content: [[line], [line]],
   };
   const fn = vi.fn();
+
+  // Define the user for events.
+  const user = userEvent.setup();
 
   // Cleanup the vDOM after each test.
   afterEach(() => cleanup());
@@ -28,5 +32,17 @@ describe("<EditQueueItemForm />", () => {
     // Make the assertions.
     expect(headingEl).toHaveTextContent("Make live changes");
     expect(inputEl).toHaveTextContent(line);
+  });
+
+  test("it calls the handler when the form is submitted", async () => {
+    // Render the component on the vDOM.
+    render(() => <EditQueueItemForm item={item} handler={fn} />);
+
+    // Get the elements from the vDOM.
+    const el = screen.getByRole("button");
+    await user.click(el);
+
+    // Make the assertions.
+    expect(fn).toHaveBeenCalledOnce();
   });
 });

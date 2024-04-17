@@ -32,7 +32,7 @@ const EditQueueItemForm: Component<{
         <textarea
           name="live-edit"
           id="live-edit"
-          rows="29"
+          rows="30"
           class="w-full rounded-md px-3 py-2"
           onInput={(e) => setLive(e.target.value)}
         >
