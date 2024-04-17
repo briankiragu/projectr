@@ -315,13 +315,14 @@ const App: Component = () => {
         {/* Controls */}
         <footer class="fixed bottom-0 left-0 w-full bg-white p-3">
           <div class="flex min-h-16 flex-wrap justify-center gap-4 rounded-lg bg-tvc-green p-4 text-gray-700 md:justify-between md:gap-4 lg:justify-center">
-            <ProjectionButton
-              title="Shift + P"
-              isEnabled={isSupported()}
-              isProjecting={isProjecting()}
-              startHandler={openProjection}
-              stopHandler={closeProjection}
-            />
+            <Show when={isSupported()}>
+              <ProjectionButton
+                title="Shift + P"
+                isProjecting={isProjecting()}
+                startHandler={openProjection}
+                stopHandler={closeProjection}
+              />
+            </Show>
             <PlaybackButton
               icon="fullscreen"
               text="Fullscreen"

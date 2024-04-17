@@ -6,7 +6,7 @@
 ## Changelog
 
 > [!TIP]
-> This is where it becomes technical. Here is where you can focus more on your solution's engineering side. Include information about the functionality they are adding or modifying and any refactoring or improvement of existing code.
+> This is where it becomes technical. Here is where you can focus more on your solution's engineering side. Include details about the functionality being added or modified and any refactoring or enhancements to existing code.
 
 - [ ] Changes outside the codebase (e.g. env variables, database, external service, etc...)? If yes, could you provide context?
 
@@ -25,4 +25,4 @@
 ## Additional notes
 
 > [!TIP]
-> Links to relevant documentation and articles.
+> Links to relevant documentation or articles.
