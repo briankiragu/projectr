@@ -22,10 +22,12 @@ if (import.meta.env.PROD && "serviceWorker" in navigator) {
   navigator.serviceWorker.register("./sw.js");
 }
 
-// Web vitals.
-onCLS(console.log);
-onFID(console.log);
-onLCP(console.log);
+// Web vitals (Development only).
+if (import.meta.env.DEV) {
+  onCLS(console.log);
+  onFID(console.log);
+  onLCP(console.log);
+}
 
 // Vercel insights.
 inject();
