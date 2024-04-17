@@ -6,6 +6,7 @@ const LyricsCard: Component<{
   handler: () => void;
 }> = (props) => (
   <div
+    data-testid="lyrics-card"
     style={{ "font-size": "1em" }}
     class="min-h-32 cursor-pointer rounded-lg border-4 bg-gray-200 px-6 py-4 text-gray-600 shadow-md transition-colors lg:px-4 lg:py-2"
     classList={{
