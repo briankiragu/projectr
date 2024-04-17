@@ -22,7 +22,7 @@ const QueueList: Component<{
         {(track: IQueueItem, index) => (
           <QueueListItem
             ref={refs.at(index())}
-            track={track}
+            item={track}
             dragHandlers={useDragAndDropAPI}
             playHandler={() => props.playHandler(track.qid)}
             queueHandler={() => props.queueHandler(track.qid)}

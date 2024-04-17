@@ -35,7 +35,6 @@
     /* Aliases */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
       "@components/*": ["./src/ui/components/*"],
       "@composables/*": ["./src/lib/composables/*"],
       "@interfaces/*": ["./src/lib/interfaces/*"],
