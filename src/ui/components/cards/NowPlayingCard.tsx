@@ -18,12 +18,12 @@ const NowPlayingCard: Component<{
       </h4>
 
       {/* Enable live edit */}
-      <span
+      <button
         class="material-symbols-outlined cursor-pointer rounded-full bg-tvc-green p-1.5 transition-colors hover:bg-tvc-orange hover:text-orange-100"
         onClick={() => props.handler()}
       >
         edit
-      </span>
+      </button>
     </div>
   );
 };
