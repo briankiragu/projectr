@@ -8,15 +8,15 @@
 > [!TIP]
 > This is where becomes technical. Here is where you can focus more on your solution's engineering side. Include information about the functionality they are adding or modifying and any refactoring or improvement of existing code.
 
-[ ] Changes outside the codebase (e.g. env variables, database, external service, etc...)? If yes, provide context.
+- [ ] Changes outside the codebase (e.g. env variables, database, external service, etc...)? If yes, could you provide context?
 
 ---
 
 # Testing
 
-[ ] Unit tested. If not, why?
+- [ ] Unit tested. If not, why?
 
-[ ] Integration tested. If not, why?
+- [ ] Integration tested. If not, why?
 
 ## Screenshots
 
@@ -25,4 +25,4 @@
 ## Additional notes
 
 > [!TIP]
-> Links to relevant documentation and/or articles.
+> Links to relevant documentation and articles.
