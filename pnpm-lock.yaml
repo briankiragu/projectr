@@ -86,6 +86,9 @@ devDependencies:
   vitest:
     specifier: ^1.5.0
     version: 1.5.0(@types/node@20.12.7)(jsdom@24.0.0)
+  web-vitals:
+    specifier: ^3.5.2
+    version: 3.5.2
 
 packages:
 
@@ -3827,6 +3830,10 @@ packages:
     engines: {node: '>=18'}
     dependencies:
       xml-name-validator: 5.0.0
+    dev: true
+
+  /web-vitals@3.5.2:
+    resolution: {integrity: sha512-c0rhqNcHXRkY/ogGDJQxZ9Im9D19hDihbzSQJrsioex+KnFgmMzBiy57Z1EjkhX/+OjyBpclDCzz2ITtjokFmg==}
     dev: true
 
   /webidl-conversions@3.0.1:
