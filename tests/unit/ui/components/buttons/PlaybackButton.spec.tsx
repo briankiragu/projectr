@@ -1,7 +1,10 @@
 import PlaybackButton from "@components/buttons/PlaybackButton";
-import { render, screen } from "@solidjs/testing-library";
+import { cleanup, render, screen } from "@solidjs/testing-library";
 import { userEvent } from "@testing-library/user-event";
-import { describe, expect, test, vi } from "vitest";
+import { afterEach, describe, expect, test, vi } from "vitest";
+
+// After each test, clean up the mounted vDOM.
+afterEach(() => cleanup());
 
 describe("<PlaybackButton />", () => {
   // Define the component values.
