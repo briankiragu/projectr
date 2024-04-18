@@ -22,7 +22,10 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     globals: true,
-    setupFiles: ["node_modules/@testing-library/jest-dom/vitest"],
+    setupFiles: [
+      "node_modules/@testing-library/jest-dom/vitest",
+      "tests.config",
+    ],
     coverage: {
       reporter: ["text", "json-summary", "json"],
       reportOnFailure: true,

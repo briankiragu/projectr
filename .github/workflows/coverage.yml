@@ -31,4 +31,4 @@ jobs:
       - name: "Install Dependencies"
         run: pnpm install
       - name: "Run Tests with Coverage"
-        run: pnpm coverage
+        run: pnpm test:coverage

@@ -19,7 +19,7 @@ const LyricsSearch: Component<{
   const hasResults = (): boolean => props.results.length > 0;
 
   return (
-    <>
+    <div data-testId="lyrics-search">
       {/* Search Form */}
       <LyricsSearchForm searchHandler={props.searchHandler} />
 
@@ -32,7 +32,7 @@ const LyricsSearch: Component<{
           />
         </Show>
       </div>
-    </>
+    </div>
   );
 };
 
