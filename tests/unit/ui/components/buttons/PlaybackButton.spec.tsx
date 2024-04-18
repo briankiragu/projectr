@@ -1,7 +1,7 @@
 import PlaybackButton from "@components/buttons/PlaybackButton";
-import { cleanup, render, screen } from "@solidjs/testing-library";
+import { render, screen } from "@solidjs/testing-library";
 import { userEvent } from "@testing-library/user-event";
-import { afterEach, describe, expect, test, vi } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 
 describe("<PlaybackButton />", () => {
   // Define the component values.
@@ -12,9 +12,6 @@ describe("<PlaybackButton />", () => {
 
   // Setup user events.
   const user = userEvent.setup();
-
-  // After each test, clean up the mounted vDOM.
-  afterEach(() => cleanup());
 
   test("it should render an icon, text and a title", () => {
     // Render the button onto the virtual DOM.
