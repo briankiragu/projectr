@@ -1,7 +1,7 @@
 import QueueList from "@components/queue/QueueList";
 import type { IQueueItem } from "@interfaces/queue";
-import { cleanup, render, screen } from "@solidjs/testing-library";
-import { afterEach, describe, expect, test, vi } from "vitest";
+import { render, screen } from "@solidjs/testing-library";
+import { describe, expect, test, vi } from "vitest";
 
 describe("<QueueList />", () => {
   // Declare the component props.
@@ -13,9 +13,6 @@ describe("<QueueList />", () => {
   ];
   const playFn = vi.fn();
   const queueFn = vi.fn();
-
-  // Clean up after each test.
-  afterEach(() => cleanup());
 
   test("it renders correctly", () => {
     // Render the component on the vDOM.

@@ -1,8 +1,8 @@
 import QueueListItem from "@components/queue/QueueListItem";
 import type { IQueueItem } from "@interfaces/queue";
-import { cleanup, render, screen, within } from "@solidjs/testing-library";
+import { render, screen, within } from "@solidjs/testing-library";
 import userEvent from "@testing-library/user-event";
-import { afterEach, describe, expect, test, vi } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 
 describe("<QueueListItem />", () => {
   // Define the component props.
@@ -18,9 +18,6 @@ describe("<QueueListItem />", () => {
 
   // Define the user for events.
   const user = userEvent.setup();
-
-  // Clean up the vDOM after each test.
-  afterEach(() => cleanup());
 
   test("it renders correctly", () => {
     // Render the component on the vDOM.

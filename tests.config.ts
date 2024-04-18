@@ -1,4 +1,9 @@
-// import matchers from "@testing-library/jest-dom/matchers";
-// import { expect } from "vitest";
+import { cleanup } from "@solidjs/testing-library";
+import * as matchers from "@testing-library/jest-dom/matchers";
+import { afterEach, expect } from "vitest";
 
-// expect.extend(matchers);
+// Extend Jest matchers
+expect.extend(matchers);
+
+// Clean up the vDOM after each test.
+afterEach(() => cleanup());

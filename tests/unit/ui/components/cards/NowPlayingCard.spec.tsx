@@ -1,8 +1,8 @@
 import NowPlayingCard from "@components/cards/NowPlayingCard";
 import type { IQueueItem } from "@interfaces/queue";
-import { cleanup, render, screen, within } from "@solidjs/testing-library";
+import { render, screen, within } from "@solidjs/testing-library";
 import userEvent from "@testing-library/user-event";
-import { afterEach, describe, expect, test, vi } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 
 describe("<NowPlayingCard />", () => {
   // Define the mock component props.
@@ -15,9 +15,6 @@ describe("<NowPlayingCard />", () => {
     content: [[line]],
   };
   const fn = vi.fn();
-
-  // Cleanup the mounted components after each test.
-  afterEach(() => cleanup());
 
   test("it renders correctly", () => {
     // Render the item in the vDOM.

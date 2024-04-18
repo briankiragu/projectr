@@ -1,7 +1,7 @@
 import LyricsCard from "@components/cards/LyricsCard";
-import { cleanup, render, screen } from "@solidjs/testing-library";
+import { render, screen } from "@solidjs/testing-library";
 import userEvent from "@testing-library/user-event";
-import { afterEach, describe, expect, test, vi } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 
 describe("<LyricsCard />", () => {
   // Define the component props.
@@ -11,8 +11,7 @@ describe("<LyricsCard />", () => {
   // Setup the user for events.
   const user = userEvent.setup();
 
-  // Call the cleanup function after each test.
-  afterEach(() => cleanup());
+  // Call the  function after each test.
 
   test("it renders correctly", () => {
     // Render the component onto the vDOM.

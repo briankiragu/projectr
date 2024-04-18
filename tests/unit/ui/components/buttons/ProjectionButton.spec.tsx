@@ -1,7 +1,7 @@
 import ProjectionButton from "@components/buttons/ProjectionButton";
-import { cleanup, render, screen } from "@solidjs/testing-library";
+import { render, screen } from "@solidjs/testing-library";
 import userEvent from "@testing-library/user-event";
-import { afterEach, describe, expect, test, vi } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 
 describe("<ProjectionButton />", () => {
   // Define the mock data.
@@ -15,9 +15,6 @@ describe("<ProjectionButton />", () => {
 
   // Setup the user for events.
   const user = userEvent.setup();
-
-  // After each test, clean up the mounted vDOM.
-  afterEach(() => cleanup());
 
   test("it should render the start state correctly", () => {
     // Render the component onto the vDOM.

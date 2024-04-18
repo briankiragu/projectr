@@ -1,8 +1,8 @@
 import EditQueueItemForm from "@components/forms/EditQueueItemForm";
 import type { IQueueItem } from "@interfaces/queue";
-import { cleanup, render, screen } from "@solidjs/testing-library";
+import { render, screen } from "@solidjs/testing-library";
 import userEvent from "@testing-library/user-event";
-import { afterEach, describe, expect, test, vi } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 
 describe("<EditQueueItemForm />", () => {
   // Define the component props.
@@ -17,9 +17,6 @@ describe("<EditQueueItemForm />", () => {
 
   // Define the user for events.
   const user = userEvent.setup();
-
-  // Cleanup the vDOM after each test.
-  afterEach(() => cleanup());
 
   test("it renders correctly", () => {
     // Render the component on the vDOM.
