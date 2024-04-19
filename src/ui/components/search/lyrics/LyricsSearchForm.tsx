@@ -1,6 +1,6 @@
 // Import the modules.
-import { type Component, onMount } from "solid-js";
 import { debounceTime, distinctUntilChanged, fromEvent, switchMap } from "rxjs";
+import { onMount, type Component } from "solid-js";
 
 // Import the interfaces...
 import type { ISearchItem } from "@interfaces/track";
