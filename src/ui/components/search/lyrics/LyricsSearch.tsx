@@ -19,7 +19,7 @@ const LyricsSearch: Component<{
   const hasResults = (): boolean => props.results.length > 0;
 
   return (
-    <div data-testId="lyrics-search">
+    <div data-testId="lyrics-search" class="flex flex-col gap-2.5">
       {/* Search Form */}
       <LyricsSearchForm searchHandler={props.searchHandler} />
 

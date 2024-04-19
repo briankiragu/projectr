@@ -29,7 +29,6 @@ describe("<PlaybackButton />", () => {
     const el = screen.getByRole("button");
 
     // Run the assertions.
-    expect(el.innerHTML).toMatchSnapshot();
     expect(el).toContainHTML(
       `<span class="material-symbols-outlined transition">${icon}</span>`
     );

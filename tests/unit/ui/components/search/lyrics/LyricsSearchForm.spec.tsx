@@ -16,4 +16,6 @@ describe("<LyricsSearchForm />", () => {
     // Make the assertion.
     expect(el).toHaveAccessibleName("Search for a track by title or lyrics...");
   });
+
+  test.todo("it calls the function when a phrase is typed in", async () => {});
 });
