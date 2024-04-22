@@ -233,8 +233,7 @@ const ScripturesSearchForm: Component<{
 
       <button
         type="submit"
-        class="col-span-full rounded-md bg-tvc-green py-2 text-sm font-semibold text-green-50"
-        classList={{ "disabed cursor-not-allowed bg-gray-300": !hasContent() }}
+        class={`col-span-full rounded-md py-2 text-sm font-semibold text-gray-50 transition-colors ${hasContent() ? "bg-gray-900" : "disabled cursor-not-allowed bg-gray-400"}`}
         disabled={!hasContent()}
       >
         Project
