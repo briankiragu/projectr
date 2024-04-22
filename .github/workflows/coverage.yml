@@ -16,7 +16,6 @@ jobs:
       matrix:
         branch:
           - ${{ github.head_ref }}
-        node-version: [18.x]
 
     steps:
       - uses: actions/checkout@v4
