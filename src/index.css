@@ -31,7 +31,7 @@
   font-synthesis: none;
   font-variation-settings: "slnt" 0;
 
-  color-scheme: light dark;
+  /* color-scheme: light dark; */
 
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
