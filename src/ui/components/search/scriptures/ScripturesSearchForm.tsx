@@ -119,7 +119,7 @@ const ScripturesSearchForm: Component<{
       {/* Version */}
       <label for="version" class="col-span-full">
         <span class="col-span-full text-sm italic text-gray-800">
-          Search for a scripture...
+          Search for a Bible version...
         </span>
         <select
           id="version"
@@ -154,6 +154,9 @@ const ScripturesSearchForm: Component<{
 
       {/* Book */}
       <label for="book" class="col-span-2">
+        <span class="col-span-full hidden text-sm italic text-gray-800">
+          Book
+        </span>
         <select
           id="book"
           class="w-full rounded-md p-2 text-sm text-gray-700 focus:outline-none"
@@ -180,6 +183,9 @@ const ScripturesSearchForm: Component<{
 
       {/* Chapter */}
       <label for="chapter" class="col-span-2">
+        <span class="col-span-full hidden text-sm italic text-gray-800">
+          Chapter
+        </span>
         <select
           id="chapter"
           class="w-full rounded-md p-2 text-sm capitalize text-gray-700 focus:outline-none"
