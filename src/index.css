@@ -54,5 +54,6 @@ html:has(dialog[open][modal-mode="mega"]) {
   color: #1e40af;
   font-size: 0.64em;
   margin-right: 0.1em;
+  mix-blend-mode: difference;
   vertical-align: super;
 }

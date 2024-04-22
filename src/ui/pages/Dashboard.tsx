@@ -1,5 +1,4 @@
 import {
-  type Component,
   For,
   Match,
   Show,
@@ -8,13 +7,14 @@ import {
   createSignal,
   lazy,
   onMount,
+  type Component,
 } from "solid-js";
 import { createStore } from "solid-js/store";
 
 // Import the interfaces...
 import type { IProjectionPayload } from "@interfaces/projection";
-import type { ISearchItem } from "@interfaces/track";
 import type { IQueueItem } from "@interfaces/queue";
+import type { ISearchItem } from "@interfaces/track";
 
 // Import the composables...
 import useFormatting from "@composables/useFormatting";
@@ -23,12 +23,12 @@ import useQueue from "@composables/useQueue";
 
 // Import the components...
 import DisplayButton from "@components/buttons/DisplayButton";
+import PlaybackButton from "@components/buttons/PlaybackButton";
+import ProjectionButton from "@components/buttons/ProjectionButton";
 import EditQueueItemForm from "@components/forms/EditQueueItemForm";
 import LyricsCardsPreloader from "@components/preloaders/LyricsCardsPreloader";
 import LyricsSearch from "@components/search/lyrics/LyricsSearch";
-import PlaybackButton from "@components/buttons/PlaybackButton";
-import ProjectionButton from "@components/buttons/ProjectionButton";
-import ScripturesSearch from "@components/search/scriptures/ScripturesSearch";
+import ScripturesSearchForm from "@components/search/scriptures/ScripturesSearchForm";
 
 // Import the lazy-loaded components.
 const LyricsCard = lazy(() => import("@components/cards/LyricsCard"));
@@ -236,7 +236,7 @@ const App: Component = () => {
 
             {/* Search scriptures */}
             <Match when={!isLyrics()}>
-              <ScripturesSearch enqueueHandler={addToQueue} />
+              <ScripturesSearchForm enqueueHandler={addToQueue} />
             </Match>
           </Switch>
         </search>
