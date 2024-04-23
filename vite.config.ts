@@ -28,7 +28,7 @@ export default defineConfig({
     ],
     include: ["./tests/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     coverage: {
-      reporter: ["json-summary", "json"],
+      reporter: ["text", "json-summary", "json"],
       reportOnFailure: true,
       thresholds: {
         // lines: 80,
