@@ -18,12 +18,16 @@ export default () => {
   // Enqueue.
   const enqueue = (track: IQueueItem) => {
     // Create a random ID for the track and add it to the queue.
-    setQueue([...queue, { ...track, qid: Date.now() }]);
+    setQueue([...queue, track]);
   };
 
   // Dequeue.
-  const dequeue = (qid: number) => {
-    setQueue(queue.filter((track) => qid !== track.qid));
+  const dequeue = (qid?: number) => {
+    setQueue(
+      queue.filter((track, index) =>
+        qid === undefined ? index !== 0 : qid !== track.qid
+      )
+    );
   };
 
   // Clear queue
