@@ -17,11 +17,22 @@ describe("useQueue", () => {
   const track3: IQueueItem = {
     qid: 3,
     title: "Track 3",
-    content: [["Verse 1"], ["Verse 2"]],
+    content: [["Verse 1"], ["Verse 2"], ["Verse 3"]],
   };
 
   // Define the composable.
-  const { dequeue, enqueue, flush, peek } = useQueue();
+  const {
+    dequeue,
+    enqueue,
+    flush,
+    peek,
+    setNowPlaying,
+    isFirstVerse,
+    isLastVerse,
+    goToNextVerse,
+    goToPreviousVerse,
+    goToVerse,
+  } = useQueue();
 
   test("it can enqueue, peek, dequeue and flush", () => {
     // Make the assertion.
@@ -54,13 +65,40 @@ describe("useQueue", () => {
     expect(peek()).toStrictEqual(undefined);
   });
 
-  test.todo("it verifies if the current verse is the first", () => {});
+  test("it can go to the next, previous or any specific verse", () => {
+    // Set the now playing
+    setNowPlaying(track3);
 
-  test.todo("it verifies if the current verse is the last", () => {});
+    // Make the assertions.
+    expect(isFirstVerse()).toBe(true);
+    expect(isLastVerse()).toBe(false);
 
-  test.todo("it moves to the previous verse", () => {});
+    // Go to the next (last verse)
+    goToNextVerse();
 
-  test.todo("it moves to the next verse", () => {});
+    // Make the assertions.
+    expect(isFirstVerse()).toBe(false);
+    expect(isLastVerse()).toBe(false);
 
-  test.todo("it moves to a specific verse", () => {});
+    // Go to the next (last verse)
+    goToNextVerse();
+
+    // Make the assertions.
+    expect(isFirstVerse()).toBe(false);
+    expect(isLastVerse()).toBe(true);
+
+    // Go to the previous (first verse)
+    goToPreviousVerse();
+
+    // Make the assertions.
+    expect(isFirstVerse()).toBe(false);
+    expect(isLastVerse()).toBe(false);
+
+    // Go to the previous (first verse)
+    goToVerse(0);
+
+    // Make the assertions.
+    expect(isFirstVerse()).toBe(true);
+    expect(isLastVerse()).toBe(false);
+  });
 });
