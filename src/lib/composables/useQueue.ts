@@ -18,7 +18,7 @@ export default () => {
   // Enqueue.
   const enqueue = (track: IQueueItem) => {
     // Create a random ID for the track and add it to the queue.
-    setQueue([...queue, { ...track, qid: Date.now() }]);
+    setQueue([...queue, track]);
   };
 
   // Dequeue.
