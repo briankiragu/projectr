@@ -14,6 +14,11 @@ describe("useQueue", () => {
     title: "Track 2",
     content: [["Verse 1"], ["Verse 2"]],
   };
+  const track3: IQueueItem = {
+    qid: 3,
+    title: "Track 3",
+    content: [["Verse 1"], ["Verse 2"]],
+  };
 
   // Define the composable.
   const { dequeue, enqueue, flush, peek } = useQueue();
@@ -25,12 +30,19 @@ describe("useQueue", () => {
     // Add items to the queue.
     enqueue(track1);
     enqueue(track2);
+    enqueue(track3);
 
     // Make the assertion.
     expect(peek()).toStrictEqual(track1);
 
-    // Remove items to the queue.
-    dequeue(1);
+    // Remove first item from the queue.
+    dequeue();
+
+    // Make the assertion.
+    expect(peek()).toStrictEqual(track2);
+
+    // Remove second item from the queue.
+    dequeue(3);
 
     // Make the assertion.
     expect(peek()).toStrictEqual(track2);
