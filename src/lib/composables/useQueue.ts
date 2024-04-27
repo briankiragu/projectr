@@ -22,8 +22,12 @@ export default () => {
   };
 
   // Dequeue.
-  const dequeue = (qid: number) => {
-    setQueue(queue.filter((track) => qid !== track.qid));
+  const dequeue = (qid?: number) => {
+    setQueue(
+      queue.filter((track, index) =>
+        qid === undefined ? index !== 0 : qid !== track.qid
+      )
+    );
   };
 
   // Clear queue

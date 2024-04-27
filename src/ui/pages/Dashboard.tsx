@@ -134,7 +134,7 @@ const App: Component = () => {
 
     if (track !== undefined) {
       // Update the queue.
-      dequeue(track.qid);
+      dequeue();
     }
 
     // Reset the verse and editing.
