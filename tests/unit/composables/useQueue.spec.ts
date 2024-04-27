@@ -5,36 +5,42 @@ import { describe, test } from "vitest";
 describe("useQueue", () => {
   // Define the suite variables.
   const track1: IQueueItem = {
-    qid: Date.now(),
+    qid: 1,
     title: "Track 1",
     content: [["Verse 1"], ["Verse 2"]],
   };
   const track2: IQueueItem = {
-    qid: Date.now(),
+    qid: 2,
     title: "Track 2",
     content: [["Verse 1"], ["Verse 2"]],
   };
 
   // Define the composable.
-  const { peek, enqueue } = useQueue();
+  const { dequeue, enqueue, flush, peek } = useQueue();
 
-  test("it returns the first value in the queue", () => {
+  test("it can enqueue, peek, dequeue and flush", () => {
     // Make the assertion.
-    expect(peek()).toBe(undefined);
+    expect(peek()).toStrictEqual(undefined);
 
-    // Add an item to the queue.
+    // Add items to the queue.
     enqueue(track1);
     enqueue(track2);
 
     // Make the assertion.
     expect(peek()).toStrictEqual(track1);
+
+    // Remove items to the queue.
+    dequeue(1);
+
+    // Make the assertion.
+    expect(peek()).toStrictEqual(track2);
+
+    // Clear the queue.
+    flush();
+
+    // Make the assertion.
+    expect(peek()).toStrictEqual(undefined);
   });
-
-  test.todo("it adds an item to the queue", () => {});
-
-  test.todo("it removes an item from the queue", () => {});
-
-  test.todo("it empties the queue", () => {});
 
   test.todo("it verifies if the current verse is the first", () => {});
 
