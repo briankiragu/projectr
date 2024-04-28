@@ -8,7 +8,7 @@ export default (channel: BroadcastChannel) => {
   // Import the composables.
   const { isSupported, project } = useWindowManagementAPI();
 
-  const [extendedScreen, setExtendedScreen] = createSignal<
+  const [projectionScreen, setProjectionScreen] = createSignal<
     ScreenDetailed | undefined
   >(undefined);
   const [projection, setProjection] = createSignal<WindowProxy | undefined>(
@@ -22,13 +22,13 @@ export default (channel: BroadcastChannel) => {
     const payload = await project(import.meta.env.VITE_BROADCAST_NAME);
 
     if (payload !== undefined) {
-      setExtendedScreen(payload.extendedScreen);
+      setProjectionScreen(payload.projectionScreen);
       setProjection(payload.proxy);
     }
   };
 
   const expandToFullscreen = async () => {
-    await document.body.requestFullscreen({ screen: extendedScreen() });
+    await document.body.requestFullscreen({ screen: projectionScreen() });
   };
 
   const showProjection = (data: IProjectionPayload | null) => {
