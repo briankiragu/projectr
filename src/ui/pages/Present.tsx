@@ -1,10 +1,11 @@
-import { type Component, createSignal, Show, For } from "solid-js";
+import { type Component, createSignal, Show, For, onMount } from "solid-js";
 
 // Import the interfaces...
 import type { IQueueItem } from "@interfaces/queue";
 
 // Import the composables...
 import useFormatting from "@composables/useFormatting";
+import usePresentation from "@composables/usePresentation";
 
 const Present: Component = () => {
   // Create a BroadcastAPI channel.
@@ -12,6 +13,7 @@ const Present: Component = () => {
 
   // Import the composables.
   const { toTitleCase } = useFormatting();
+  const { addPresentationConnection } = usePresentation();
 
   // To hold the data from the broadcast channel.
   const [nowPlaying, setNowPlaying] = createSignal<IQueueItem | undefined>();
@@ -26,6 +28,16 @@ const Present: Component = () => {
 
     setNowPlaying(data !== null ? data["nowPlaying"] : undefined);
     setCurrentVerseIndex(data !== null ? data["currentVerseIndex"] : undefined);
+  });
+
+  onMount(() => {
+    navigator.presentation.receiver.connectionList.then((list) => {
+      list.connections.forEach((connection) =>
+        addPresentationConnection(connection)
+      );
+      list.onconnectionavailable = ({ connection }) =>
+        addPresentationConnection(connection);
+    });
   });
 
   return (

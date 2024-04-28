@@ -18,7 +18,6 @@ import type { ISearchItem } from "@interfaces/track";
 
 // Import the composables...
 import useFormatting from "@composables/useFormatting";
-import useProjection from "@composables/useProjection";
 import useQueue from "@composables/useQueue";
 
 // Import the components...
@@ -29,6 +28,7 @@ import EditQueueItemForm from "@components/forms/EditQueueItemForm";
 import LyricsCardsPreloader from "@components/preloaders/LyricsCardsPreloader";
 import LyricsSearch from "@components/search/lyrics/LyricsSearch";
 import ScripturesSearchForm from "@components/search/scriptures/ScripturesSearchForm";
+import usePresentation from "@composables/usePresentation";
 
 // Import the lazy-loaded components.
 const LyricsCard = lazy(() => import("@components/cards/LyricsCard"));
@@ -46,14 +46,16 @@ const App: Component = () => {
   // Import the composables.
   const { toTitleCase } = useFormatting();
   const {
-    isSupported,
-    isProjecting,
+    presentationRequest,
+    isAvailable,
+    isConnected,
     isVisible,
-    openProjection,
-    showProjection,
-    hideProjection,
-    closeProjection,
-  } = useProjection(channel);
+    setPresentationConnection,
+    openPresentation,
+    showPresentation,
+    hidePresentation,
+    stopPresentation,
+  } = usePresentation();
   const {
     queue,
     nowPlaying,
@@ -159,16 +161,21 @@ const App: Component = () => {
   };
 
   onMount(() => {
+    navigator.presentation.defaultRequest = presentationRequest;
+    navigator.presentation.defaultRequest.onconnectionavailable = ({
+      connection,
+    }) => setPresentationConnection(connection);
+
     window.addEventListener("keydown", (e: KeyboardEvent) => {
       // Start/stop projection.
       if (e.shiftKey && e.code === "KeyP")
-        isProjecting() ? closeProjection() : openProjection();
+        isConnected() ? stopPresentation() : openPresentation();
 
       // Show/hide content.
       if (e.shiftKey && e.code === "KeyS")
         isVisible()
-          ? hideProjection()
-          : showProjection({
+          ? hidePresentation()
+          : showPresentation({
               nowPlaying: nowPlaying(),
               currentVerseIndex: currentVerseIndex(),
             });
@@ -314,25 +321,25 @@ const App: Component = () => {
         {/* Controls */}
         <footer class="fixed bottom-0 left-0 w-full bg-white p-3">
           <div class="flex min-h-16 flex-wrap justify-center gap-4 rounded-lg bg-tvc-green p-4 text-gray-700 md:justify-between md:gap-4 lg:justify-center">
-            <Show when={isSupported()}>
+            <Show when={isAvailable()}>
               <ProjectionButton
                 title="Shift + P"
-                isProjecting={isProjecting()}
-                startHandler={openProjection}
-                stopHandler={closeProjection}
+                isProjecting={isConnected()}
+                startHandler={openPresentation}
+                stopHandler={stopPresentation}
               />
             </Show>
             <DisplayButton
               title="Shift + S"
-              isEnabled={isProjecting()}
+              isEnabled={isConnected()}
               isDisplaying={isVisible()}
               showHandler={() =>
-                showProjection({
+                showPresentation({
                   nowPlaying: nowPlaying(),
                   currentVerseIndex: currentVerseIndex(),
                 })
               }
-              hideHandler={hideProjection}
+              hideHandler={hidePresentation}
             />
             <PlaybackButton
               icon="arrow_back"
