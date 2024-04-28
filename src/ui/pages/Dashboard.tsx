@@ -50,7 +50,6 @@ const App: Component = () => {
     isProjecting,
     isVisible,
     openProjection,
-    expandToFullscreen,
     showProjection,
     hideProjection,
     closeProjection,
@@ -161,9 +160,11 @@ const App: Component = () => {
 
   onMount(() => {
     window.addEventListener("keydown", (e: KeyboardEvent) => {
-      // Projection events.
+      // Start/stop projection.
       if (e.shiftKey && e.code === "KeyP")
         isProjecting() ? closeProjection() : openProjection();
+
+      // Show/hide content.
       if (e.shiftKey && e.code === "KeyS")
         isVisible()
           ? hideProjection()
@@ -171,8 +172,6 @@ const App: Component = () => {
               nowPlaying: nowPlaying(),
               currentVerseIndex: currentVerseIndex(),
             });
-      if (e.shiftKey && e.code === "KeyF")
-        isProjecting() && expandToFullscreen();
 
       // Playback events.
       if (e.code === "ArrowLeft") goToPreviousVerse();
@@ -323,13 +322,6 @@ const App: Component = () => {
                 stopHandler={closeProjection}
               />
             </Show>
-            <PlaybackButton
-              icon="fullscreen"
-              text="Fullscreen"
-              title="Shift + F"
-              isEnabled={isProjecting()}
-              handler={expandToFullscreen}
-            />
             <DisplayButton
               title="Shift + S"
               isEnabled={isProjecting()}
