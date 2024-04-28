@@ -13,7 +13,7 @@ const Present: Component = () => {
 
   // Import the composables.
   const { toTitleCase } = useFormatting();
-  const { addPresentationConnection } = usePresentation();
+  const { initialisePresentationReceiver } = usePresentation();
 
   // To hold the data from the broadcast channel.
   const [nowPlaying, setNowPlaying] = createSignal<IQueueItem | undefined>();
@@ -30,14 +30,9 @@ const Present: Component = () => {
     setCurrentVerseIndex(data !== null ? data["currentVerseIndex"] : undefined);
   });
 
+  // Initalise the Presentaition API receiver.
   onMount(() => {
-    navigator.presentation.receiver.connectionList.then((list) => {
-      list.connections.forEach((connection) =>
-        addPresentationConnection(connection)
-      );
-      list.onconnectionavailable = ({ connection }) =>
-        addPresentationConnection(connection);
-    });
+    initialisePresentationReceiver();
   });
 
   return (

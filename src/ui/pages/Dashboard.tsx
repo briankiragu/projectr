@@ -36,9 +36,6 @@ const NowPlayingCard = lazy(() => import("@components/cards/NowPlayingCard"));
 const QueueList = lazy(() => import("@components/queue/QueueList"));
 
 const App: Component = () => {
-  // Create a BroadcastAPI channel.
-  const channel = new BroadcastChannel(import.meta.env.VITE_BROADCAST_NAME);
-
   // Create the signals.
   const [isLyrics, setIsLyrics] = createSignal<boolean>(true);
   const [results, setResults] = createStore<ISearchItem[]>([]);
@@ -46,15 +43,15 @@ const App: Component = () => {
   // Import the composables.
   const { toTitleCase } = useFormatting();
   const {
-    presentationRequest,
     isAvailable,
     isConnected,
     isVisible,
-    setPresentationConnection,
+    connection,
     openPresentation,
     showPresentation,
     hidePresentation,
-    stopPresentation,
+    closePresentation,
+    initialisePresentationController,
   } = usePresentation();
   const {
     queue,
@@ -92,7 +89,7 @@ const App: Component = () => {
           : null;
 
       // Send the message.
-      channel.postMessage(JSON.stringify(data));
+      connection()?.send(JSON.stringify(data));
     }
   };
 
@@ -161,15 +158,13 @@ const App: Component = () => {
   };
 
   onMount(() => {
-    navigator.presentation.defaultRequest = presentationRequest;
-    navigator.presentation.defaultRequest.onconnectionavailable = ({
-      connection,
-    }) => setPresentationConnection(connection);
+    // Initiate the Presentation Controller.
+    initialisePresentationController();
 
     window.addEventListener("keydown", (e: KeyboardEvent) => {
       // Start/stop projection.
       if (e.shiftKey && e.code === "KeyP")
-        isConnected() ? stopPresentation() : openPresentation();
+        isConnected() ? closePresentation() : openPresentation();
 
       // Show/hide content.
       if (e.shiftKey && e.code === "KeyS")
@@ -326,7 +321,7 @@ const App: Component = () => {
                 title="Shift + P"
                 isProjecting={isConnected()}
                 startHandler={openPresentation}
-                stopHandler={stopPresentation}
+                stopHandler={closePresentation}
               />
             </Show>
             <DisplayButton

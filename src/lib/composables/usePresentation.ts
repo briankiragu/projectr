@@ -9,15 +9,16 @@ import usePresentationAPI from "@composables/apis/usePresentationAPI";
 export default () => {
   // Import the composables.
   const {
-    presentationRequest,
     isAvailable,
     setPresentationConnection,
     addPresentationConnection,
     startPresentation,
-    closePresentation,
+    terminatePresentation,
+    initialisePresentationController,
+    initialisePresentationReceiver,
   } = usePresentationAPI();
 
-  const [connection, setConnection] = createSignal<any>(undefined);
+  const [connection, setConnection] = createSignal<any | undefined>(undefined);
   const [isVisible, setIsVisible] = createSignal<boolean>(true);
 
   const isConnected = (): boolean => connection()?.state === "connected";
@@ -25,33 +26,33 @@ export default () => {
   const openPresentation = async () => {
     try {
       // Launch the presentation.
-      const connection = await startPresentation();
-      setConnection(connection);
-    } catch {
-      console.dir("Could not open presentation");
+      const conn = await startPresentation();
+      setConnection(conn);
+    } catch (e) {
+      console.error(e);
     }
   };
 
   const showPresentation = (data: IProjectionPayload | null) => {
-    connection().send(JSON.stringify(data));
+    connection()?.send(JSON.stringify(data));
     setIsVisible(true);
   };
 
   const hidePresentation = () => {
     setIsVisible(false);
-    connection().send(null);
+    connection()?.send(null);
   };
 
-  const stopPresentation = () => {
-    closePresentation(connection());
+  const closePresentation = () => {
+    terminatePresentation(connection());
     setConnection(undefined);
     setIsVisible(true);
   };
 
   return {
-    presentationRequest,
-    isVisible,
+    connection,
 
+    isVisible,
     isAvailable,
     isConnected,
 
@@ -61,6 +62,9 @@ export default () => {
     openPresentation,
     showPresentation,
     hidePresentation,
-    stopPresentation,
+    closePresentation,
+
+    initialisePresentationController,
+    initialisePresentationReceiver,
   };
 };

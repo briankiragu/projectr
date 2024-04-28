@@ -10,45 +10,61 @@ export default () => {
     return availability.value;
   };
 
-  const setPresentationConnection = (connection: any) => {
-    // Set the new connection and save the presentation ID
-    localStorage["presId"] = connection.id;
+  const setPresentationConnection = (connection: any | undefined) => {
+    if (connection !== undefined) {
+      // Set the new connection and save the presentation ID
+      localStorage["presId"] = connection.id;
 
-    // Monitor the connection state
-    connection.onconnect = () => {
-      // Register message handler
-      connection.onmessage = (message: MessageEvent) => {
-        console.log(`Received message: ${message.data}`);
-      };
+      // Monitor the connection state
+      connection.addEventListener("connect", () => {
+        // Register message handler
+        connection.addEventListener("message", (message: MessageEvent) => {
+          console.log(`Received message: ${message.data}`);
+        });
 
-      // Send initial message to presentation page
-      connection.send(token);
-    };
+        // Send initial message to presentation page
+        connection.send(token);
+        console.info("Connected...");
+      });
 
-    connection.onclose = () => {
-      connection = null;
-    };
+      // Monitor the disconnection state
+      connection.addEventListener("disconnect", () => {
+        console.info("Disconnected...");
+      });
 
-    connection.onterminate = () => {
-      // Remove presId from localStorage if exists
-      delete localStorage["presId"];
-      connection = null;
-    };
+      connection.addEventListener("close", () => {
+        connection = null;
+        console.info("Closed...");
+      });
+
+      connection.addEventListener("terminate", () => {
+        // Remove presId from localStorage if exists
+        delete localStorage["presId"];
+        connection = null;
+        console.info("Terminated...");
+      });
+    }
+
+    return connection;
   };
 
   const addPresentationConnection = (connection: any) => {
-    connection.onmessage = (message: MessageEvent) => {
-      if (message.data === token) connection.send("hello");
-    };
+    connection.addEventListener("message", (message: MessageEvent) => {
+      if (message.data === token) connection.send(token);
+    });
+
+    connection.addEventListener("close", (event: CloseEvent) => {
+      console.log("Connection closed!", event.reason);
+    });
   };
 
   const startPresentation = async () => {
     try {
       // Start new presentation.
-      const connection = await presentationRequest.start();
+      let connection = await presentationRequest.start();
 
       // The connection to the presentation will be passed on success.
-      setPresentationConnection(connection);
+      connection = setPresentationConnection(connection);
 
       // Return the connection
       return connection;
@@ -66,10 +82,10 @@ export default () => {
     if (presId) {
       try {
         // Start new presentation.
-        const connection = await presentationRequest.reconnect(presId);
+        let connection = await presentationRequest.reconnect(presId);
 
         // The connection to the presentation will be passed on success.
-        setPresentationConnection(connection);
+        connection = setPresentationConnection(connection);
 
         // Return the connection
         return connection;
@@ -80,22 +96,45 @@ export default () => {
     }
   };
 
-  const terminatePresentation = (connection: any | undefined) => {
-    connection?.terminate();
-  };
-
   const closePresentation = (connection: any | undefined) => {
     connection?.close();
   };
 
+  const terminatePresentation = (connection: any | undefined) => {
+    connection?.terminate();
+  };
+
+  const initialisePresentationController = () => {
+    navigator.presentation.defaultRequest = presentationRequest;
+    navigator.presentation.defaultRequest.addEventListener(
+      "connectionavailable",
+      ({ conn }) => setPresentationConnection(conn)
+    );
+  };
+
+  const initialisePresentationReceiver = () => {
+    navigator.presentation.receiver?.connectionList.then((list) => {
+      list.connections.map((conn) => addPresentationConnection(conn));
+      list.addEventListener("connectionavailable", ({ conn }) =>
+        addPresentationConnection(conn)
+      );
+    });
+  };
+
   return {
     presentationRequest,
+
     isAvailable,
+
     setPresentationConnection,
     addPresentationConnection,
+
     startPresentation,
     reconnectPresentation,
     terminatePresentation,
     closePresentation,
+
+    initialisePresentationController,
+    initialisePresentationReceiver,
   };
 };
