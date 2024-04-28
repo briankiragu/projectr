@@ -6,7 +6,7 @@ import type { IQueueItem } from "@interfaces/queue";
 // Import the composables...
 import useFormatting from "@composables/useFormatting";
 
-const Project: Component = () => {
+const Present: Component = () => {
   // Create a BroadcastAPI channel.
   const channel = new BroadcastChannel(import.meta.env.VITE_BROADCAST_NAME);
 
@@ -47,7 +47,7 @@ const Project: Component = () => {
           <For each={currentVerse()}>
             {(line) => (
               <div
-                class="md:text-large lg:text-larger 2xl:text-largest text-wrap text-2xl font-extrabold uppercase"
+                class="text-wrap text-2xl font-extrabold uppercase md:text-large lg:text-larger 2xl:text-largest"
                 innerHTML={line}
               ></div>
             )}
@@ -58,4 +58,4 @@ const Project: Component = () => {
   );
 };
 
-export default Project;
+export default Present;

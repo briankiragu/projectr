@@ -62,7 +62,7 @@ export default () => {
       `height=${screen.height}`,
     ].join(",");
 
-    return window.open("/project", channel, features);
+    return window.open("/present", channel, features);
   };
 
   return { isSupported, project };
