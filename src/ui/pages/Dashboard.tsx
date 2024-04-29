@@ -18,7 +18,6 @@ import type { ISearchItem } from "@interfaces/track";
 
 // Import the composables...
 import useFormatting from "@composables/useFormatting";
-import useProjection from "@composables/useProjection";
 import useQueue from "@composables/useQueue";
 
 // Import the components...
@@ -29,6 +28,7 @@ import EditQueueItemForm from "@components/forms/EditQueueItemForm";
 import LyricsCardsPreloader from "@components/preloaders/LyricsCardsPreloader";
 import LyricsSearch from "@components/search/lyrics/LyricsSearch";
 import ScripturesSearchForm from "@components/search/scriptures/ScripturesSearchForm";
+import usePresentation from "@composables/usePresentation";
 
 // Import the lazy-loaded components.
 const LyricsCard = lazy(() => import("@components/cards/LyricsCard"));
@@ -36,9 +36,6 @@ const NowPlayingCard = lazy(() => import("@components/cards/NowPlayingCard"));
 const QueueList = lazy(() => import("@components/queue/QueueList"));
 
 const App: Component = () => {
-  // Create a BroadcastAPI channel.
-  const channel = new BroadcastChannel(import.meta.env.VITE_BROADCAST_NAME);
-
   // Create the signals.
   const [isLyrics, setIsLyrics] = createSignal<boolean>(true);
   const [results, setResults] = createStore<ISearchItem[]>([]);
@@ -46,14 +43,16 @@ const App: Component = () => {
   // Import the composables.
   const { toTitleCase } = useFormatting();
   const {
-    isSupported,
-    isProjecting,
+    isAvailable,
+    isConnected,
     isVisible,
-    openProjection,
-    showProjection,
-    hideProjection,
-    closeProjection,
-  } = useProjection(channel);
+    connection,
+    openPresentation,
+    showPresentation,
+    hidePresentation,
+    closePresentation,
+    initialisePresentationController,
+  } = usePresentation();
   const {
     queue,
     nowPlaying,
@@ -90,7 +89,7 @@ const App: Component = () => {
           : null;
 
       // Send the message.
-      channel.postMessage(JSON.stringify(data));
+      connection()?.send(JSON.stringify(data));
     }
   };
 
@@ -159,16 +158,19 @@ const App: Component = () => {
   };
 
   onMount(() => {
+    // Initiate the Presentation Controller.
+    initialisePresentationController();
+
     window.addEventListener("keydown", (e: KeyboardEvent) => {
       // Start/stop projection.
       if (e.shiftKey && e.code === "KeyP")
-        isProjecting() ? closeProjection() : openProjection();
+        isConnected() ? closePresentation() : openPresentation();
 
       // Show/hide content.
       if (e.shiftKey && e.code === "KeyS")
         isVisible()
-          ? hideProjection()
-          : showProjection({
+          ? hidePresentation()
+          : showPresentation({
               nowPlaying: nowPlaying(),
               currentVerseIndex: currentVerseIndex(),
             });
@@ -314,25 +316,25 @@ const App: Component = () => {
         {/* Controls */}
         <footer class="fixed bottom-0 left-0 w-full bg-white p-3">
           <div class="flex min-h-16 flex-wrap justify-center gap-4 rounded-lg bg-tvc-green p-4 text-gray-700 md:justify-between md:gap-4 lg:justify-center">
-            <Show when={isSupported()}>
+            <Show when={isAvailable()}>
               <ProjectionButton
                 title="Shift + P"
-                isProjecting={isProjecting()}
-                startHandler={openProjection}
-                stopHandler={closeProjection}
+                isProjecting={isConnected()}
+                startHandler={openPresentation}
+                stopHandler={closePresentation}
               />
             </Show>
             <DisplayButton
               title="Shift + S"
-              isEnabled={isProjecting()}
+              isEnabled={isConnected()}
               isDisplaying={isVisible()}
               showHandler={() =>
-                showProjection({
+                showPresentation({
                   nowPlaying: nowPlaying(),
                   currentVerseIndex: currentVerseIndex(),
                 })
               }
-              hideHandler={hideProjection}
+              hideHandler={hidePresentation}
             />
             <PlaybackButton
               icon="arrow_back"

@@ -1,17 +1,16 @@
-import { type Component, createSignal, Show, For } from "solid-js";
+import { type Component, createSignal, Show, For, onMount } from "solid-js";
 
 // Import the interfaces...
 import type { IQueueItem } from "@interfaces/queue";
 
 // Import the composables...
 import useFormatting from "@composables/useFormatting";
+import usePresentation from "@composables/usePresentation";
 
-const Project: Component = () => {
-  // Create a BroadcastAPI channel.
-  const channel = new BroadcastChannel(import.meta.env.VITE_BROADCAST_NAME);
-
+const Present: Component = () => {
   // Import the composables.
   const { toTitleCase } = useFormatting();
+  const { initialisePresentationReceiver } = usePresentation();
 
   // To hold the data from the broadcast channel.
   const [nowPlaying, setNowPlaying] = createSignal<IQueueItem | undefined>();
@@ -20,12 +19,17 @@ const Project: Component = () => {
   const currentVerse = (): string[] | undefined =>
     nowPlaying()?.content.at(currentVerseIndex());
 
-  // When a message relays on the channel.
-  channel.addEventListener("message", (e: Event) => {
-    const data = JSON.parse((e as MessageEvent).data);
+  const updatePresentation = (message: MessageEvent) => {
+    // When a message is relayed on the connection, extract it.
+    const data = JSON.parse(message.data);
 
     setNowPlaying(data !== null ? data["nowPlaying"] : undefined);
     setCurrentVerseIndex(data !== null ? data["currentVerseIndex"] : undefined);
+  };
+
+  // Initalise the Presentaition API receiver.
+  onMount(() => {
+    initialisePresentationReceiver(updatePresentation);
   });
 
   return (
@@ -47,7 +51,7 @@ const Project: Component = () => {
           <For each={currentVerse()}>
             {(line) => (
               <div
-                class="md:text-large lg:text-larger 2xl:text-largest text-wrap text-2xl font-extrabold uppercase"
+                class="text-wrap text-2xl font-extrabold uppercase md:text-large lg:text-larger 2xl:text-largest"
                 innerHTML={line}
               ></div>
             )}
@@ -58,4 +62,4 @@ const Project: Component = () => {
   );
 };
 
-export default Project;
+export default Present;

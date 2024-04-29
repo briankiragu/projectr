@@ -12,7 +12,7 @@ import "./index.css";
 // Import components.
 import App from "@pages/App";
 import Dashboard from "@pages/Dashboard";
-const Project = lazy(() => import("@pages/Project"));
+const Present = lazy(() => import("@pages/Present"));
 
 // Get the root element
 const root = document.getElementById("root");
@@ -37,7 +37,7 @@ render(
   () => (
     <Router root={App}>
       <Route path="/" component={Dashboard} />
-      <Route path="/project" component={Project} />
+      <Route path="/present" component={Present} />
     </Router>
   ),
   root!
