@@ -17,6 +17,7 @@ export default () => {
     initialisePresentationReceiver,
   } = usePresentationAPI();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [connection, setConnection] = createSignal<any | undefined>(undefined);
   const [isConnected, setIsConnected] = createSignal<boolean>(false);
   const [isVisible, setIsVisible] = createSignal<boolean>(true);

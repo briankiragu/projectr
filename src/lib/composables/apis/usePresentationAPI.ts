@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
@@ -11,6 +10,7 @@ export default () => {
     return availability.value;
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const setPresentationConnection = (connection: any | undefined) => {
     if (connection !== undefined) {
       // Set the new connection and save the presentation ID
@@ -42,6 +42,7 @@ export default () => {
   };
 
   const addPresentationConnection = (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     conn: any,
     callback: (message: MessageEvent) => void
   ) => {
@@ -64,9 +65,9 @@ export default () => {
 
       // Return the connection
       return connection;
-    } catch {
+    } catch (e: Error) {
       // Otherwise, the user canceled the selection dialog or no screens were found.
-      console.error("[Presentation] Failed to start...");
+      throw new Error(`[Presentation] Failed to start with reason: ${e}`);
     }
   };
 
@@ -85,14 +86,16 @@ export default () => {
       return connection;
     } catch {
       // No connection found for presUrl and presId, or an error occurred.
-      console.error("[Presentation] Failed to start...");
+      throw new Error(`[Presentation] Failed to reconnect with reason: ${e}`);
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const closePresentation = (connection: any | undefined) => {
     connection?.close();
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const terminatePresentation = (connection: any | undefined) => {
     connection?.terminate();
   };
