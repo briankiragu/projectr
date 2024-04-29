@@ -2,10 +2,7 @@ export default () => {
   // Prepare the request with the presentation URLs.
   const presentationRequest = new PresentationRequest(["present"]);
 
-  // Const communication ackowledgement token.
-  const token = "Say hello";
-
-  const isAvailable = async (): boolean => {
+  const isAvailable = async (): Promise<boolean> => {
     const availability = await presentationRequest.getAvailability();
     return availability.value;
   };
@@ -21,9 +18,6 @@ export default () => {
         connection.addEventListener("message", (message: MessageEvent) => {
           console.log(`Received message: ${message.data}`);
         });
-
-        // Send initial message to presentation page
-        connection.send(token);
         console.info("Connected...");
       });
 
@@ -48,16 +42,6 @@ export default () => {
     return connection;
   };
 
-  const addPresentationConnection = (connection: any) => {
-    connection.addEventListener("message", (message: MessageEvent) => {
-      if (message.data === token) connection.send(token);
-    });
-
-    connection.addEventListener("close", (event: CloseEvent) => {
-      console.log("Connection closed!", event.reason);
-    });
-  };
-
   const startPresentation = async () => {
     try {
       // Start new presentation.
@@ -70,7 +54,7 @@ export default () => {
       return connection;
     } catch {
       // Otherwise, the user canceled the selection dialog or no screens were found.
-      console.dir("Failed to start presentation");
+      console.error("Failed to start presentation");
     }
   };
 
@@ -91,7 +75,7 @@ export default () => {
         return connection;
       } catch {
         // No connection found for presUrl and presId, or an error occurred.
-        console.dir("Failed to start presentation");
+        console.error("Failed to start presentation");
       }
     }
   };
@@ -112,11 +96,11 @@ export default () => {
     );
   };
 
-  const initialisePresentationReceiver = () => {
+  const initialisePresentationReceiver = (callback: (conn: any) => void) => {
     navigator.presentation.receiver?.connectionList.then((list) => {
-      list.connections.map((conn) => addPresentationConnection(conn));
+      list.connections.map((conn) => callback(conn));
       list.addEventListener("connectionavailable", ({ conn }) =>
-        addPresentationConnection(conn)
+        callback(conn)
       );
     });
   };
@@ -127,7 +111,6 @@ export default () => {
     isAvailable,
 
     setPresentationConnection,
-    addPresentationConnection,
 
     startPresentation,
     reconnectPresentation,

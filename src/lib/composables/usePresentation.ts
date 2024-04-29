@@ -11,7 +11,6 @@ export default () => {
   const {
     isAvailable,
     setPresentationConnection,
-    addPresentationConnection,
     startPresentation,
     terminatePresentation,
     initialisePresentationController,
@@ -57,7 +56,6 @@ export default () => {
     isConnected,
 
     setPresentationConnection,
-    addPresentationConnection,
 
     openPresentation,
     showPresentation,
