@@ -1,4 +1,4 @@
-const API_URL = process.env.VITE_MUSIXMATCH_API_URL;
+const API_URL = process.env["VITE_MUSIXMATCH_API_URL"];
 
 export const GET = async (request: Request) => {
   const queryString = request.url.split("?").at(-1);
