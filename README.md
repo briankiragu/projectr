@@ -1,5 +1,4 @@
-![Coverage](https://github.com/briankiragu/projectr/blob/main/.github/workflows/coverage.yml/badge.svg)
-
+![Coverage](https://github.com/briankiragu/projectr/actions/workflows/coverage.yml/badge.svg)
 
 # Projectr
 
