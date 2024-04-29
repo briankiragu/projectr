@@ -42,6 +42,21 @@ export default () => {
     return connection;
   };
 
+  const addPresentationConnection = (
+    conn: any,
+    callback: (message: MessageEvent) => void
+  ) => {
+    // Listen for new messages.
+    conn.addEventListener("message", (message: MessageEvent) =>
+      callback(message)
+    );
+
+    // Listen for connection close.
+    conn.addEventListener("close", (event: CloseEvent) => {
+      console.log("Connection closed!", event.reason);
+    });
+  };
+
   const startPresentation = async () => {
     try {
       // Start new presentation.
@@ -96,11 +111,13 @@ export default () => {
     );
   };
 
-  const initialisePresentationReceiver = (callback: (conn: any) => void) => {
+  const initialisePresentationReceiver = (
+    callback: (message: MessageEvent) => void
+  ) => {
     navigator.presentation.receiver?.connectionList.then((list) => {
-      list.connections.map((conn) => callback(conn));
+      list.connections.map((conn) => addPresentationConnection(conn, callback));
       list.addEventListener("connectionavailable", ({ conn }) =>
-        callback(conn)
+        addPresentationConnection(conn, callback)
       );
     });
   };

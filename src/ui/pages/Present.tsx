@@ -19,27 +19,17 @@ const Present: Component = () => {
   const currentVerse = (): string[] | undefined =>
     nowPlaying()?.content.at(currentVerseIndex());
 
-  const addPresentationConnection = (connection: any) => {
-    // Listen for new messages.
-    connection.addEventListener("message", (message: MessageEvent) => {
-      // When a message is relayed on the connection, extract it.
-      const data = JSON.parse(message.data);
+  const updatePresentation = (message: MessageEvent) => {
+    // When a message is relayed on the connection, extract it.
+    const data = JSON.parse(message.data);
 
-      setNowPlaying(data !== null ? data["nowPlaying"] : undefined);
-      setCurrentVerseIndex(
-        data !== null ? data["currentVerseIndex"] : undefined
-      );
-    });
-
-    // Listen for connection close.
-    connection.addEventListener("close", (event: CloseEvent) => {
-      console.log("Connection closed!", event.reason);
-    });
+    setNowPlaying(data !== null ? data["nowPlaying"] : undefined);
+    setCurrentVerseIndex(data !== null ? data["currentVerseIndex"] : undefined);
   };
 
   // Initalise the Presentaition API receiver.
   onMount(() => {
-    initialisePresentationReceiver(addPresentationConnection);
+    initialisePresentationReceiver(updatePresentation);
   });
 
   return (
