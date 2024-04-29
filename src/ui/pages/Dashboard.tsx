@@ -89,7 +89,6 @@ const App: Component = () => {
           : null;
 
       // Send the message.
-      console.dir(connection());
       connection()?.send(JSON.stringify(data));
     }
   };

@@ -10,19 +10,16 @@ export default () => {
   // Import the composables.
   const {
     isAvailable,
-    hasConnection,
     setPresentationConnection,
     startPresentation,
-    reconnectPresentation,
     terminatePresentation,
     initialisePresentationController,
     initialisePresentationReceiver,
   } = usePresentationAPI();
 
   const [connection, setConnection] = createSignal<any | undefined>(undefined);
+  const [isConnected, setIsConnected] = createSignal<boolean>(false);
   const [isVisible, setIsVisible] = createSignal<boolean>(true);
-
-  const isConnected = (): boolean => connection()?.state === "connected";
 
   const openPresentation = async () => {
     try {
@@ -31,6 +28,9 @@ export default () => {
 
       // Setup the connection
       setConnection(conn);
+
+      // Set the connected state.
+      setIsConnected(true);
     } catch (e) {
       console.error(e);
     }
@@ -42,13 +42,14 @@ export default () => {
   };
 
   const hidePresentation = () => {
-    setIsVisible(false);
     connection()?.send(null);
+    setIsVisible(false);
   };
 
   const closePresentation = () => {
     terminatePresentation(connection());
     setConnection(undefined);
+    setIsConnected(false);
     setIsVisible(true);
   };
 

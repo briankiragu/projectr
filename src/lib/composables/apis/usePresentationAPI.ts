@@ -7,8 +7,6 @@ export default () => {
     return availability.value;
   };
 
-  const hasConnection = (): boolean => localStorage["presId"] !== undefined;
-
   const setPresentationConnection = (connection: any | undefined) => {
     if (connection !== undefined) {
       // Set the new connection and save the presentation ID
@@ -18,21 +16,21 @@ export default () => {
       connection.onconnect = () => {
         // Register message handler
         connection.onmessage = (message: MessageEvent) => {
-          console.log(`Received message: ${message.data}`);
+          console.log(`[Presentation] Received message: ${message.data}`);
         };
-        console.info("Connected...");
+        console.info("[Presentation] Connected...");
       };
 
       connection.onclose = () => {
         connection = null;
-        console.info("Closed...");
+        console.info("[Presentation] Closed...");
       };
 
       connection.onterminate = () => {
         // Remove presId from localStorage if exists
         delete localStorage["presId"];
         connection = null;
-        console.info("Terminated...");
+        console.info("[Presentation] Terminated...");
       };
     }
 
@@ -48,7 +46,7 @@ export default () => {
 
     // Listen for connection close.
     conn.onclose = (event: CloseEvent) => {
-      console.log("Connection closed!", event.reason);
+      console.log("[Presentation] Connection closed!", event.reason);
     };
   };
 
@@ -64,7 +62,7 @@ export default () => {
       return connection;
     } catch {
       // Otherwise, the user canceled the selection dialog or no screens were found.
-      console.error("Failed to start presentation");
+      console.error("[Presentation] Failed to start...");
     }
   };
 
@@ -83,7 +81,7 @@ export default () => {
       return connection;
     } catch {
       // No connection found for presUrl and presId, or an error occurred.
-      console.error("Failed to start presentation");
+      console.error("[Presentation] Failed to start...");
     }
   };
 
@@ -115,7 +113,6 @@ export default () => {
     presentationRequest,
 
     isAvailable,
-    hasConnection,
 
     setPresentationConnection,
 
