@@ -7,36 +7,33 @@ export default () => {
     return availability.value;
   };
 
+  const hasConnection = (): boolean => localStorage["presId"] !== undefined;
+
   const setPresentationConnection = (connection: any | undefined) => {
     if (connection !== undefined) {
       // Set the new connection and save the presentation ID
       localStorage["presId"] = connection.id;
 
       // Monitor the connection state
-      connection.addEventListener("connect", () => {
+      connection.onconnect = () => {
         // Register message handler
-        connection.addEventListener("message", (message: MessageEvent) => {
+        connection.onmessage = (message: MessageEvent) => {
           console.log(`Received message: ${message.data}`);
-        });
+        };
         console.info("Connected...");
-      });
+      };
 
-      // Monitor the disconnection state
-      connection.addEventListener("disconnect", () => {
-        console.info("Disconnected...");
-      });
-
-      connection.addEventListener("close", () => {
+      connection.onclose = () => {
         connection = null;
         console.info("Closed...");
-      });
+      };
 
-      connection.addEventListener("terminate", () => {
+      connection.onterminate = () => {
         // Remove presId from localStorage if exists
         delete localStorage["presId"];
         connection = null;
         console.info("Terminated...");
-      });
+      };
     }
 
     return connection;
@@ -47,14 +44,12 @@ export default () => {
     callback: (message: MessageEvent) => void
   ) => {
     // Listen for new messages.
-    conn.addEventListener("message", (message: MessageEvent) =>
-      callback(message)
-    );
+    conn.onmessage = (message: MessageEvent) => callback(message);
 
     // Listen for connection close.
-    conn.addEventListener("close", (event: CloseEvent) => {
+    conn.onclose = (event: CloseEvent) => {
       console.log("Connection closed!", event.reason);
-    });
+    };
   };
 
   const startPresentation = async () => {
@@ -74,24 +69,21 @@ export default () => {
   };
 
   const reconnectPresentation = async () => {
-    // read presId from localStorage if exists
-    const presId = localStorage["presId"];
+    try {
+      // Read presId from localStorage if exists
+      const presId = localStorage["presId"];
 
-    // presId is mandatory when reconnecting to a presentation.
-    if (presId) {
-      try {
-        // Start new presentation.
-        let connection = await presentationRequest.reconnect(presId);
+      // Start new presentation.
+      let connection = await presentationRequest.reconnect(presId);
 
-        // The connection to the presentation will be passed on success.
-        connection = setPresentationConnection(connection);
+      // The connection to the presentation will be passed on success.
+      connection = setPresentationConnection(connection);
 
-        // Return the connection
-        return connection;
-      } catch {
-        // No connection found for presUrl and presId, or an error occurred.
-        console.error("Failed to start presentation");
-      }
+      // Return the connection
+      return connection;
+    } catch {
+      // No connection found for presUrl and presId, or an error occurred.
+      console.error("Failed to start presentation");
     }
   };
 
@@ -105,10 +97,8 @@ export default () => {
 
   const initialisePresentationController = () => {
     navigator.presentation.defaultRequest = presentationRequest;
-    navigator.presentation.defaultRequest.addEventListener(
-      "connectionavailable",
-      ({ conn }) => setPresentationConnection(conn)
-    );
+    navigator.presentation.defaultRequest.onconnectionavailable = ({ conn }) =>
+      setPresentationConnection(conn);
   };
 
   const initialisePresentationReceiver = (
@@ -116,9 +106,8 @@ export default () => {
   ) => {
     navigator.presentation.receiver?.connectionList.then((list) => {
       list.connections.map((conn) => addPresentationConnection(conn, callback));
-      list.addEventListener("connectionavailable", ({ conn }) =>
-        addPresentationConnection(conn, callback)
-      );
+      list.onconnectionavailable = ({ conn }) =>
+        addPresentationConnection(conn, callback);
     });
   };
 
@@ -126,6 +115,7 @@ export default () => {
     presentationRequest,
 
     isAvailable,
+    hasConnection,
 
     setPresentationConnection,
 

@@ -10,8 +10,10 @@ export default () => {
   // Import the composables.
   const {
     isAvailable,
+    hasConnection,
     setPresentationConnection,
     startPresentation,
+    reconnectPresentation,
     terminatePresentation,
     initialisePresentationController,
     initialisePresentationReceiver,
@@ -26,6 +28,8 @@ export default () => {
     try {
       // Launch the presentation.
       const conn = await startPresentation();
+
+      // Setup the connection
       setConnection(conn);
     } catch (e) {
       console.error(e);
