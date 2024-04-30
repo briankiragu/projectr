@@ -47,7 +47,7 @@ const App: Component = () => {
     isAvailable,
     isConnected,
     isVisible,
-    connection,
+    connections,
     openPresentation,
     showPresentation,
     hidePresentation,
@@ -90,7 +90,7 @@ const App: Component = () => {
           : null;
 
       // Send the message.
-      connection()?.send(JSON.stringify(data));
+      connections().forEach((conn) => conn?.send(JSON.stringify(data)));
     }
   };
 
@@ -324,6 +324,7 @@ const App: Component = () => {
               <Show when={isAvailable()}>
                 <ProjectionButton
                   title="Shift + P"
+                  isAvailable={isAvailable()}
                   isProjecting={isConnected()}
                   startHandler={openPresentation}
                   stopHandler={closePresentation}

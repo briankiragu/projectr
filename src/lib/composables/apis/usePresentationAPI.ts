@@ -5,10 +5,27 @@ export default () => {
   // Prepare the request with the presentation URLs.
   const presentationRequest = new PresentationRequest(["present"]);
 
-  const isAvailable = async (): Promise<boolean> => {
-    const availability = await presentationRequest.getAvailability();
-    return availability.value;
-  };
+  const getAvailability = (callback: (value: boolean) => void): void =>
+    presentationRequest
+      .getAvailability()
+      .then((availability) => {
+        // availability.value may be kept up-to-date by the controlling UA
+        // as long as the availability object is alive.
+        // It is advised for the web developers to discard the object
+        // as soon as it's not needed.
+        callback(availability.value);
+        availability.onchange = () => {
+          callback(availability.value);
+        };
+      })
+      .catch(() => {
+        // Availability monitoring is not supported by the platform,
+        // so discovery of presentation displays will happen only after
+        // request.start() is called.
+        // Pretend the devices are available for simplicity; or,
+        // one could implement a third state for the button.
+        callback(true);
+      });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const setPresentationConnection = (connection: any | undefined) => {
@@ -119,7 +136,7 @@ export default () => {
   return {
     presentationRequest,
 
-    isAvailable,
+    getAvailability,
 
     setPresentationConnection,
 
