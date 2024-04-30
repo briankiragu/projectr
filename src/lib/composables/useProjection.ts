@@ -6,59 +6,71 @@ import type { IProjectionPayload } from "@interfaces/projection";
 
 export default (channel: BroadcastChannel) => {
   // Import the composables.
-  const { isSupported, project } = useWindowManagementAPI();
+  const { isAvailable, project } = useWindowManagementAPI();
 
-  const [projectionScreen, setProjectionScreen] = createSignal<
-    ScreenDetailed | undefined
-  >(undefined);
-  const [projection, setProjection] = createSignal<WindowProxy | undefined>(
-    undefined
-  );
+  const [presentations, setProjections] = createSignal<WindowProxy[]>([]);
   const [isVisible, setIsVisible] = createSignal<boolean>(true);
 
-  const isProjecting = (): boolean => projection() !== undefined;
+  const isConnected = (): boolean => presentations().length > 0;
 
   const openProjection = async () => {
-    const payload = await project(import.meta.env.VITE_BROADCAST_NAME);
+    // Launch a presentation instance.
+    const payload = await project(
+      Date.now().toString(),
+      import.meta.env.VITE_BROADCAST_NAME
+    );
 
-    if (payload !== undefined) {
-      setProjectionScreen(payload.projectionScreen);
-      setProjection(payload.proxy);
+    if (payload?.proxy !== undefined) {
+      // Save the Window proxies in the state.
+      setProjections([...presentations(), payload.proxy]);
     }
   };
 
-  const expandToFullscreen = async () => {
-    await document.body.requestFullscreen({ screen: projectionScreen() });
-  };
-
   const showProjection = (data: IProjectionPayload | null) => {
+    sendProjectionData(data);
     setIsVisible(true);
-    channel.postMessage(JSON.stringify(data));
   };
 
   const hideProjection = () => {
     setIsVisible(false);
-    channel.postMessage(null);
+    sendProjectionData(null);
   };
 
   const closeProjection = () => {
-    projection()?.close();
+    // Close each proxy.
+    presentations()?.forEach((presentation) => presentation?.close());
 
-    setProjection(undefined);
+    setProjections([]);
     setIsVisible(true);
   };
 
+  const sendProjectionData = (data: IProjectionPayload | null) => {
+    // Parse the data to a string if not null.
+    const processedData = data !== null ? JSON.stringify(data) : null;
+
+    // Send the data over the connections.
+    channel.postMessage(processedData);
+  };
+
+  const initialiseProjectionReceiver = (
+    callback: (event: MessageEvent) => void
+  ) => {
+    // When a message relays on the channel.
+    channel.addEventListener("message", callback);
+  };
+
   return {
-    projection,
+    isAvailable,
+    isConnected,
     isVisible,
 
-    isSupported,
-    isProjecting,
-
     openProjection,
-    expandToFullscreen,
     showProjection,
     hideProjection,
     closeProjection,
+
+    sendProjectionData,
+
+    initialiseProjectionReceiver,
   };
 };

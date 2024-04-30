@@ -5,12 +5,17 @@ import type { IQueueItem } from "@interfaces/queue";
 
 // Import the composables...
 import useFormatting from "@composables/useFormatting";
+import useProjection from "@composables/useProjection";
 import usePresentation from "@composables/usePresentation";
 
 const Present: Component = () => {
+  // Create a BroadcastAPI channel.
+  const channel = new BroadcastChannel(import.meta.env.VITE_BROADCAST_NAME);
+
   // Import the composables.
   const { toTitleCase } = useFormatting();
   const { initialisePresentationReceiver } = usePresentation();
+  const { initialiseProjectionReceiver } = useProjection(channel);
 
   // To hold the data from the broadcast channel.
   const [nowPlaying, setNowPlaying] = createSignal<IQueueItem | undefined>();
@@ -27,9 +32,9 @@ const Present: Component = () => {
     setCurrentVerseIndex(data !== null ? data["currentVerseIndex"] : undefined);
   };
 
-  // Initalise the Presentaition API receiver.
   onMount(() => {
     initialisePresentationReceiver(updatePresentation);
+    initialiseProjectionReceiver(updatePresentation);
   });
 
   return (

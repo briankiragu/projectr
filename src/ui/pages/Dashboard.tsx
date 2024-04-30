@@ -29,6 +29,7 @@ import LyricsCardsPreloader from "@components/preloaders/LyricsCardsPreloader";
 import LyricsSearch from "@components/search/lyrics/LyricsSearch";
 import OfflineBanner from "@components/banners/OfflineBanner";
 import ScripturesSearchForm from "@components/search/scriptures/ScripturesSearchForm";
+import useProjection from "@composables/useProjection";
 import usePresentation from "@composables/usePresentation";
 
 // Import the lazy-loaded components.
@@ -37,23 +38,27 @@ const NowPlayingCard = lazy(() => import("@components/cards/NowPlayingCard"));
 const QueueList = lazy(() => import("@components/queue/QueueList"));
 
 const App: Component = () => {
+  // Create a BroadcastAPI channel.
+  const channel = new BroadcastChannel(import.meta.env.VITE_BROADCAST_NAME);
+
   // Create the signals.
+  const [isOffline, setIsOffline] = createSignal<boolean>(false);
   const [isLyrics, setIsLyrics] = createSignal<boolean>(true);
   const [results, setResults] = createStore<ISearchItem[]>([]);
 
   // Import the composables.
   const { toTitleCase } = useFormatting();
+  const { sendPresentationData } = usePresentation();
   const {
     isAvailable,
     isConnected,
     isVisible,
-    connection,
-    openPresentation,
-    showPresentation,
-    hidePresentation,
-    closePresentation,
-    initialisePresentationController,
-  } = usePresentation();
+    openProjection,
+    showProjection,
+    hideProjection,
+    closeProjection,
+    sendProjectionData,
+  } = useProjection(channel);
   const {
     queue,
     nowPlaying,
@@ -89,8 +94,9 @@ const App: Component = () => {
             }
           : null;
 
-      // Send the message.
-      connection()?.send(JSON.stringify(data));
+      // Send the data.
+      sendPresentationData(data);
+      sendProjectionData(data);
     }
   };
 
@@ -159,19 +165,26 @@ const App: Component = () => {
   };
 
   onMount(() => {
-    // Initiate the Presentation Controller.
-    initialisePresentationController();
+    // When the network connectivity is lost.
+    window.addEventListener("offline", () => {
+      setIsOffline(true);
+    });
+
+    // When the network connectivity is established.
+    window.addEventListener("online", () => {
+      setIsOffline(false);
+    });
 
     window.addEventListener("keydown", (e: KeyboardEvent) => {
       // Start/stop projection.
       if (e.shiftKey && e.code === "KeyP")
-        isConnected() ? closePresentation() : openPresentation();
+        isConnected() ? closeProjection() : openProjection();
 
       // Show/hide content.
       if (e.shiftKey && e.code === "KeyS")
         isVisible()
-          ? hidePresentation()
-          : showPresentation({
+          ? hideProjection()
+          : showProjection({
               nowPlaying: nowPlaying(),
               currentVerseIndex: currentVerseIndex(),
             });
@@ -194,7 +207,7 @@ const App: Component = () => {
   return (
     <>
       {/* Offline Banner */}
-      <OfflineBanner />
+      <OfflineBanner isOffline={isOffline()} />
 
       {/* Main container */}
       <div class="grid gap-5 p-6 md:grid-cols-3 lg:grid-cols-4">
@@ -285,20 +298,20 @@ const App: Component = () => {
 
         {/* Live edit */}
         <Show when={isEditing()}>
-          <aside class="mb-12 rounded-lg bg-gray-100 p-3 transition-transform lg:mb-20">
+          <aside class="mb-12 rounded-lg bg-gray-100 p-3 transition lg:mb-20">
             <EditQueueItemForm item={nowPlaying()!} handler={editLyrics} />
           </aside>
         </Show>
 
         {/* View Pane */}
         <main
-          class="mb-16 flex flex-col rounded-lg transition-transform md:col-start-2 md:col-end-5 lg:col-end-6 lg:mb-20"
+          class="mb-20 flex flex-col rounded-lg transition-transform md:col-start-2 md:col-end-5 lg:col-end-6 lg:mb-20"
           classList={{ "lg:col-start-3": isEditing() }}
         >
           {/* Title */}
           <Show
             when={nowPlaying() !== undefined}
-            fallback={<LyricsCardsPreloader />}
+            fallback={<LyricsCardsPreloader canProject={isAvailable()} />}
           >
             <h2 class="mb-3 text-wrap text-4xl font-black uppercase text-tvc-green lg:mb-4 lg:text-6xl">
               {toTitleCase(nowPlaying()!.title)}
@@ -321,25 +334,24 @@ const App: Component = () => {
           {/* Controls */}
           <footer class="fixed bottom-0 left-0 w-full bg-white p-3">
             <div class="flex min-h-16 flex-wrap justify-center gap-4 rounded-lg bg-tvc-green p-4 text-gray-700 md:justify-between md:gap-4 lg:justify-center">
-              <Show when={isAvailable()}>
-                <ProjectionButton
-                  title="Shift + P"
-                  isProjecting={isConnected()}
-                  startHandler={openPresentation}
-                  stopHandler={closePresentation}
-                />
-              </Show>
+              <ProjectionButton
+                title="Shift + P"
+                isAvailable={isAvailable()}
+                isProjecting={isConnected()}
+                startHandler={openProjection}
+                stopHandler={closeProjection}
+              />
               <DisplayButton
                 title="Shift + S"
                 isEnabled={isConnected()}
                 isDisplaying={isVisible()}
                 showHandler={() =>
-                  showPresentation({
+                  showProjection({
                     nowPlaying: nowPlaying(),
                     currentVerseIndex: currentVerseIndex(),
                   })
                 }
-                hideHandler={hidePresentation}
+                hideHandler={hideProjection}
               />
               <PlaybackButton
                 icon="arrow_back"

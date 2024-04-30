@@ -37,7 +37,7 @@ render(
   () => (
     <Router root={App}>
       <Route path="/" component={Dashboard} />
-      <Route path="/present" component={Present} />
+      <Route path="/present/:id?" component={Present} />
     </Router>
   ),
   root!

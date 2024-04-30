@@ -1,23 +1,22 @@
 import usePermissionsAPI from "@composables/apis/usePermissionsAPI";
 
-type IProjectionPayload = {
-  projectionScreen: ScreenDetailed;
-  proxy: WindowProxy | undefined;
-};
+// Import the interfaces...
+import type { IProjection } from "@interfaces/projection";
 
 export default () => {
-  // Check if the API is supported.
-  const isSupported = () =>
+  // Check if the API is available.
+  const isAvailable = () =>
     "getScreenDetails" in window || "getScreens" in window;
 
   // Import the composable methods.
   const { requestWindowManagementPermissions } = usePermissionsAPI();
 
   const project = async (
+    id: string,
     channel: string
-  ): Promise<IProjectionPayload | undefined> => {
-    // If the API is not supported, do not project.
-    if (!isSupported) return;
+  ): Promise<IProjection | undefined> => {
+    // If the API is not available, do not project.
+    if (!isAvailable) return;
 
     // Request the permissions.
     const isEnabled: boolean =
@@ -45,13 +44,14 @@ export default () => {
 
     // Open the popup with the correct data.
     return {
-      projectionScreen,
-      proxy: openPopup(projectionScreen!, channel) ?? undefined,
+      screen: projectionScreen,
+      proxy: openPopup(projectionScreen!, id, channel) ?? undefined,
     };
   };
 
   const openPopup = (
     screen: ScreenDetailed,
+    id: string,
     channel: string
   ): WindowProxy | null => {
     // Set the popup configuration.
@@ -62,8 +62,8 @@ export default () => {
       `height=${screen.height}`,
     ].join(",");
 
-    return window.open("/present", channel, features);
+    return window.open(`/present/${id}`, `${channel}-${id}`, features);
   };
 
-  return { isSupported, project };
+  return { isAvailable, project };
 };
