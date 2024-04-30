@@ -30,9 +30,6 @@ export default () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const setPresentationConnection = (connection: any | undefined) => {
     if (connection !== undefined) {
-      // Set the new connection and save the presentation ID
-      localStorage["presId"] = connection.id;
-
       // Monitor the connection state
       connection.onconnect = () => {
         // Register message handler
@@ -48,8 +45,6 @@ export default () => {
       };
 
       connection.onterminate = () => {
-        // Remove presId from localStorage if exists
-        delete localStorage["presId"];
         connection = null;
         console.info("[Presentation] Terminated...");
       };
@@ -88,11 +83,8 @@ export default () => {
     }
   };
 
-  const reconnectPresentation = async () => {
+  const reconnectPresentation = async (presId: string) => {
     try {
-      // Read presId from localStorage if exists
-      const presId = localStorage["presId"];
-
       // Start new presentation.
       let connection = await presentationRequest.reconnect(presId);
 
