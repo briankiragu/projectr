@@ -2,7 +2,7 @@ import { createSignal } from "solid-js";
 
 // Import composables.
 import useWindowManagementAPI from "@composables/apis/useWindowManagementAPI";
-import type { IPresentationPayload } from "@interfaces/projection";
+import type { IProjectionPayload } from "@interfaces/projection";
 
 export default (channel: BroadcastChannel) => {
   // Import the composables.
@@ -26,7 +26,7 @@ export default (channel: BroadcastChannel) => {
     }
   };
 
-  const showProjection = (data: IPresentationPayload | null) => {
+  const showProjection = (data: IProjectionPayload | null) => {
     sendProjectionData(data);
     setIsVisible(true);
   };
@@ -44,7 +44,7 @@ export default (channel: BroadcastChannel) => {
     setIsVisible(true);
   };
 
-  const sendProjectionData = (data: IPresentationPayload | null) => {
+  const sendProjectionData = (data: IProjectionPayload | null) => {
     // Parse the data to a string if not null.
     const processedData = data !== null ? JSON.stringify(data) : null;
 

@@ -12,7 +12,7 @@ import {
 import { createStore } from "solid-js/store";
 
 // Import the interfaces...
-import type { IPresentationPayload } from "@interfaces/projection";
+import type { IProjectionPayload } from "@interfaces/projection";
 import type { IQueueItem } from "@interfaces/queue";
 import type { ISearchItem } from "@interfaces/track";
 
@@ -86,7 +86,7 @@ const App: Component = () => {
   const broadcast = () => {
     if (isVisible()) {
       // Declare a variable to hold the outgoing data.
-      const data: IPresentationPayload | null =
+      const data: IProjectionPayload | null =
         nowPlaying() !== undefined
           ? {
               nowPlaying: nowPlaying(),

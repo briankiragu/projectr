@@ -1,9 +1,7 @@
 import usePermissionsAPI from "@composables/apis/usePermissionsAPI";
 
-type IPresentationPayload = {
-  projectionScreen: ScreenDetailed;
-  proxy: WindowProxy | undefined;
-};
+// Import the interfaces...
+import type { IProjection } from "@interfaces/projection";
 
 export default () => {
   // Check if the API is available.
@@ -16,7 +14,7 @@ export default () => {
   const project = async (
     id: string,
     channel: string
-  ): Promise<IPresentationPayload | undefined> => {
+  ): Promise<IProjection | undefined> => {
     // If the API is not available, do not project.
     if (!isAvailable) return;
 
@@ -46,7 +44,7 @@ export default () => {
 
     // Open the popup with the correct data.
     return {
-      projectionScreen,
+      screen: projectionScreen,
       proxy: openPopup(projectionScreen!, id, channel) ?? undefined,
     };
   };

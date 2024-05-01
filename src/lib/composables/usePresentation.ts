@@ -1,7 +1,7 @@
 import { createSignal } from "solid-js";
 
 // Import interfaces...
-import type { IPresentationPayload } from "@interfaces/projection";
+import type { IProjectionPayload } from "@interfaces/projection";
 
 // Import composables...
 import usePresentationAPI from "@composables/apis/usePresentationAPI";
@@ -39,7 +39,7 @@ export default () => {
     }
   };
 
-  const showPresentation = (data: IPresentationPayload | null) => {
+  const showPresentation = (data: IProjectionPayload | null) => {
     sendPresentationData(data);
     setIsVisible(true);
   };
@@ -58,7 +58,7 @@ export default () => {
     setIsVisible(true);
   };
 
-  const sendPresentationData = (data: IPresentationPayload | null) => {
+  const sendPresentationData = (data: IProjectionPayload | null) => {
     // Parse the data to a string if not null.
     const processedData = data !== null ? JSON.stringify(data) : null;
 
