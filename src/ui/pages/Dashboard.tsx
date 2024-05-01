@@ -47,11 +47,11 @@ const App: Component = () => {
     isAvailable,
     isConnected,
     isVisible,
-    connections,
     openPresentation,
     showPresentation,
     hidePresentation,
     closePresentation,
+    sendData,
     initialisePresentationController,
   } = usePresentation();
   const {
@@ -90,7 +90,7 @@ const App: Component = () => {
           : null;
 
       // Send the message.
-      connections().forEach((conn) => conn?.send(JSON.stringify(data)));
+      sendData(data);
     }
   };
 
@@ -298,7 +298,7 @@ const App: Component = () => {
           {/* Title */}
           <Show
             when={nowPlaying() !== undefined}
-            fallback={<LyricsCardsPreloader />}
+            fallback={<LyricsCardsPreloader canProject={isAvailable()} />}
           >
             <h2 class="mb-3 text-wrap text-4xl font-black uppercase text-tvc-green lg:mb-4 lg:text-6xl">
               {toTitleCase(nowPlaying()!.title)}

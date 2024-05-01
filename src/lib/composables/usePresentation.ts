@@ -10,7 +10,6 @@ export default () => {
   // Import the composables.
   const {
     getAvailability,
-    setPresentationConnection,
     startPresentation,
     terminatePresentation,
     initialisePresentationController,
@@ -30,7 +29,6 @@ export default () => {
     try {
       // Launch the presentation.
       const conn = await startPresentation(Date.now().toString());
-
       // Setup the connection
       setConnections([...connections(), conn]);
 
@@ -67,19 +65,25 @@ export default () => {
     setIsVisible(true);
   };
 
-  return {
-    connections,
+  const sendData = (data: IProjectionPayload | null) => {
+    // Parse the data to a string if not null.
+    const processedData = data !== null ? JSON.stringify(data) : null;
 
-    isVisible,
+    // Send the data over the connections.
+    connections().forEach((conn) => conn?.send(processedData));
+  };
+
+  return {
     isAvailable,
     isConnected,
-
-    setPresentationConnection,
+    isVisible,
 
     openPresentation,
     showPresentation,
     hidePresentation,
     closePresentation,
+
+    sendData,
 
     initialisePresentationController,
     initialisePresentationReceiver,

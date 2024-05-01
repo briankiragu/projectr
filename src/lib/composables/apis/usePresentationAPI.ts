@@ -70,7 +70,7 @@ export default () => {
       connection.onconnect = () => {
         // Register message handler
         connection.onmessage = (message: MessageEvent) => {
-          console.log(`[Presentation] Received message: ${message.data}`);
+          console.info(`[Presentation] Received message: ${message.data}`);
         };
         console.info("[Presentation] Connected...");
       };
@@ -99,7 +99,7 @@ export default () => {
 
     // Listen for connection close.
     conn.onclose = (event: CloseEvent) => {
-      console.log("[Presentation] Connection closed!", event.reason);
+      console.info("[Presentation] Connection closed!", event.reason);
     };
   };
 
