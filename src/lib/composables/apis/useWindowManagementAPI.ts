@@ -14,6 +14,7 @@ export default () => {
   const { requestWindowManagementPermissions } = usePermissionsAPI();
 
   const project = async (
+    id: string,
     channel: string
   ): Promise<IPresentationPayload | undefined> => {
     // If the API is not available, do not project.
@@ -46,12 +47,13 @@ export default () => {
     // Open the popup with the correct data.
     return {
       projectionScreen,
-      proxy: openPopup(projectionScreen!, channel) ?? undefined,
+      proxy: openPopup(projectionScreen!, id, channel) ?? undefined,
     };
   };
 
   const openPopup = (
     screen: ScreenDetailed,
+    id: string,
     channel: string
   ): WindowProxy | null => {
     // Set the popup configuration.
@@ -62,7 +64,7 @@ export default () => {
       `height=${screen.height}`,
     ].join(",");
 
-    return window.open("/present", channel, features);
+    return window.open(`/present/${id}`, `${channel}-${id}`, features);
   };
 
   return { isAvailable, project };

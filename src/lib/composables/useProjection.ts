@@ -16,7 +16,10 @@ export default (channel: BroadcastChannel) => {
   const isConnected = (): boolean => projection() !== undefined;
 
   const openPresentation = async () => {
-    const payload = await project(import.meta.env.VITE_BROADCAST_NAME);
+    const payload = await project(
+      Date.now().toString(),
+      import.meta.env.VITE_BROADCAST_NAME
+    );
 
     if (payload !== undefined) {
       setPresentation(payload.proxy);
