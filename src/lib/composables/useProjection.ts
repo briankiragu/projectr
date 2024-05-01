@@ -8,12 +8,10 @@ export default (channel: BroadcastChannel) => {
   // Import the composables.
   const { isAvailable, project } = useWindowManagementAPI();
 
-  const [projection, setPresentation] = createSignal<WindowProxy | undefined>(
-    undefined
-  );
+  const [presentations, setPresentations] = createSignal<WindowProxy[]>([]);
   const [isVisible, setIsVisible] = createSignal<boolean>(true);
 
-  const isConnected = (): boolean => projection() !== undefined;
+  const isConnected = (): boolean => presentations().length > 0;
 
   const openPresentation = async () => {
     const payload = await project(
@@ -21,8 +19,8 @@ export default (channel: BroadcastChannel) => {
       import.meta.env.VITE_BROADCAST_NAME
     );
 
-    if (payload !== undefined) {
-      setPresentation(payload.proxy);
+    if (payload?.proxy !== undefined) {
+      setPresentations([...presentations(), payload.proxy]);
     }
   };
 
@@ -37,9 +35,9 @@ export default (channel: BroadcastChannel) => {
   };
 
   const closePresentation = () => {
-    projection()?.close();
+    presentations()?.forEach((presentation) => presentation?.close());
 
-    setPresentation(undefined);
+    setPresentations([]);
     setIsVisible(true);
   };
 
@@ -52,7 +50,7 @@ export default (channel: BroadcastChannel) => {
   };
 
   return {
-    projection,
+    presentations,
 
     isAvailable,
     isConnected,
