@@ -12,7 +12,7 @@ import {
 import { createStore } from "solid-js/store";
 
 // Import the interfaces...
-import type { IProjectionPayload } from "@interfaces/projection";
+import type { IPresentationPayload } from "@interfaces/projection";
 import type { IQueueItem } from "@interfaces/queue";
 import type { ISearchItem } from "@interfaces/track";
 
@@ -29,7 +29,7 @@ import LyricsCardsPreloader from "@components/preloaders/LyricsCardsPreloader";
 import LyricsSearch from "@components/search/lyrics/LyricsSearch";
 import OfflineBanner from "@components/banners/OfflineBanner";
 import ScripturesSearchForm from "@components/search/scriptures/ScripturesSearchForm";
-import usePresentation from "@composables/usePresentation";
+import useProjection from "@composables/useProjection";
 
 // Import the lazy-loaded components.
 const LyricsCard = lazy(() => import("@components/cards/LyricsCard"));
@@ -37,6 +37,9 @@ const NowPlayingCard = lazy(() => import("@components/cards/NowPlayingCard"));
 const QueueList = lazy(() => import("@components/queue/QueueList"));
 
 const App: Component = () => {
+  // Create a BroadcastAPI channel.
+  const channel = new BroadcastChannel(import.meta.env.VITE_BROADCAST_NAME);
+
   // Create the signals.
   const [isOffline, setIsOffline] = createSignal<boolean>(false);
   const [isLyrics, setIsLyrics] = createSignal<boolean>(true);
@@ -53,8 +56,7 @@ const App: Component = () => {
     hidePresentation,
     closePresentation,
     sendData,
-    initialisePresentationController,
-  } = usePresentation();
+  } = useProjection(channel);
   const {
     queue,
     nowPlaying,
@@ -82,7 +84,7 @@ const App: Component = () => {
   const broadcast = () => {
     if (isVisible()) {
       // Declare a variable to hold the outgoing data.
-      const data: IProjectionPayload | null =
+      const data: IPresentationPayload | null =
         nowPlaying() !== undefined
           ? {
               nowPlaying: nowPlaying(),
@@ -160,9 +162,6 @@ const App: Component = () => {
   };
 
   onMount(() => {
-    // Initiate the Presentation Controller.
-    initialisePresentationController();
-
     // When the network connectivity is lost.
     window.addEventListener("offline", () => {
       setIsOffline(true);

@@ -24,7 +24,7 @@ const ProjectionButton: Component<{
       onClick={() => props.startHandler()}
     >
       <span class="material-symbols-outlined transition">screen_share</span>
-      <span class="hidden md:inline">Project</span>
+      <span class="hidden md:inline">Launch presentation</span>
     </button>
 
     {/* Stop projection */}
@@ -43,7 +43,6 @@ const ProjectionButton: Component<{
       <span class="material-symbols-outlined transition">
         stop_screen_share
       </span>
-      {/* <span class="hidden font-semibold md:inline">Stop projecting</span> */}
     </button>
   </div>
 );

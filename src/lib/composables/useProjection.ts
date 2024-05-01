@@ -2,63 +2,64 @@ import { createSignal } from "solid-js";
 
 // Import composables.
 import useWindowManagementAPI from "@composables/apis/useWindowManagementAPI";
-import type { IProjectionPayload } from "@interfaces/projection";
+import type { IPresentationPayload } from "@interfaces/projection";
 
 export default (channel: BroadcastChannel) => {
   // Import the composables.
-  const { isSupported, project } = useWindowManagementAPI();
+  const { isAvailable, project } = useWindowManagementAPI();
 
-  const [projectionScreen, setProjectionScreen] = createSignal<
-    ScreenDetailed | undefined
-  >(undefined);
-  const [projection, setProjection] = createSignal<WindowProxy | undefined>(
+  const [projection, setPresentation] = createSignal<WindowProxy | undefined>(
     undefined
   );
   const [isVisible, setIsVisible] = createSignal<boolean>(true);
 
-  const isProjecting = (): boolean => projection() !== undefined;
+  const isConnected = (): boolean => projection() !== undefined;
 
-  const openProjection = async () => {
+  const openPresentation = async () => {
     const payload = await project(import.meta.env.VITE_BROADCAST_NAME);
 
     if (payload !== undefined) {
-      setProjectionScreen(payload.projectionScreen);
-      setProjection(payload.proxy);
+      setPresentation(payload.proxy);
     }
   };
 
-  const expandToFullscreen = async () => {
-    await document.body.requestFullscreen({ screen: projectionScreen() });
-  };
-
-  const showProjection = (data: IProjectionPayload | null) => {
+  const showPresentation = (data: IPresentationPayload | null) => {
     setIsVisible(true);
-    channel.postMessage(JSON.stringify(data));
+    sendData(data);
   };
 
-  const hideProjection = () => {
+  const hidePresentation = () => {
     setIsVisible(false);
-    channel.postMessage(null);
+    sendData(null);
   };
 
-  const closeProjection = () => {
+  const closePresentation = () => {
     projection()?.close();
 
-    setProjection(undefined);
+    setPresentation(undefined);
     setIsVisible(true);
+  };
+
+  const sendData = (data: IPresentationPayload | null) => {
+    // Parse the data to a string if not null.
+    const processedData = data !== null ? JSON.stringify(data) : null;
+
+    // Send the data over the connections.
+    channel.postMessage(processedData);
   };
 
   return {
     projection,
+
+    isAvailable,
+    isConnected,
     isVisible,
 
-    isSupported,
-    isProjecting,
+    openPresentation,
+    showPresentation,
+    hidePresentation,
+    closePresentation,
 
-    openProjection,
-    expandToFullscreen,
-    showProjection,
-    hideProjection,
-    closeProjection,
+    sendData,
   };
 };

@@ -1,13 +1,13 @@
 import usePermissionsAPI from "@composables/apis/usePermissionsAPI";
 
-type IProjectionPayload = {
+type IPresentationPayload = {
   projectionScreen: ScreenDetailed;
   proxy: WindowProxy | undefined;
 };
 
 export default () => {
-  // Check if the API is supported.
-  const isSupported = () =>
+  // Check if the API is available.
+  const isAvailable = () =>
     "getScreenDetails" in window || "getScreens" in window;
 
   // Import the composable methods.
@@ -15,9 +15,9 @@ export default () => {
 
   const project = async (
     channel: string
-  ): Promise<IProjectionPayload | undefined> => {
-    // If the API is not supported, do not project.
-    if (!isSupported) return;
+  ): Promise<IPresentationPayload | undefined> => {
+    // If the API is not available, do not project.
+    if (!isAvailable) return;
 
     // Request the permissions.
     const isEnabled: boolean =
@@ -65,5 +65,5 @@ export default () => {
     return window.open("/present", channel, features);
   };
 
-  return { isSupported, project };
+  return { isAvailable, project };
 };

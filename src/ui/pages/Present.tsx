@@ -5,12 +5,13 @@ import type { IQueueItem } from "@interfaces/queue";
 
 // Import the composables...
 import useFormatting from "@composables/useFormatting";
-import usePresentation from "@composables/usePresentation";
 
 const Present: Component = () => {
+  // Create a BroadcastAPI channel.
+  const channel = new BroadcastChannel(import.meta.env.VITE_BROADCAST_NAME);
+
   // Import the composables.
   const { toTitleCase } = useFormatting();
-  const { initialisePresentationReceiver } = usePresentation();
 
   // To hold the data from the broadcast channel.
   const [nowPlaying, setNowPlaying] = createSignal<IQueueItem | undefined>();
@@ -19,17 +20,16 @@ const Present: Component = () => {
   const currentVerse = (): string[] | undefined =>
     nowPlaying()?.content.at(currentVerseIndex());
 
-  const updatePresentation = (message: MessageEvent) => {
-    // When a message is relayed on the connection, extract it.
-    const data = JSON.parse(message.data);
-
-    setNowPlaying(data !== null ? data["nowPlaying"] : undefined);
-    setCurrentVerseIndex(data !== null ? data["currentVerseIndex"] : undefined);
-  };
-
-  // Initalise the Presentaition API receiver.
   onMount(() => {
-    initialisePresentationReceiver(updatePresentation);
+    // When a message relays on the channel.
+    channel.addEventListener("message", (e: Event) => {
+      const data = JSON.parse((e as MessageEvent).data);
+
+      setNowPlaying(data !== null ? data["nowPlaying"] : undefined);
+      setCurrentVerseIndex(
+        data !== null ? data["currentVerseIndex"] : undefined
+      );
+    });
   });
 
   return (

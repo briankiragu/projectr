@@ -1,5 +1,5 @@
 import useProjection from "@composables/useProjection";
-import type { IProjectionPayload } from "@interfaces/projection";
+import type { IPresentationPayload } from "@interfaces/projection";
 import { describe } from "vitest";
 
 describe("useProjection", () => {
@@ -13,7 +13,7 @@ describe("useProjection", () => {
 
   test("it shows the projection", () => {
     // Prepare the data.
-    const data: IProjectionPayload = {
+    const data: IPresentationPayload = {
       currentVerseIndex: 0,
       nowPlaying: {
         qid: Date.now(),

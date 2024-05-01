@@ -1,6 +1,6 @@
 import type { IQueueItem } from "@interfaces/queue";
 
-export type IProjectionPayload = {
+export type IPresentationPayload = {
   nowPlaying: IQueueItem | undefined;
   currentVerseIndex: number;
 };
