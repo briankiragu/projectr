@@ -1,26 +1,12 @@
-import { Show, createSignal, onMount } from "solid-js";
+import { Show } from "solid-js";
 import { type Component } from "solid-js";
 
-const OfflineBanner: Component = () => {
-  const [isOffline, setIsOffline] = createSignal<boolean>(false);
-
-  onMount(() => {
-    window.addEventListener("offline", () => {
-      setIsOffline(true);
-    });
-
-    window.addEventListener("online", () => {
-      setIsOffline(false);
-    });
-  });
-
-  return (
-    <Show when={isOffline()}>
-      <div class="w-full bg-black py-1.5 text-center text-sm text-white transition">
-        You are currently offline...
-      </div>
-    </Show>
-  );
-};
+const OfflineBanner: Component<{ isOffline: boolean }> = (props) => (
+  <Show when={props.isOffline}>
+    <div class="sticky top-0 z-30 flex w-full items-center justify-center gap-3 bg-black py-1.5 text-center text-sm font-medium text-white transition">
+      <span> You are currently offline.</span>
+    </div>
+  </Show>
+);
 
 export default OfflineBanner;

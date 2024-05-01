@@ -9,64 +9,74 @@ import usePresentationAPI from "@composables/apis/usePresentationAPI";
 export default () => {
   // Import the composables.
   const {
-    isAvailable,
-    setPresentationConnection,
+    getAvailability,
     startPresentation,
     terminatePresentation,
     initialisePresentationController,
     initialisePresentationReceiver,
   } = usePresentationAPI();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [connection, setConnection] = createSignal<any | undefined>(undefined);
-  const [isConnected, setIsConnected] = createSignal<boolean>(false);
+  const [isAvailable, setIsAvailable] = createSignal<boolean>(false);
   const [isVisible, setIsVisible] = createSignal<boolean>(true);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [connections, setConnections] = createSignal<(any | undefined)[]>([]);
+
+  // Get and set the availability.
+  getAvailability(setIsAvailable);
+
+  const isConnected = (): boolean =>
+    connections().some((conn) => conn !== undefined);
 
   const openPresentation = async () => {
     try {
       // Launch the presentation.
-      const conn = await startPresentation();
+      const conn = await startPresentation(Date.now().toString());
 
       // Setup the connection
-      setConnection(conn);
-
-      // Set the connected state.
-      setIsConnected(true);
+      setConnections([...connections(), conn]);
     } catch (e) {
       console.error(e);
     }
   };
 
   const showPresentation = (data: IProjectionPayload | null) => {
-    connection()?.send(JSON.stringify(data));
+    sendPresentationData(data);
     setIsVisible(true);
   };
 
   const hidePresentation = () => {
-    connection()?.send(null);
     setIsVisible(false);
+    sendPresentationData(null);
   };
 
   const closePresentation = () => {
-    terminatePresentation(connection());
-    setConnection(undefined);
-    setIsConnected(false);
+    // Close the connections.
+    connections().forEach((conn) => terminatePresentation(conn));
+
+    // Clear the signals.
+    setConnections([]);
     setIsVisible(true);
   };
 
-  return {
-    connection,
+  const sendPresentationData = (data: IProjectionPayload | null) => {
+    // Parse the data to a string if not null.
+    const processedData = data !== null ? JSON.stringify(data) : null;
 
-    isVisible,
+    // Send the data over the connections.
+    connections().forEach((conn) => conn?.send(processedData));
+  };
+
+  return {
     isAvailable,
     isConnected,
-
-    setPresentationConnection,
+    isVisible,
 
     openPresentation,
     showPresentation,
     hidePresentation,
     closePresentation,
+
+    sendPresentationData,
 
     initialisePresentationController,
     initialisePresentationReceiver,

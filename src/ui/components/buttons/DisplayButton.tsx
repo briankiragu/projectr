@@ -23,7 +23,7 @@ const DisplayButton: Component<{
     <span class="material-symbols-outlined transition">
       {props.isDisplaying ? "visibility_off" : "visibility"}
     </span>
-    <span class="hidden font-semibold md:inline">
+    <span class="hidden w-24 font-semibold md:inline">
       {props.isDisplaying ? "Hide lyrics" : "Show lyrics"}
     </span>
   </button>

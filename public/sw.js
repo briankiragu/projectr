@@ -31,6 +31,9 @@ const appShellFiles = [
   "/images/tvc-logo.webp",
 
   "/images/musixmatch-logo.webp",
+
+  "/images/failed.png",
+  "/images/waiting.png",
 ];
 
 self.addEventListener("install", (e) => {
@@ -75,21 +78,3 @@ self.addEventListener("fetch", (e) => {
     })
   );
 });
-
-/* State-while-revalidate cache */
-// self.addEventListener("fetch", (e) => {
-//   e.respondWith(
-//     caches.open(cacheName).then(async (cache) => {
-//       console.info(`[Service Worker] Fetching resource: ${e.request.url}...`);
-//
-//       const cachedResponse = await cache.match(e.request);
-//       const fetchedResponse = fetch(e.request).then((networkResponse) => {
-//         cache.put(e.request, networkResponse.clone());
-//
-//         return networkResponse;
-//       });
-//
-//       return cachedResponse || fetchedResponse;
-//     })
-//   );
-// });
