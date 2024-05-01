@@ -14,12 +14,14 @@ export default (channel: BroadcastChannel) => {
   const isConnected = (): boolean => presentations().length > 0;
 
   const openPresentation = async () => {
+    // Launch a presentation instance.
     const payload = await project(
       Date.now().toString(),
       import.meta.env.VITE_BROADCAST_NAME
     );
 
     if (payload?.proxy !== undefined) {
+      // Save the Window proxies in the state.
       setPresentations([...presentations(), payload.proxy]);
     }
   };
@@ -35,6 +37,7 @@ export default (channel: BroadcastChannel) => {
   };
 
   const closePresentation = () => {
+    // Close each proxy.
     presentations()?.forEach((presentation) => presentation?.close());
 
     setPresentations([]);
@@ -50,8 +53,6 @@ export default (channel: BroadcastChannel) => {
   };
 
   return {
-    presentations,
-
     isAvailable,
     isConnected,
     isVisible,
