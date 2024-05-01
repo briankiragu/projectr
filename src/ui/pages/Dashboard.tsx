@@ -38,6 +38,7 @@ const QueueList = lazy(() => import("@components/queue/QueueList"));
 
 const App: Component = () => {
   // Create the signals.
+  const [isOffline, setIsOffline] = createSignal<boolean>(false);
   const [isLyrics, setIsLyrics] = createSignal<boolean>(true);
   const [results, setResults] = createStore<ISearchItem[]>([]);
 
@@ -162,6 +163,16 @@ const App: Component = () => {
     // Initiate the Presentation Controller.
     initialisePresentationController();
 
+    // When the network connectivity is lost.
+    window.addEventListener("offline", () => {
+      setIsOffline(true);
+    });
+
+    // When the network connectivity is established.
+    window.addEventListener("online", () => {
+      setIsOffline(false);
+    });
+
     window.addEventListener("keydown", (e: KeyboardEvent) => {
       // Start/stop projection.
       if (e.shiftKey && e.code === "KeyP")
@@ -194,7 +205,7 @@ const App: Component = () => {
   return (
     <>
       {/* Offline Banner */}
-      <OfflineBanner />
+      <OfflineBanner isOffline={isOffline()} />
 
       {/* Main container */}
       <div class="grid gap-5 p-6 md:grid-cols-3 lg:grid-cols-4">
@@ -285,14 +296,14 @@ const App: Component = () => {
 
         {/* Live edit */}
         <Show when={isEditing()}>
-          <aside class="mb-12 rounded-lg bg-gray-100 p-3 transition-transform lg:mb-20">
+          <aside class="mb-12 rounded-lg bg-gray-100 p-3 transition lg:mb-20">
             <EditQueueItemForm item={nowPlaying()!} handler={editLyrics} />
           </aside>
         </Show>
 
         {/* View Pane */}
         <main
-          class="mb-16 flex flex-col rounded-lg transition-transform md:col-start-2 md:col-end-5 lg:col-end-6 lg:mb-20"
+          class="mb-20 flex flex-col rounded-lg transition-transform md:col-start-2 md:col-end-5 lg:col-end-6 lg:mb-20"
           classList={{ "lg:col-start-3": isEditing() }}
         >
           {/* Title */}
@@ -321,15 +332,13 @@ const App: Component = () => {
           {/* Controls */}
           <footer class="fixed bottom-0 left-0 w-full bg-white p-3">
             <div class="flex min-h-16 flex-wrap justify-center gap-4 rounded-lg bg-tvc-green p-4 text-gray-700 md:justify-between md:gap-4 lg:justify-center">
-              <Show when={isAvailable()}>
-                <ProjectionButton
-                  title="Shift + P"
-                  isAvailable={isAvailable()}
-                  isProjecting={isConnected()}
-                  startHandler={openPresentation}
-                  stopHandler={closePresentation}
-                />
-              </Show>
+              <ProjectionButton
+                title="Shift + P"
+                isAvailable={isAvailable()}
+                isProjecting={isConnected()}
+                startHandler={openPresentation}
+                stopHandler={closePresentation}
+              />
               <DisplayButton
                 title="Shift + S"
                 isEnabled={isConnected()}
