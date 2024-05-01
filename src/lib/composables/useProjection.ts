@@ -8,12 +8,12 @@ export default (channel: BroadcastChannel) => {
   // Import the composables.
   const { isAvailable, project } = useWindowManagementAPI();
 
-  const [presentations, setPresentations] = createSignal<WindowProxy[]>([]);
+  const [presentations, setProjections] = createSignal<WindowProxy[]>([]);
   const [isVisible, setIsVisible] = createSignal<boolean>(true);
 
   const isConnected = (): boolean => presentations().length > 0;
 
-  const openPresentation = async () => {
+  const openProjection = async () => {
     // Launch a presentation instance.
     const payload = await project(
       Date.now().toString(),
@@ -22,29 +22,29 @@ export default (channel: BroadcastChannel) => {
 
     if (payload?.proxy !== undefined) {
       // Save the Window proxies in the state.
-      setPresentations([...presentations(), payload.proxy]);
+      setProjections([...presentations(), payload.proxy]);
     }
   };
 
-  const showPresentation = (data: IPresentationPayload | null) => {
+  const showProjection = (data: IPresentationPayload | null) => {
+    sendProjectionData(data);
     setIsVisible(true);
-    sendData(data);
   };
 
-  const hidePresentation = () => {
+  const hideProjection = () => {
     setIsVisible(false);
-    sendData(null);
+    sendProjectionData(null);
   };
 
-  const closePresentation = () => {
+  const closeProjection = () => {
     // Close each proxy.
     presentations()?.forEach((presentation) => presentation?.close());
 
-    setPresentations([]);
+    setProjections([]);
     setIsVisible(true);
   };
 
-  const sendData = (data: IPresentationPayload | null) => {
+  const sendProjectionData = (data: IPresentationPayload | null) => {
     // Parse the data to a string if not null.
     const processedData = data !== null ? JSON.stringify(data) : null;
 
@@ -52,16 +52,25 @@ export default (channel: BroadcastChannel) => {
     channel.postMessage(processedData);
   };
 
+  const initialiseProjectionReceiver = (
+    callback: (event: MessageEvent) => void
+  ) => {
+    // When a message relays on the channel.
+    channel.addEventListener("message", callback);
+  };
+
   return {
     isAvailable,
     isConnected,
     isVisible,
 
-    openPresentation,
-    showPresentation,
-    hidePresentation,
-    closePresentation,
+    openProjection,
+    showProjection,
+    hideProjection,
+    closeProjection,
 
-    sendData,
+    sendProjectionData,
+
+    initialiseProjectionReceiver,
   };
 };

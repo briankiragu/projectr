@@ -17,7 +17,6 @@ export default () => {
   } = usePresentationAPI();
 
   const [isAvailable, setIsAvailable] = createSignal<boolean>(false);
-  const [isConnected, setIsConnected] = createSignal<boolean>(false);
   const [isVisible, setIsVisible] = createSignal<boolean>(true);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [connections, setConnections] = createSignal<(any | undefined)[]>([]);
@@ -25,34 +24,29 @@ export default () => {
   // Get and set the availability.
   getAvailability(setIsAvailable);
 
+  const isConnected = (): boolean =>
+    connections().some((conn) => conn !== undefined);
+
   const openPresentation = async () => {
     try {
       // Launch the presentation.
       const conn = await startPresentation(Date.now().toString());
+
       // Setup the connection
       setConnections([...connections(), conn]);
-
-      // Set the connected state.
-      setIsConnected(connections().some((conn) => conn !== undefined));
     } catch (e) {
       console.error(e);
     }
   };
 
   const showPresentation = (data: IPresentationPayload | null) => {
-    // Send the data over the connections.
-    connections().forEach((conn) => conn?.send(JSON.stringify(data)));
-
-    // Clear the signals.
+    sendPresentationData(data);
     setIsVisible(true);
   };
 
   const hidePresentation = () => {
-    // Send the data over the connections.
-    connections().forEach((conn) => conn?.send(null));
-
-    // Clear the signals.
     setIsVisible(false);
+    sendPresentationData(null);
   };
 
   const closePresentation = () => {
@@ -61,11 +55,10 @@ export default () => {
 
     // Clear the signals.
     setConnections([]);
-    setIsConnected(false);
     setIsVisible(true);
   };
 
-  const sendData = (data: IPresentationPayload | null) => {
+  const sendPresentationData = (data: IPresentationPayload | null) => {
     // Parse the data to a string if not null.
     const processedData = data !== null ? JSON.stringify(data) : null;
 
@@ -83,7 +76,7 @@ export default () => {
     hidePresentation,
     closePresentation,
 
-    sendData,
+    sendPresentationData,
 
     initialisePresentationController,
     initialisePresentationReceiver,

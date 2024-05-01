@@ -5,6 +5,8 @@ import type { IQueueItem } from "@interfaces/queue";
 
 // Import the composables...
 import useFormatting from "@composables/useFormatting";
+import useProjection from "@composables/useProjection";
+import usePresentation from "@composables/usePresentation";
 
 const Present: Component = () => {
   // Create a BroadcastAPI channel.
@@ -12,6 +14,8 @@ const Present: Component = () => {
 
   // Import the composables.
   const { toTitleCase } = useFormatting();
+  const { initialisePresentationReceiver } = usePresentation();
+  const { initialiseProjectionReceiver } = useProjection(channel);
 
   // To hold the data from the broadcast channel.
   const [nowPlaying, setNowPlaying] = createSignal<IQueueItem | undefined>();
@@ -20,16 +24,17 @@ const Present: Component = () => {
   const currentVerse = (): string[] | undefined =>
     nowPlaying()?.content.at(currentVerseIndex());
 
-  onMount(() => {
-    // When a message relays on the channel.
-    channel.addEventListener("message", (e: Event) => {
-      const data = JSON.parse((e as MessageEvent).data);
+  const updatePresentation = (message: MessageEvent) => {
+    // When a message is relayed on the connection, extract it.
+    const data = JSON.parse(message.data);
 
-      setNowPlaying(data !== null ? data["nowPlaying"] : undefined);
-      setCurrentVerseIndex(
-        data !== null ? data["currentVerseIndex"] : undefined
-      );
-    });
+    setNowPlaying(data !== null ? data["nowPlaying"] : undefined);
+    setCurrentVerseIndex(data !== null ? data["currentVerseIndex"] : undefined);
+  };
+
+  onMount(() => {
+    initialisePresentationReceiver(updatePresentation);
+    initialiseProjectionReceiver(updatePresentation);
   });
 
   return (
