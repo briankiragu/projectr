@@ -7,12 +7,12 @@ const ProjectionButton: Component<{
   startHandler: () => void;
   stopHandler: () => void;
 }> = (props) => (
-  <div class="relative flex w-20 gap-0.5 lg:w-[18.5rem]">
+  <div class="relative flex w-28 gap-0.5 lg:w-[18.5rem]">
     {/* Start projection */}
     <button
       type="button"
       title={props.title}
-      class="flex cursor-pointer gap-3 p-2 font-semibold transition-colors hover:bg-teal-700 hover:text-teal-50 focus:outline-none md:h-auto md:w-auto md:px-6"
+      class="flex cursor-pointer gap-3 p-2 px-3 font-semibold transition-colors hover:bg-teal-700 hover:text-teal-50 focus:outline-none md:h-auto md:w-auto md:px-6"
       classList={{
         "bg-teal-300": props.isAvailable,
         "hover:bg-transparent disabled:text-gray-300 hover:cursor-not-allowed":
@@ -31,7 +31,7 @@ const ProjectionButton: Component<{
     <button
       type="button"
       title={props.title}
-      class="flex cursor-pointer gap-3 rounded-r-full p-2 font-semibold transition focus:outline-none md:h-auto md:w-auto md:px-3"
+      class="flex cursor-pointer gap-3 rounded-r-full p-2 px-3 font-semibold transition focus:outline-none md:h-auto md:w-auto md:px-3"
       classList={{
         "bg-teal-700 text-teal-50 hover:bg-pink-700 hover:text-pink-50":
           props.isProjecting,
