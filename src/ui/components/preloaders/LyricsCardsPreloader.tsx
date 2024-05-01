@@ -9,13 +9,13 @@ const LyricsCardsPreloader: Component<{ canProject: boolean }> = (props) => {
         fallback={
           <div class="flex flex-col items-center justify-center">
             <img src="/images/failed.png" class="h-auto w-44 opacity-90" />
-            <span>Failed to identify a second screen</span>
+            <span>Failed to identify/project onto a second screen.</span>
           </div>
         }
       >
         <div class="flex flex-col items-center justify-center">
           <img src="/images/waiting.png" class="h-auto w-32 opacity-90" />
-          <span class="text-tvc-orange">No track is currently playing...</span>
+          <span class="text-green-700">No track is currently playing</span>
         </div>
       </Show>
     </div>

@@ -7,7 +7,7 @@ const ProjectionButton: Component<{
   startHandler: () => void;
   stopHandler: () => void;
 }> = (props) => (
-  <div class="relative flex gap-0.5">
+  <div class="relative flex w-20 gap-0.5 lg:w-[18.5rem]">
     {/* Start projection */}
     <button
       type="button"
