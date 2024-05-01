@@ -29,7 +29,7 @@ export default () => {
   const openPresentation = async () => {
     try {
       // Launch the presentation.
-      const conn = await startPresentation();
+      const conn = await startPresentation(Date.now().toString());
 
       // Setup the connection
       setConnections([...connections(), conn]);

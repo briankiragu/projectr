@@ -2,11 +2,14 @@
 // @ts-nocheck
 
 export default () => {
-  // Prepare the request with the presentation URLs.
-  const presentationRequest = new PresentationRequest(["present"]);
+  // Define the default request.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const defaultRequest: any = new PresentationRequest([`present`]);
+  defaultRequest.onconnectionavailable = ({ conn }) =>
+    setPresentationConnection(conn);
 
   const getAvailability = (callback: (value: boolean) => void): void =>
-    presentationRequest
+    defaultRequest
       .getAvailability()
       .then((availability) => {
         // availability.value may be kept up-to-date by the controlling UA
@@ -26,6 +29,39 @@ export default () => {
         // one could implement a third state for the button.
         callback(true);
       });
+
+  // Prepare the request with the presentation URLs.
+  const getPresentationRequest = (id: string) =>
+    new PresentationRequest([`present/${id}`]);
+
+  const startPresentation = async (id: string) => {
+    try {
+      // Create a PresentationRequest
+      const presentationRequest = getPresentationRequest(id);
+
+      // Start new presentation.
+      let connection = await presentationRequest.start();
+
+      // The connection to the presentation will be passed on success.
+      connection = setPresentationConnection(connection);
+
+      // Return the connection
+      return connection;
+    } catch (e: Error) {
+      // Otherwise, the user canceled the selection dialog or no screens were found.
+      throw new Error(`[Presentation] Failed to start with reason: ${e}`);
+    }
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const closePresentation = (connection: any | undefined) => {
+    connection?.close();
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const terminatePresentation = (connection: any | undefined) => {
+    connection?.terminate();
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const setPresentationConnection = (connection: any | undefined) => {
@@ -67,52 +103,9 @@ export default () => {
     };
   };
 
-  const startPresentation = async () => {
-    try {
-      // Start new presentation.
-      let connection = await presentationRequest.start();
-
-      // The connection to the presentation will be passed on success.
-      connection = setPresentationConnection(connection);
-
-      // Return the connection
-      return connection;
-    } catch (e: Error) {
-      // Otherwise, the user canceled the selection dialog or no screens were found.
-      throw new Error(`[Presentation] Failed to start with reason: ${e}`);
-    }
-  };
-
-  const reconnectPresentation = async (presId: string) => {
-    try {
-      // Start new presentation.
-      let connection = await presentationRequest.reconnect(presId);
-
-      // The connection to the presentation will be passed on success.
-      connection = setPresentationConnection(connection);
-
-      // Return the connection
-      return connection;
-    } catch {
-      // No connection found for presUrl and presId, or an error occurred.
-      throw new Error(`[Presentation] Failed to reconnect with reason: ${e}`);
-    }
-  };
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const closePresentation = (connection: any | undefined) => {
-    connection?.close();
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const terminatePresentation = (connection: any | undefined) => {
-    connection?.terminate();
-  };
-
   const initialisePresentationController = () => {
-    navigator.presentation.defaultRequest = presentationRequest;
-    navigator.presentation.defaultRequest.onconnectionavailable = ({ conn }) =>
-      setPresentationConnection(conn);
+    navigator.presentation.defaultRequest = defaultRequest;
   };
 
   const initialisePresentationReceiver = (
@@ -126,16 +119,14 @@ export default () => {
   };
 
   return {
-    presentationRequest,
-
+    getPresentationRequest,
     getAvailability,
 
-    setPresentationConnection,
-
     startPresentation,
-    reconnectPresentation,
     terminatePresentation,
     closePresentation,
+
+    setPresentationConnection,
 
     initialisePresentationController,
     initialisePresentationReceiver,
