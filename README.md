@@ -26,8 +26,8 @@ To get a good launching point for working on this project, follow the instructio
 
 > [!CAUTION]
 > There are steps labelled as **[Recommended]**. These can be skipped. However,
-> following them will **ignificantly** improve your developer experience and we
-> highly recommend following them.
+> following them will **significantly** improve your developer experience
+> and we highly recommend following them.
 
 ## Prerequisites
 
