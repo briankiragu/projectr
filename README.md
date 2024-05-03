@@ -14,18 +14,19 @@ to project/cast song lyrics and/or Bible verses to an audience without distruput
 - Offline caching of search results.
 - _(Coming soon)_ Support for wireless casting.
 
+---
+
 > [!NOTE]
 > For more information on this project,
-> consult our [wiki](https://github.com/briankiragu/projectr/wiki)
-> to get started.
+> consult our [wiki](https://github.com/briankiragu/projectr/wiki).
 
 # Getting started locally
 
-To get a good launching point for working on this project, follow the instructions in this README **in the order they appear in**.
+To get a good launching point for working on this project, follow the instructions in this README **in the order they appear**.
 
 > [!CAUTION]
-> There are steps labelled as [Recommended]. These can be skipped. However,
-> following them will significantly improve your developer experience and we
+> There are steps labelled as **[Recommended]**. These can be skipped. However,
+> following them will **ignificantly** improve your developer experience and we
 > highly recommend following them.
 
 ## Prerequisites
@@ -35,7 +36,7 @@ To get a good launching point for working on this project, follow the instructio
 Ensure you have the latest version **_(LTS)_** of
 [NodeJS](https://nodejs.org/download/) installed on your machine.
 
-#### PNPM [Mandatory]
+### PNPM [Mandatory]
 
 This project uses [PNPM](https://pnpm.io/) as its dependency manager. Install it on your local
 machine to manage all the packages in the `package.json` as well as run the
@@ -62,14 +63,14 @@ installed and running these image to access test data during development.
 
 After cloning the repository to your local machine, follow these steps:
 
-1. [Mandatory] Create a copy of the `.env.example` and rename it to `.env`.
+1. **[Mandatory]** Create a copy of the `.env.example` and rename it to `.env`.
    **It is important that you maintain the names of the keys**.
-2. [Mandatory] Fill in the values of the `.env` file with your own custom
+2. **[Mandatory]** Fill in the values of the `.env` file with your own custom
    values. If unsure which values to use, consult the documentation
    of each container image provided above.
-3. [Recommended] In the folder `/docker/meilisync/`, create a copy of
+3. **[Recommended]** In the folder `/docker/meilisync/`, create a copy of
    `config.example.yml` in the same folder and rename it to `config.yml`.
-4. [Recommended] Fill in the missing values of the `config.yml` with the
+4. **[Recommended]** Fill in the missing values of the `config.yml` with the
    corresponding values in your `.env`.
 
 ## Starting up the application
