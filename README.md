@@ -14,18 +14,19 @@ to project/cast song lyrics and/or Bible verses to an audience without distruput
 - Offline caching of search results.
 - _(Coming soon)_ Support for wireless casting.
 
+> [!NOTE]
+> For more information on this project,
+> consult our [wiki](https://github.com/briankiragu/projectr/wiki)
+> to get started.
+
 # Getting started locally
 
-To get a good launching point for working on this project, follow the instructions in this Wiki **in the order they appear in**.
+To get a good launching point for working on this project, follow the instructions in this README **in the order they appear in**.
 
----
-
-> [!TIP]
+> [!CAUTION]
 > There are steps labelled as [Recommended]. These can be skipped. However,
 > following them will significantly improve your developer experience and we
 > highly recommend following them.
-
----
 
 ## Prerequisites
 
@@ -93,7 +94,7 @@ To manage the scripts in the `package.json`, use the following commands:
 
 - Development: `pnpm run dev`
 - Unit Testing: `pnpm run test`
-- Unit Tesiting (With coverage): `pnpm run test:coverage`
+- Unit Testing (With coverage): `pnpm run test:coverage`
 - Preview: `pnpm run build && pnpm run preview`
 
 ## Viewing the application
