@@ -1,4 +1,4 @@
-import { type Component, Show, For, onMount, createEffect } from "solid-js";
+import { type Component, Show, For, onMount } from "solid-js";
 
 // Import the interfaces...
 import type { IProjectionPayload } from "@interfaces/projection";
