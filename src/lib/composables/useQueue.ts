@@ -15,10 +15,14 @@ export default () => {
   // First item in queue.
   const peek = () => queue.at(0);
 
+  // Create the derived signals.
+  const fullQueue = (): IQueueItem[] =>
+    [nowPlaying(), ...queue].filter((val) => val) as IQueueItem[];
+
   // Enqueue.
-  const enqueue = (track: IQueueItem) => {
+  const enqueue = (...items: IQueueItem[]) => {
     // Create a random ID for the track and add it to the queue.
-    setQueue([...queue, track]);
+    setQueue([...queue, ...items]);
   };
 
   // Dequeue.
@@ -60,8 +64,9 @@ export default () => {
   };
 
   return {
-    queue,
     nowPlaying,
+    queue,
+    fullQueue,
     isEditing,
     currentVerseIndex,
 

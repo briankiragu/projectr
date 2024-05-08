@@ -6,6 +6,6 @@ export type IProjection = {
 };
 
 export type IProjectionPayload = {
-  nowPlaying: IQueueItem | undefined;
+  queue: IQueueItem[];
   currentVerseIndex: number;
 };

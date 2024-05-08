@@ -41,11 +41,6 @@ const App: Component = () => {
   // Create a BroadcastAPI channel.
   const channel = new BroadcastChannel(import.meta.env.VITE_BROADCAST_NAME);
 
-  // Create the signals.
-  const [isOffline, setIsOffline] = createSignal<boolean>(false);
-  const [isLyrics, setIsLyrics] = createSignal<boolean>(true);
-  const [results, setResults] = createStore<ISearchItem[]>([]);
-
   // Import the composables.
   const { toTitleCase } = useFormatting();
   const { sendPresentationData } = usePresentation();
@@ -60,8 +55,9 @@ const App: Component = () => {
     sendProjectionData,
   } = useProjection(channel);
   const {
-    queue,
     nowPlaying,
+    queue,
+    fullQueue,
     currentVerseIndex,
     isEditing,
 
@@ -82,17 +78,23 @@ const App: Component = () => {
     goToVerse,
   } = useQueue();
 
+  // Create the signals.
+  const [isOffline, setIsOffline] = createSignal<boolean>(false);
+  const [isLyrics, setIsLyrics] = createSignal<boolean>(true);
+  const [results, setResults] = createStore<ISearchItem[]>([]);
+
+  // Create the derived signals.
+  const projectionPayload = (): IProjectionPayload => ({
+    queue: fullQueue(),
+    currentVerseIndex: currentVerseIndex(),
+  });
+
   // Send the data over the channel.
   const broadcast = () => {
     if (isVisible()) {
       // Declare a variable to hold the outgoing data.
       const data: IProjectionPayload | null =
-        nowPlaying() !== undefined
-          ? {
-              nowPlaying: nowPlaying(),
-              currentVerseIndex: currentVerseIndex(),
-            }
-          : null;
+        nowPlaying() !== undefined ? projectionPayload() : null;
 
       // Send the data.
       sendPresentationData(data);
@@ -182,12 +184,7 @@ const App: Component = () => {
 
       // Show/hide content.
       if (e.shiftKey && e.code === "KeyS")
-        isVisible()
-          ? hideProjection()
-          : showProjection({
-              nowPlaying: nowPlaying(),
-              currentVerseIndex: currentVerseIndex(),
-            });
+        isVisible() ? hideProjection() : showProjection(projectionPayload());
 
       // Playback events.
       if (e.code === "ArrowLeft") goToPreviousVerse();
@@ -345,12 +342,7 @@ const App: Component = () => {
                 title="Shift + S"
                 isEnabled={isConnected()}
                 isDisplaying={isVisible()}
-                showHandler={() =>
-                  showProjection({
-                    nowPlaying: nowPlaying(),
-                    currentVerseIndex: currentVerseIndex(),
-                  })
-                }
+                showHandler={() => showProjection(projectionPayload())}
                 hideHandler={hideProjection}
               />
               <PlaybackButton
