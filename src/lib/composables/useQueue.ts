@@ -1,7 +1,8 @@
 import { createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 
-// Import the interfaces.
+// Import the interfaces...
+import type { IProjectionPayload } from "@interfaces/projection";
 import type { IQueueItem } from "@interfaces/queue";
 
 export default () => {
@@ -18,6 +19,12 @@ export default () => {
   // Create the derived signals.
   const fullQueue = (): IQueueItem[] =>
     [nowPlaying(), ...queue].filter((val) => val) as IQueueItem[];
+
+  // Create the derived signals.
+  const projectionPayload = (): IProjectionPayload => ({
+    queue: fullQueue(),
+    currentVerseIndex: currentVerseIndex(),
+  });
 
   // Enqueue.
   const enqueue = (...items: IQueueItem[]) => {
@@ -67,6 +74,7 @@ export default () => {
     nowPlaying,
     queue,
     fullQueue,
+    projectionPayload,
     isEditing,
     currentVerseIndex,
 

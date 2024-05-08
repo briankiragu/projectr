@@ -53,11 +53,12 @@ const App: Component = () => {
     hideProjection,
     closeProjection,
     sendProjectionData,
+    initialiseProjectionReceiver,
   } = useProjection(channel);
   const {
     nowPlaying,
     queue,
-    fullQueue,
+    projectionPayload,
     currentVerseIndex,
     isEditing,
 
@@ -82,12 +83,6 @@ const App: Component = () => {
   const [isOffline, setIsOffline] = createSignal<boolean>(false);
   const [isLyrics, setIsLyrics] = createSignal<boolean>(true);
   const [results, setResults] = createStore<ISearchItem[]>([]);
-
-  // Create the derived signals.
-  const projectionPayload = (): IProjectionPayload => ({
-    queue: fullQueue(),
-    currentVerseIndex: currentVerseIndex(),
-  });
 
   // Send the data over the channel.
   const broadcast = () => {
@@ -166,7 +161,26 @@ const App: Component = () => {
     broadcast();
   };
 
+  const updatePresentation = (message: MessageEvent) => {
+    // When a message is relayed on the connection, extract it.
+    const data: IProjectionPayload | null = JSON.parse(message.data);
+
+    // Clear the queue, reset the index and disable editing.
+    flush();
+    setCurrentVerseIndex(0);
+    setIsEditing(false);
+
+    // Set the queue and current index.
+    if (data !== null) {
+      enqueue(...data.queue);
+      setCurrentVerseIndex(data.currentVerseIndex);
+    }
+  };
+
   onMount(() => {
+    // When the user makes an action whilst on the projection page
+    initialiseProjectionReceiver(updatePresentation);
+
     // When the network connectivity is lost.
     window.addEventListener("offline", () => {
       setIsOffline(true);
@@ -177,6 +191,7 @@ const App: Component = () => {
       setIsOffline(false);
     });
 
+    // When the user presses any of the pre-defined key combinations.
     window.addEventListener("keydown", (e: KeyboardEvent) => {
       // Start/stop projection.
       if (e.shiftKey && e.code === "KeyP")

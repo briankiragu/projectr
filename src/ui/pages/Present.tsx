@@ -1,4 +1,4 @@
-import { type Component, Show, For, onMount } from "solid-js";
+import { type Component, Show, For, onMount, createEffect } from "solid-js";
 
 // Import the interfaces...
 import type { IProjectionPayload } from "@interfaces/projection";
@@ -16,11 +16,19 @@ const Present: Component = () => {
   // Extract the composable functions...
   const { toTitleCase } = useFormatting();
   const { initialisePresentationReceiver } = usePresentation();
-  const { initialiseProjectionReceiver } = useProjection(channel);
-
-  // To hold the data from the broadcast channel.
-  const { peek, currentVerseIndex, setCurrentVerseIndex, enqueue, flush } =
-    useQueue();
+  const { sendProjectionData, initialiseProjectionReceiver } =
+    useProjection(channel);
+  const {
+    peek,
+    projectionPayload,
+    currentVerseIndex,
+    setCurrentVerseIndex,
+    enqueue,
+    dequeue,
+    flush,
+    goToPreviousVerse,
+    goToNextVerse,
+  } = useQueue();
 
   const currentVerse = (): string[] | undefined =>
     peek()?.content.at(currentVerseIndex());
@@ -40,9 +48,49 @@ const Present: Component = () => {
     }
   };
 
+  // Send the data over the channel.
+  const broadcast = () => {
+    // Declare a variable to hold the outgoing data.
+    const data: IProjectionPayload | null =
+      peek() !== undefined ? projectionPayload() : null;
+
+    // Send the data.
+    sendProjectionData(data);
+  };
+
+  const playNext = () => {
+    // Remove the first item in the queue.
+    dequeue();
+
+    // Reset the verse index.
+    setCurrentVerseIndex(0);
+
+    // Broadcast the data.
+    broadcast();
+  };
+
   onMount(() => {
     initialisePresentationReceiver(updatePresentation);
     initialiseProjectionReceiver(updatePresentation);
+
+    // When the user presses any of the pre-defined key combinations.
+    window.addEventListener("keydown", (e: KeyboardEvent) => {
+      // Playback events.
+      if (e.code === "ArrowLeft") {
+        goToPreviousVerse();
+        broadcast();
+      }
+
+      if (e.code === "ArrowRight") {
+        goToNextVerse();
+        broadcast();
+      }
+
+      if (e.shiftKey && e.code === "ArrowRight") {
+        playNext();
+        broadcast();
+      }
+    });
   });
 
   return (
