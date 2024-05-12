@@ -12,12 +12,12 @@ const ProjectionButton: Component<{
     <button
       type="button"
       title={props.title}
-      class="flex cursor-pointer gap-3 p-2 px-3 font-semibold transition-colors hover:bg-teal-700 hover:text-teal-50 focus:outline-none md:h-auto md:w-auto md:px-6"
+      class="flex cursor-pointer gap-3 p-2 font-semibold transition-colors hover:bg-teal-700 hover:text-teal-50 focus:outline-none md:h-auto md:w-auto md:px-6"
       classList={{
         "bg-teal-300": props.isAvailable,
         "hover:bg-transparent disabled:text-gray-300 hover:cursor-not-allowed":
           !props.isAvailable,
-        "rounded-l-full": props.isProjecting,
+        "rounded-l-full px-3": props.isProjecting,
         "rounded-full": !props.isProjecting,
       }}
       disabled={!props.isAvailable}

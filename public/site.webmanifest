@@ -7,6 +7,7 @@
   "theme_color": "#fde047",
   "background_color": "#fde047",
   "description": "Simple projection software",
+  "display_override": ["window-controls-overlay"],
   "icons": [
     {
       "src": "/favicons/android-chrome-36x36.png",

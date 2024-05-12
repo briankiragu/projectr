@@ -7,6 +7,9 @@ module.exports = {
         "tvc-orange": "#ff9538",
         "tvc-green": "#0ab9aa",
       },
+      fontFamily: {
+        serif: ["NYT Imperial", "Georgia", "ui-serif"],
+      },
       fontSize: {
         large: ["2.25em", { lineHeight: "2.5em" }],
         larger: ["3.75em", { lineHeight: "1" }],

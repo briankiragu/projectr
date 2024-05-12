@@ -1,6 +1,45 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
 
 @font-face {
+  font-family: "NYT Imperial";
+  src: url("/fonts/nyt-imperial/imperial-normal-500.ttf");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "NYT Imperial";
+  src: url("/fonts/nyt-imperial/imperial-normal-600.ttf");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "NYT Imperial";
+  src: url("/fonts/nyt-imperial/imperial-normal-700.ttf");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "NYT Imperial";
+  src: url("/fonts/nyt-imperial/imperial-italic-500.ttf");
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "NYT Imperial";
+  src: url("/fonts/nyt-imperial/imperial-italic-600.ttf");
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "NYT Imperial";
+  src: url("/fonts/nyt-imperial/imperial-italic-700.ttf");
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
   font-family: "Inter-fallback";
   size-adjust: 107%;
   ascent-override: 91%;
@@ -48,6 +87,11 @@ html:has(dialog[open][modal-mode="mega"]) {
     border-end-end-radius: 0;
     border-end-start-radius: 0;
   }
+}
+
+.text-base {
+  font-size: 1.125rem;
+  line-height: 1.5625rem;
 }
 
 .v {

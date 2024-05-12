@@ -1,5 +1,12 @@
 const cacheName = "projectr-v1.0.3";
 const appShellFiles = [
+  "/fonts/nyt-imperial/imperial-normal-500.ttf",
+  "/fonts/nyt-imperial/imperial-normal-600.ttf",
+  "/fonts/nyt-imperial/imperial-normal-700.ttf",
+  "/fonts/nyt-imperial/imperial-italic-500.ttf",
+  "/fonts/nyt-imperial/imperial-italic-600.ttf",
+  "/fonts/nyt-imperial/imperial-italic-700.ttf",
+
   "/apple-touch-icon.png",
   "/safari-pinned-tab.svg",
 
