@@ -11,7 +11,10 @@ const QueueList: Component<{
   playHandler: (id: number) => void;
   queueHandler: (id: number) => void;
 }> = (props) => (
-  <div data-testId="queue-list" class="flex flex-col gap-2 rounded-md">
+  <ul
+    data-testId="queue-list"
+    class="flex flex-col gap-2 overflow-y-scroll rounded-md"
+  >
     <For each={props.queue}>
       {(track: IQueueItem) => (
         <QueueListItem
@@ -21,7 +24,7 @@ const QueueList: Component<{
         />
       )}
     </For>
-  </div>
+  </ul>
 );
 
 export default QueueList;

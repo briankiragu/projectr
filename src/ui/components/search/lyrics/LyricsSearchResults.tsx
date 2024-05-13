@@ -19,7 +19,7 @@ const LyricsSearchResults: Component<{
   const { searchItemToQueueItem } = useTracks();
 
   return (
-    <ul class="flex flex-col gap-2 rounded-md">
+    <ul class="flex flex-col gap-2 overflow-y-scroll rounded-md">
       <For each={props.results}>
         {(track) => (
           <LyricsSearchResultsItem
