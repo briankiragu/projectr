@@ -1,23 +1,30 @@
-import { type Component } from "solid-js";
+import { For, createSignal, onMount, type Component } from "solid-js";
 
 // Import the components...
-import DisplayButton from "@components/buttons/DisplayButton";
 import OfflineBanner from "@components/banners/OfflineBanner";
+import DisplayButton from "@components/buttons/DisplayButton";
 import PlaybackButton from "@components/buttons/PlaybackButton";
 import ProjectionButton from "@components/buttons/ProjectionButton";
-import { For } from "solid-js";
 
 const Controller: Component = () => {
+  const [items, setItems] = createSignal<number[]>([]);
+
+  onMount(() => {
+    window.addEventListener("click", () => {
+      setItems([...items(), items().length]);
+    });
+  });
+
   return (
     <div class="flex h-dvh flex-col">
       {/* Offline Banner */}
-      <OfflineBanner isOffline={true} />
+      <OfflineBanner isOffline={false} />
 
       <div class="grid grow grid-cols-1 bg-gray-400 lg:grid-cols-4">
         {/* Sidebar */}
-        <aside class="col-span-1 flex flex-col bg-rose-400">
+        <aside class="col-span-1 flex flex-initial flex-col bg-rose-400">
           {/* Searchbar and search results */}
-          <search class="flex h-[50%] flex-col bg-yellow-400">
+          <search class="flex h-[50dvh] flex-col bg-yellow-400">
             {/* Searchbar */}
             <form class="bg-pink-400">
               <input
@@ -29,13 +36,17 @@ const Controller: Component = () => {
 
             {/* Search results */}
             <ul class="overflow-y-scroll bg-indigo-400">
-              <For each={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}>
-                {(item) => <li class="h-16 bg-indigo-600">{item}</li>}
+              <For each={items()}>
+                {(item) => <li class="h-12 bg-indigo-600">{item}</li>}
               </For>
             </ul>
           </search>
 
-          <div class="h-[50%] bg-green-400"></div>
+          <ul class="h-[50dvh] overflow-y-scroll bg-teal-400">
+            <For each={items()}>
+              {(item) => <li class="h-12 bg-teal-600">{item}</li>}
+            </For>
+          </ul>
         </aside>
 
         <main class="col-span-1 flex flex-col justify-between bg-gray-400 lg:col-span-3">
