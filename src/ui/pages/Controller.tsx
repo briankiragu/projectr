@@ -51,7 +51,7 @@ const Controller: Component = () => {
 
         <main class="col-span-1 flex flex-col justify-between bg-gray-400 lg:col-span-3">
           {/* Display */}
-          <ul class="grid h-[50dvh] grow grid-cols-4 overflow-y-scroll bg-fuchsia-400">
+          <ul class="grid h-[50dvh] grow grid-cols-4 content-start overflow-y-scroll bg-fuchsia-400">
             <For each={items()}>
               {(item) => <li class="col-span-1 h-32 bg-fuchsia-600">{item}</li>}
             </For>
