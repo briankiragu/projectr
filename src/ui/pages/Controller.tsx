@@ -271,7 +271,7 @@ const Controller: Component = () => {
             </h2>
 
             {/* Content */}
-            <div class="grid h-[50dvh] grow grid-cols-4 content-start gap-4 overflow-y-scroll">
+            <div class="grid h-[50dvh] grow grid-cols-1 content-start gap-4 overflow-y-scroll lg:grid-cols-4">
               <For each={nowPlaying()!.content}>
                 {(verse, index) => (
                   <LyricsCard
