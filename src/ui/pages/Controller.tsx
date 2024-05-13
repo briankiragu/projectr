@@ -206,11 +206,11 @@ const Controller: Component = () => {
       {/* Offline Banner */}
       <OfflineBanner isOffline={isOffline()} />
 
-      <div class="grid grow grid-cols-1 bg-gray-400 lg:grid-cols-4">
+      <div class="grid grow grid-cols-1 gap-4 p-4 lg:grid-cols-4">
         {/* Sidebar */}
-        <aside class="col-span-1 flex flex-initial flex-col bg-rose-400">
+        <aside class="col-span-1 flex flex-initial flex-col gap-4">
           {/* Searchbar and search results */}
-          <search class="flex h-[40dvh] flex-col bg-yellow-400">
+          <search class="flex h-[45dvh] flex-col gap-4 rounded-lg bg-tvc-orange px-4 py-4">
             {/* Searchbar */}
             <LyricsSearchForm searchHandler={setResults} />
 
@@ -221,10 +221,12 @@ const Controller: Component = () => {
             />
           </search>
 
-          <section class="flex h-[60dvh] flex-col bg-yellow-400">
+          <section class="flex h-[55dvh] flex-col rounded-lg bg-tvc-orange p-4">
             {/* Now playing */}
-            <div class="min-h-24">
-              <h3 class="mb-1 text-sm text-gray-500">Now Playing</h3>
+            <div class="mb-2 min-h-24">
+              <h3 class="mb-1 text-sm font-semibold text-gray-900">
+                Now Playing
+              </h3>
               <Show
                 when={nowPlaying() !== undefined}
                 fallback={<div class="h-16 rounded-md bg-gray-600/10"></div>}
@@ -237,7 +239,7 @@ const Controller: Component = () => {
             </div>
 
             {/* Up next */}
-            <div class="flex justify-between text-gray-500">
+            <div class="mb-2 flex justify-between font-semibold text-gray-800">
               <h3 class="text-sm">Up next</h3>
               <button class="text-sm" onClick={() => flush()}>
                 Clear all
@@ -255,18 +257,21 @@ const Controller: Component = () => {
 
         {/* Live edit */}
         <Show when={isEditing()}>
-          <aside class="mb-12 rounded-lg bg-gray-100 p-3 transition lg:mb-20">
+          <aside class="h-full rounded-lg bg-gray-100 p-3 transition lg:mb-20">
             <EditQueueItemForm item={nowPlaying()!} handler={editLyrics} />
           </aside>
         </Show>
 
-        <main class="col-span-1 flex flex-col justify-between bg-gray-400 lg:col-span-3">
+        <main
+          class="col-span-1 flex flex-col justify-between rounded-lg md:col-start-2 md:col-end-5 lg:col-span-4 lg:col-end-6"
+          classList={{ "lg:col-start-3": isEditing() }}
+        >
           {/* Title */}
           <Show
             when={nowPlaying() !== undefined}
             fallback={<LyricsCardsPreloader canProject={isAvailable()} />}
           >
-            <h2 class="mb-3 text-wrap text-4xl font-black uppercase text-tvc-green lg:mb-4 lg:text-6xl">
+            <h2 class="mb-3 text-wrap p-4 text-4xl font-black uppercase text-tvc-green lg:mb-4 lg:text-6xl">
               {toTitleCase(nowPlaying()!.title)}
             </h2>
 
@@ -285,7 +290,7 @@ const Controller: Component = () => {
           </Show>
 
           {/* Controls */}
-          <footer class="sticky bottom-0 bg-white p-3">
+          <footer class="sticky bottom-0 bg-white pt-4">
             <div class="flex min-h-16 flex-wrap justify-center gap-4 rounded-lg bg-tvc-green p-4 text-gray-700 md:justify-between md:gap-4 lg:justify-center">
               <ProjectionButton
                 title="Shift + P"

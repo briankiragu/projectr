@@ -33,7 +33,7 @@ const EditQueueItemForm: Component<{
           name="live-edit"
           id="live-edit"
           rows="30"
-          class="w-full rounded-md px-3 py-2"
+          class="h-full w-full rounded-md px-3 py-2"
           onInput={(e) => setLive(e.target.value)}
         >
           {live()}
