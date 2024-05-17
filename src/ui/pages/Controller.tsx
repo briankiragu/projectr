@@ -45,15 +45,24 @@ const Controller: Component = () => {
 
   // Import the composables.
   const { toTitleCase } = useFormatting();
-  const { sendPresentationData } = usePresentation();
   const {
-    isAvailable,
-    isConnected,
-    isVisible,
-    openProjection,
-    showProjection,
-    hideProjection,
-    closeProjection,
+    isAvailable: receiverIsAvailable,
+    isConnected: receiverIsConnected,
+    isVisible: receiverIsVisible,
+    openPresentation: openReceiver,
+    showPresentation: showOnReceiver,
+    hidePresentation: hideOnReceiver,
+    closePresentation: closeReceiver,
+    sendPresentationData,
+  } = usePresentation();
+  const {
+    // isAvailable: receiverIsAvailable,
+    // isConnected: receiverIsConnected,
+    // isVisible: receiverIsVisible,
+    // openProjection: openReceiver,
+    // showProjection: showOnReceiver,
+    // hideProjection: hideOnReceiver,
+    // closeProjection: closeReceiver,
     sendProjectionData,
   } = useProjection(channel);
   const {
@@ -81,7 +90,7 @@ const Controller: Component = () => {
 
   // Send the data over the channel.
   const broadcast = () => {
-    if (isVisible()) {
+    if (receiverIsVisible()) {
       // Declare a variable to hold the outgoing data.
       const data: IProjectionPayload | null =
         nowPlaying() !== undefined
@@ -175,13 +184,13 @@ const Controller: Component = () => {
     window.addEventListener("keydown", (e: KeyboardEvent) => {
       // Start/stop projection.
       if (e.shiftKey && e.code === "KeyP")
-        isConnected() ? closeProjection() : openProjection();
+        receiverIsConnected() ? closeReceiver() : openReceiver();
 
       // Show/hide content.
       if (e.shiftKey && e.code === "KeyS")
-        isVisible()
-          ? hideProjection()
-          : showProjection({
+        receiverIsVisible()
+          ? hideOnReceiver()
+          : showOnReceiver({
               nowPlaying: nowPlaying(),
               currentVerseIndex: currentVerseIndex(),
             });
@@ -285,7 +294,9 @@ const Controller: Component = () => {
         >
           <Show
             when={nowPlaying() !== undefined}
-            fallback={<LyricsCardsPreloader canProject={isAvailable()} />}
+            fallback={
+              <LyricsCardsPreloader canProject={receiverIsAvailable()} />
+            }
           >
             {/* Title */}
             <h2
@@ -318,22 +329,22 @@ const Controller: Component = () => {
             <div class="flex min-h-16 flex-wrap justify-center gap-2 rounded-lg bg-tvc-green p-4 px-6 text-gray-700 lg:justify-between lg:gap-4">
               <ProjectionButton
                 title="Shift + P"
-                isAvailable={isAvailable()}
-                isProjecting={isConnected()}
-                startHandler={openProjection}
-                stopHandler={closeProjection}
+                isAvailable={receiverIsAvailable()}
+                isProjecting={receiverIsConnected()}
+                startHandler={openReceiver}
+                stopHandler={closeReceiver}
               />
               <DisplayButton
                 title="Shift + S"
-                isEnabled={isConnected()}
-                isDisplaying={isVisible()}
+                isEnabled={receiverIsConnected()}
+                isDisplaying={receiverIsVisible()}
                 showHandler={() =>
-                  showProjection({
+                  showOnReceiver({
                     nowPlaying: nowPlaying(),
                     currentVerseIndex: currentVerseIndex(),
                   })
                 }
-                hideHandler={hideProjection}
+                hideHandler={hideOnReceiver}
               />
               <PlaybackButton
                 icon="arrow_back"
