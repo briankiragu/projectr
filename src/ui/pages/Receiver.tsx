@@ -8,7 +8,7 @@ import useFormatting from "@composables/useFormatting";
 import useProjection from "@composables/useProjection";
 import usePresentation from "@composables/usePresentation";
 
-const Present: Component = () => {
+const Receiver: Component = () => {
   // Create a BroadcastAPI channel.
   const channel = new BroadcastChannel(import.meta.env.VITE_BROADCAST_NAME);
 
@@ -67,4 +67,4 @@ const Present: Component = () => {
   );
 };
 
-export default Present;
+export default Receiver;

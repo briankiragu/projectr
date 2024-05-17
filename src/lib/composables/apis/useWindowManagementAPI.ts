@@ -62,7 +62,7 @@ export default () => {
       `height=${screen.height}`,
     ].join(",");
 
-    return window.open(`/present/${id}`, `${channel}-${id}`, features);
+    return window.open(`/receive/${id}`, `${channel}-${id}`, features);
   };
 
   return { isAvailable, project };

@@ -12,7 +12,7 @@ import "./index.css";
 // Import components.
 import App from "@pages/App";
 import Controller from "@pages/Controller";
-const Present = lazy(() => import("@pages/Present"));
+const Receiver = lazy(() => import("@pages/Receiver"));
 
 // Get the root element
 const root = document.getElementById("root");
@@ -35,7 +35,7 @@ render(
   () => (
     <Router root={App}>
       <Route path="/" component={Controller} />
-      <Route path="/present/:id?" component={Present} />
+      <Route path="/receive/:id?" component={Receiver} />
     </Router>
   ),
   root!
