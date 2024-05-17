@@ -204,15 +204,25 @@ const Controller: Component = () => {
   return (
     <div class="flex h-dvh flex-col">
       {/* Offline Banner */}
-      <OfflineBanner isOffline={isOffline()} />
+      <Show when={isOffline()}>
+        <OfflineBanner />
+      </Show>
 
-      <div class="grid grow grid-cols-1 gap-4 p-4 lg:grid-cols-4">
+      <div
+        class="grid grow grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        classList={{ "md:grid-cols-3": isEditing() }}
+      >
         {/* Sidebar */}
         <aside class="col-span-1 flex flex-initial flex-col gap-4">
           {/* Searchbar and search results */}
-          <search class="flex h-[45dvh] flex-col gap-4 rounded-lg bg-tvc-orange px-4 py-4">
+          <search class="flex h-[45dvh] flex-col gap-4 rounded-lg bg-tvc-orange px-4 pb-4 pt-2">
             {/* Searchbar */}
-            <LyricsSearchForm searchHandler={setResults} />
+            <div class="flex flex-col gap-2">
+              <h2 class="text-4xl font-black tracking-tight text-gray-900">
+                Search
+              </h2>
+              <LyricsSearchForm searchHandler={setResults} />
+            </div>
 
             {/* Search results */}
             <LyricsSearchResults
@@ -221,7 +231,7 @@ const Controller: Component = () => {
             />
           </search>
 
-          <section class="flex h-[55dvh] flex-col rounded-lg bg-tvc-orange p-4">
+          <section class="flex h-[45dvh] flex-col rounded-lg bg-tvc-orange p-4 md:h-[48dvh] xl:h-[48.9dvh]">
             {/* Now playing */}
             <div class="mb-2 min-h-24">
               <h3 class="mb-1 text-sm font-semibold text-gray-900">
@@ -241,7 +251,14 @@ const Controller: Component = () => {
             {/* Up next */}
             <div class="mb-2 flex justify-between font-semibold text-gray-800">
               <h3 class="text-sm">Up next</h3>
-              <button class="text-sm" onClick={() => flush()}>
+              <button
+                class="flex items-center gap-1.5 rounded-md px-2 text-sm transition hover:text-white"
+                classList={{ hidden: peek() === undefined }}
+                onClick={() => flush()}
+              >
+                <span class="material-symbols-outlined transition-colors">
+                  clear_all
+                </span>
                 Clear all
               </button>
             </div>
@@ -257,26 +274,33 @@ const Controller: Component = () => {
 
         {/* Live edit */}
         <Show when={isEditing()}>
-          <aside class="h-full rounded-lg bg-gray-100 p-3 transition lg:mb-20">
+          <section class="grow rounded-lg bg-gray-100 p-3 transition">
             <EditQueueItemForm item={nowPlaying()!} handler={editLyrics} />
-          </aside>
+          </section>
         </Show>
 
         <main
-          class="col-span-1 flex flex-col justify-between rounded-lg md:col-start-2 md:col-end-5 lg:col-span-4 lg:col-end-6"
-          classList={{ "lg:col-start-3": isEditing() }}
+          class="col-span-1 flex flex-col justify-between rounded-lg md:col-start-2 md:col-end-4 lg:col-end-5"
+          classList={{ "md:col-start-3": isEditing() }}
         >
-          {/* Title */}
           <Show
             when={nowPlaying() !== undefined}
             fallback={<LyricsCardsPreloader canProject={isAvailable()} />}
           >
-            <h2 class="mb-3 text-wrap p-4 text-4xl font-black uppercase text-tvc-green lg:mb-4 lg:text-6xl">
+            {/* Title */}
+            <h2
+              id="title"
+              class="mb-3 text-wrap text-4xl font-black uppercase text-tvc-orange lg:mb-4 lg:text-6xl"
+            >
               {toTitleCase(nowPlaying()!.title)}
             </h2>
 
             {/* Content */}
-            <div class="grid h-[50dvh] grow grid-cols-1 content-start gap-4 overflow-y-scroll lg:grid-cols-4">
+            <div
+              id="content"
+              class="grid h-[70dvh] grow grid-cols-1 content-start gap-2 overflow-y-scroll lg:h-[50dvh] lg:grid-cols-3 xl:h-[30dvh]"
+              classList={{ "lg:grid-cols-1 xl:grid-cols-2": isEditing() }}
+            >
               <For each={nowPlaying()!.content}>
                 {(verse, index) => (
                   <LyricsCard
@@ -290,8 +314,8 @@ const Controller: Component = () => {
           </Show>
 
           {/* Controls */}
-          <footer class="sticky bottom-0 bg-white pt-4">
-            <div class="flex min-h-16 flex-wrap justify-center gap-4 rounded-lg bg-tvc-green p-4 text-gray-700 md:justify-between md:gap-4 lg:justify-center">
+          <footer id="controls" class="sticky bottom-0 bg-white pt-4">
+            <div class="flex min-h-16 flex-wrap justify-center gap-2 rounded-lg bg-tvc-green p-4 px-6 text-gray-700 lg:justify-between lg:gap-4">
               <ProjectionButton
                 title="Shift + P"
                 isAvailable={isAvailable()}

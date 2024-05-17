@@ -3,7 +3,7 @@ import { type Component } from "solid-js";
 
 const LyricsCardsPreloader: Component<{ canProject: boolean }> = (props) => {
   return (
-    <div class="flex flex-1 items-center justify-center text-lg font-semibold text-gray-800">
+    <div class="flex flex-1 items-center justify-center text-lg font-semibold tracking-tight text-gray-800">
       <Show
         when={props.canProject}
         fallback={
@@ -14,9 +14,9 @@ const LyricsCardsPreloader: Component<{ canProject: boolean }> = (props) => {
           </div>
         }
       >
-        <div class="flex flex-col items-center justify-center">
+        <div class="flex flex-col items-center justify-center gap-4">
           <img src="/images/waiting.png" class="h-auto w-32 opacity-90" />
-          <h3 class="text-green-700">No track is currently playing</h3>
+          <h3>No track is currently playing</h3>
         </div>
       </Show>
     </div>

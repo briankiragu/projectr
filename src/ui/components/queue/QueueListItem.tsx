@@ -23,19 +23,19 @@ const QueueListItem: Component<{
       </h4>
       <button
         type="button"
-        title="play"
-        class="material-symbols-outlined rounded-full p-1.5 transition hover:bg-gray-500 hover:text-gray-50"
-        onClick={() => props.playHandler()}
-      >
-        play_arrow
-      </button>
-      <button
-        type="button"
         title="remove"
         class="material-symbols-outlined rounded-full p-1.5 transition hover:bg-gray-500 hover:text-gray-50"
         onClick={() => props.dequeueHandler()}
       >
         remove_from_queue
+      </button>
+      <button
+        type="button"
+        title="play"
+        class="material-symbols-outlined rounded-full p-1.5 transition hover:bg-gray-500 hover:text-gray-50"
+        onClick={() => props.playHandler()}
+      >
+        queue_play_next
       </button>
     </li>
   );

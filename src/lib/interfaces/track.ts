@@ -12,6 +12,7 @@ export enum IStatus {
 export type ITrack = {
   title: string;
   lyrics: string;
+  artists?: string;
 
   status: IStatus;
   sort: number | null;
@@ -23,7 +24,8 @@ export type ITrack = {
   updated_by?: string;
 };
 
-export interface ISearchItem extends Omit<ITrack, "lyrics"> {
+export interface ISearchItem extends Omit<ITrack, "lyrics" | "artists"> {
   lyrics: string[][];
+  artists?: string[];
   source: ISource;
 }
