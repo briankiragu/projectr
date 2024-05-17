@@ -19,12 +19,15 @@ const LyricsSearch: Component<{
   const hasResults = (): boolean => props.results.length > 0;
 
   return (
-    <div data-testId="lyrics-search" class="flex flex-col gap-2.5">
+    <div
+      data-testId="lyrics-search"
+      class="flex grow flex-col gap-2.5 bg-pink-400"
+    >
       {/* Search Form */}
       <LyricsSearchForm searchHandler={props.searchHandler} />
 
       {/* Search results */}
-      <div class="h-40 overflow-y-scroll rounded-md bg-gray-50/10 transition md:h-36 xl:h-52 2xl:h-2/6">
+      <div class="flex-initial grow overflow-y-scroll rounded-md transition">
         <Show when={hasResults()}>
           <LyricsSearchResults
             results={props.results}

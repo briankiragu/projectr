@@ -34,9 +34,6 @@ const LyricsSearchForm: Component<{
   return (
     <form onSubmit={(e) => e.preventDefault()}>
       <label for="search">
-        <span class="text-sm italic text-gray-800">
-          Search for a track by title or lyrics...
-        </span>
         <input
           ref={inputRef!}
           id="search"

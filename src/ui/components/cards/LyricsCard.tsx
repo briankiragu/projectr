@@ -8,7 +8,7 @@ const LyricsCard: Component<{
   <div
     data-testid="lyrics-card"
     style={{ "font-size": "1em" }}
-    class="min-h-32 cursor-pointer rounded-lg border-4 bg-gray-200 px-6 py-4 text-gray-600 shadow-md transition-colors lg:px-4 lg:py-2"
+    class="m-2 cursor-pointer rounded-lg border-4 bg-gray-200 px-6 py-4 text-gray-600 shadow-md transition-colors lg:px-4 lg:py-2"
     classList={{
       "border-tvc-green bg-tvc-green text-green-50 shadow-lg shadow-tvc-green/20":
         props.isActive,
@@ -18,7 +18,7 @@ const LyricsCard: Component<{
     <For each={props.verse}>
       {(line) => (
         <div
-          class="text-wrap text-xl font-semibold lg:text-sm"
+          class="text-wrap text-xl font-semibold uppercase lg:text-sm"
           innerHTML={line}
         ></div>
       )}

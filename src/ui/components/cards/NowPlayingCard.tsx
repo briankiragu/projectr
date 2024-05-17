@@ -11,7 +11,7 @@ const NowPlayingCard: Component<{
   return (
     <div
       data-testid="now-playing-card"
-      class="relative flex min-h-16 items-center truncate rounded-lg bg-tvc-green px-5 align-middle text-sm shadow-lg shadow-tvc-green/20 md:px-4 xl:px-4"
+      class="relative flex min-h-16 items-center truncate rounded-lg bg-tvc-green px-5 align-middle text-sm tracking-tight shadow-lg shadow-tvc-green/20 md:px-4 xl:px-4"
     >
       <h4 class="w-[90%] text-wrap text-lg font-extrabold text-green-50 md:text-sm xl:text-lg">
         {toTitleCase(props.item.title)}

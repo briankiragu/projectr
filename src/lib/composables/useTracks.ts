@@ -20,6 +20,7 @@ export default () => {
       ...(hits as ITrack[]).map((hit) => ({
         ...hit,
         lyrics: fromEditableLyrics(hit.lyrics),
+        artists: hit.artists?.split(";").filter((val) => val),
         source: ISource.meili,
       })),
     ];

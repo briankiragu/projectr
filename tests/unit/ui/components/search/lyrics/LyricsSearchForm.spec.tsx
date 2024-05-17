@@ -14,7 +14,10 @@ describe("<LyricsSearchForm />", () => {
     const el = screen.getByRole("searchbox");
 
     // Make the assertion.
-    expect(el).toHaveAccessibleName("Search for a track by title or lyrics...");
+    expect(el).toHaveAttribute(
+      "placeholder",
+      "Search for a track by title or lyrics..."
+    );
   });
 
   test.todo("it calls the function when a phrase is typed in", async () => {});

@@ -10,7 +10,7 @@ to project/cast song lyrics and/or Bible verses to an audience without distruput
 ## Features:
 
 - Separate projection screen from control dashboard.
-- Fuzzy search for lyrics by title, lyrics or author _(coming soon)_.
+- Fuzzy search for lyrics by title, lyrics or author.
 - Offline caching of search results.
 - _(Coming soon)_ Support for wireless casting.
 

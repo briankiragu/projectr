@@ -1,8 +1,6 @@
 import {
   For,
-  Match,
   Show,
-  Switch,
   createEffect,
   createSignal,
   lazy,
@@ -21,29 +19,28 @@ import useFormatting from "@composables/useFormatting";
 import useQueue from "@composables/useQueue";
 
 // Import the components...
+import OfflineBanner from "@components/banners/OfflineBanner";
 import DisplayButton from "@components/buttons/DisplayButton";
 import PlaybackButton from "@components/buttons/PlaybackButton";
 import ProjectionButton from "@components/buttons/ProjectionButton";
 import EditQueueItemForm from "@components/forms/EditQueueItemForm";
 import LyricsCardsPreloader from "@components/preloaders/LyricsCardsPreloader";
-import LyricsSearch from "@components/search/lyrics/LyricsSearch";
-import OfflineBanner from "@components/banners/OfflineBanner";
-import ScripturesSearchForm from "@components/search/scriptures/ScripturesSearchForm";
-import useProjection from "@composables/useProjection";
 import usePresentation from "@composables/usePresentation";
+import useProjection from "@composables/useProjection";
+import LyricsSearchForm from "@components/search/lyrics/LyricsSearchForm";
+import LyricsSearchResults from "@components/search/lyrics/LyricsSearchResults";
 
 // Import the lazy-loaded components.
 const LyricsCard = lazy(() => import("@components/cards/LyricsCard"));
 const NowPlayingCard = lazy(() => import("@components/cards/NowPlayingCard"));
 const QueueList = lazy(() => import("@components/queue/QueueList"));
 
-const App: Component = () => {
+const Controller: Component = () => {
   // Create a BroadcastAPI channel.
   const channel = new BroadcastChannel(import.meta.env.VITE_BROADCAST_NAME);
 
   // Create the signals.
   const [isOffline, setIsOffline] = createSignal<boolean>(false);
-  const [isLyrics, setIsLyrics] = createSignal<boolean>(true);
   const [results, setResults] = createStore<ISearchItem[]>([]);
 
   // Import the composables.
@@ -205,66 +202,41 @@ const App: Component = () => {
   });
 
   return (
-    <>
+    <div class="flex h-dvh flex-col">
       {/* Offline Banner */}
-      <OfflineBanner isOffline={isOffline()} />
+      <Show when={isOffline()}>
+        <OfflineBanner />
+      </Show>
 
-      {/* Main container */}
-      <div class="grid gap-5 p-6 md:grid-cols-3 lg:grid-cols-4">
-        <aside class="flex flex-col gap-3 rounded-lg lg:mb-20">
-          {/* Search Pane */}
-          <search class="flex flex-col gap-2 rounded-lg bg-gray-300 px-4 pb-4 pt-3">
-            <div class="flex gap-4 text-sm text-gray-800">
-              <label for="lyrics" class="flex gap-1">
-                <input
-                  id="lyrics"
-                  type="radio"
-                  name="data"
-                  value="lyrics"
-                  onChange={() => setIsLyrics(true)}
-                  checked={isLyrics() === true}
-                  required
-                />
-                Lyrics
-              </label>
-
-              <label for="scripture" class="flex gap-1">
-                <input
-                  id="scripture"
-                  type="radio"
-                  name="data"
-                  value="scripture"
-                  onChange={() => setIsLyrics(false)}
-                  checked={isLyrics() === false}
-                  required
-                />
-                Scripture
-              </label>
+      <div
+        class="grid grow grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        classList={{ "md:grid-cols-3": isEditing() }}
+      >
+        {/* Sidebar */}
+        <aside class="col-span-1 flex flex-initial flex-col gap-4">
+          {/* Searchbar and search results */}
+          <search class="flex h-[45dvh] flex-col gap-4 rounded-lg bg-tvc-orange px-4 pb-4 pt-2">
+            {/* Searchbar */}
+            <div class="flex flex-col gap-2">
+              <h2 class="text-4xl font-black tracking-tight text-gray-900">
+                Search
+              </h2>
+              <LyricsSearchForm searchHandler={setResults} />
             </div>
 
-            {/* Search components */}
-            <Switch>
-              {/* Search lyrics */}
-              <Match when={isLyrics()}>
-                <LyricsSearch
-                  results={results}
-                  searchHandler={setResults}
-                  enqueueHandler={addToQueue}
-                />
-              </Match>
-
-              {/* Search scriptures */}
-              <Match when={!isLyrics()}>
-                <ScripturesSearchForm enqueueHandler={addToQueue} />
-              </Match>
-            </Switch>
+            {/* Search results */}
+            <LyricsSearchResults
+              results={results}
+              enqueueHandler={addToQueue}
+            />
           </search>
 
-          {/* Play queue */}
-          <div class="flex flex-1 flex-col gap-1.5 rounded-lg bg-gray-200 px-4 pb-4 pt-3">
+          <section class="flex h-[45dvh] flex-col rounded-lg bg-tvc-orange p-4 md:h-[48dvh] xl:h-[48.9dvh]">
             {/* Now playing */}
-            <div class="min-h-24">
-              <h3 class="mb-1 text-sm text-gray-500">Now Playing</h3>
+            <div class="mb-2 min-h-24">
+              <h3 class="mb-1 text-sm font-semibold text-gray-900">
+                Now Playing
+              </h3>
               <Show
                 when={nowPlaying() !== undefined}
                 fallback={<div class="h-16 rounded-md bg-gray-600/10"></div>}
@@ -277,48 +249,58 @@ const App: Component = () => {
             </div>
 
             {/* Up next */}
-            <div class="flex justify-between text-gray-500">
+            <div class="mb-2 flex justify-between font-semibold text-gray-800">
               <h3 class="text-sm">Up next</h3>
-              <button class="text-sm" onClick={() => flush()}>
+              <button
+                class="flex items-center gap-1.5 rounded-md px-2 text-sm transition hover:text-white"
+                classList={{ hidden: peek() === undefined }}
+                onClick={() => flush()}
+              >
+                <span class="material-symbols-outlined transition-colors">
+                  clear_all
+                </span>
                 Clear all
               </button>
             </div>
 
-            <div class="lg:h-30 overflow-y-scroll rounded-lg bg-gray-300/40 md:h-36 xl:h-44 2xl:h-auto">
-              <Show when={queue.length > 0}>
-                <QueueList
-                  queue={queue}
-                  playHandler={playNow}
-                  queueHandler={dequeue}
-                />
-              </Show>
-            </div>
-          </div>
+            {/* Queue items */}
+            <QueueList
+              queue={queue}
+              playHandler={playNow}
+              queueHandler={dequeue}
+            />
+          </section>
         </aside>
 
         {/* Live edit */}
         <Show when={isEditing()}>
-          <aside class="mb-12 rounded-lg bg-gray-100 p-3 transition lg:mb-20">
+          <section class="grow rounded-lg bg-gray-100 p-3 transition">
             <EditQueueItemForm item={nowPlaying()!} handler={editLyrics} />
-          </aside>
+          </section>
         </Show>
 
-        {/* View Pane */}
         <main
-          class="mb-20 flex flex-col rounded-lg transition-transform md:col-start-2 md:col-end-5 lg:col-end-6 lg:mb-20"
-          classList={{ "lg:col-start-3": isEditing() }}
+          class="col-span-1 flex flex-col justify-between rounded-lg md:col-start-2 md:col-end-4 lg:col-end-5"
+          classList={{ "md:col-start-3": isEditing() }}
         >
-          {/* Title */}
           <Show
             when={nowPlaying() !== undefined}
             fallback={<LyricsCardsPreloader canProject={isAvailable()} />}
           >
-            <h2 class="mb-3 text-wrap text-4xl font-black uppercase text-tvc-green lg:mb-4 lg:text-6xl">
+            {/* Title */}
+            <h2
+              id="title"
+              class="mb-3 text-wrap text-4xl font-black uppercase text-tvc-orange lg:mb-4 lg:text-6xl"
+            >
               {toTitleCase(nowPlaying()!.title)}
             </h2>
 
-            {/* Lyrics */}
-            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:overflow-y-scroll lg:grid-cols-3 lg:pb-2">
+            {/* Content */}
+            <div
+              id="content"
+              class="grid h-[70dvh] grow grid-cols-1 content-start gap-2 overflow-y-scroll lg:h-[50dvh] lg:grid-cols-3 xl:h-[30dvh]"
+              classList={{ "lg:grid-cols-1 xl:grid-cols-2": isEditing() }}
+            >
               <For each={nowPlaying()!.content}>
                 {(verse, index) => (
                   <LyricsCard
@@ -332,8 +314,8 @@ const App: Component = () => {
           </Show>
 
           {/* Controls */}
-          <footer class="fixed bottom-0 left-0 w-full bg-white p-3">
-            <div class="flex min-h-16 flex-wrap justify-center gap-4 rounded-lg bg-tvc-green p-4 text-gray-700 md:justify-between md:gap-4 lg:justify-center">
+          <footer id="controls" class="sticky bottom-0 bg-white pt-4">
+            <div class="flex min-h-16 flex-wrap justify-center gap-2 rounded-lg bg-tvc-green p-4 px-6 text-gray-700 lg:justify-between lg:gap-4">
               <ProjectionButton
                 title="Shift + P"
                 isAvailable={isAvailable()}
@@ -378,8 +360,8 @@ const App: Component = () => {
           </footer>
         </main>
       </div>
-    </>
+    </div>
   );
 };
 
-export default App;
+export default Controller;
