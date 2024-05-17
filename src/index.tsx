@@ -11,7 +11,6 @@ import "./index.css";
 
 // Import components.
 import App from "@pages/App";
-// import Dashboard from "@pages/Dashboard";
 import Controller from "@pages/Controller";
 const Present = lazy(() => import("@pages/Present"));
 
