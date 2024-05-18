@@ -45,25 +45,27 @@ const Controller: Component = () => {
 
   // Import the composables.
   const { toTitleCase } = useFormatting();
-  const {
-    isAvailable: receiverIsAvailable,
-    isConnected: receiverIsConnected,
-    isVisible: receiverIsVisible,
-    openPresentation: openReceiver,
-    showPresentation: showOnReceiver,
-    hidePresentation: hideOnReceiver,
-    closePresentation: closeReceiver,
-    sendPresentationData,
-  } = usePresentation();
+  // eslint-disable-next-line no-empty-pattern
   const {
     // isAvailable: receiverIsAvailable,
     // isConnected: receiverIsConnected,
     // isVisible: receiverIsVisible,
-    // openProjection: openReceiver,
-    // showProjection: showOnReceiver,
-    // hideProjection: hideOnReceiver,
-    // closeProjection: closeReceiver,
-    sendProjectionData,
+    // openPresentation: openReceiver,
+    // showPresentation: showOnReceiver,
+    // hidePresentation: hideOnReceiver,
+    // closePresentation: closeReceiver,
+    // sendPresentationData: sendToReceiver,
+  } = usePresentation();
+  // eslint-disable-next-line no-empty-pattern
+  const {
+    isAvailable: receiverIsAvailable,
+    isConnected: receiverIsConnected,
+    isVisible: receiverIsVisible,
+    openProjection: openReceiver,
+    showProjection: showOnReceiver,
+    hideProjection: hideOnReceiver,
+    closeProjection: closeReceiver,
+    sendProjectionData: sendToReceiver,
   } = useProjection(channel);
   const {
     queue,
@@ -101,8 +103,7 @@ const Controller: Component = () => {
           : null;
 
       // Send the data.
-      sendPresentationData(data);
-      sendProjectionData(data);
+      sendToReceiver(data);
     }
   };
 
