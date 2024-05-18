@@ -1,7 +1,11 @@
-import usePermissionsAPI from "@composables/apis/usePermissionsAPI";
+// Import constants...
+import { RECEIVER_PAGE } from "../../constants";
 
 // Import the interfaces...
 import type { IProjection } from "@interfaces/projection";
+
+// Import composables...
+import usePermissionsAPI from "@composables/apis/usePermissionsAPI";
 
 export default () => {
   // Check if the API is available.
@@ -62,7 +66,7 @@ export default () => {
       `height=${screen.height}`,
     ].join(",");
 
-    return window.open(`/receive/${id}`, `${channel}-${id}`, features);
+    return window.open(`/${RECEIVER_PAGE}/${id}`, `${channel}-${id}`, features);
   };
 
   return { isAvailable, project };

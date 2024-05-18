@@ -1,10 +1,13 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
+// Import constants...
+import { RECEIVER_PAGE } from "../../constants";
+
 export default () => {
   // Define the default request.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const defaultRequest: any = new PresentationRequest([`present`]);
+  const defaultRequest: any = new PresentationRequest([RECEIVER_PAGE]);
   defaultRequest.onconnectionavailable = ({ conn }) =>
     setPresentationConnection(conn);
 
@@ -32,7 +35,7 @@ export default () => {
 
   // Prepare the request with the presentation URLs.
   const getPresentationRequest = (id: string) =>
-    new PresentationRequest([`present/${id}`]);
+    new PresentationRequest([`${RECEIVER_PAGE}/${id}`]);
 
   const startPresentation = async (id: string) => {
     try {

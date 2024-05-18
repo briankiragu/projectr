@@ -7,7 +7,7 @@ import type { IProjectionPayload } from "@interfaces/projection";
 import usePresentationAPI from "@composables/apis/usePresentationAPI";
 
 export default () => {
-  // Import the composables.
+  // Extract the composables.
   const {
     getAvailability,
     startPresentation,

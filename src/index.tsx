@@ -9,7 +9,10 @@ import { onCLS, onFID, onLCP } from "web-vitals";
 // Import global styles.
 import "./index.css";
 
-// Import components.
+// Import constants...
+import { RECEIVER_PAGE } from "./lib/constants";
+
+// Import components...
 import App from "@pages/App";
 import Controller from "@pages/Controller";
 const Receiver = lazy(() => import("@pages/Receiver"));
@@ -35,7 +38,7 @@ render(
   () => (
     <Router root={App}>
       <Route path="/" component={Controller} />
-      <Route path="/receive/:id?" component={Receiver} />
+      <Route path={`/${RECEIVER_PAGE}/:id?`} component={Receiver} />
     </Router>
   ),
   root!

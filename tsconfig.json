@@ -39,9 +39,7 @@
       "@components/*": ["./src/ui/components/*"],
       "@composables/*": ["./src/lib/composables/*"],
       "@interfaces/*": ["./src/lib/interfaces/*"],
-      "@lib/*": ["./src/lib/*"],
-      "@pages/*": ["./src/ui/pages/*"],
-      "@ui/*": ["./src/ui/*"]
+      "@pages/*": ["./src/ui/pages/*"]
     }
   },
   "include": [
