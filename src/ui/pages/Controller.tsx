@@ -29,8 +29,6 @@ import usePresentation from "@composables/usePresentation";
 import useProjection from "@composables/useProjection";
 import LyricsSearchForm from "@components/search/lyrics/LyricsSearchForm";
 import LyricsSearchResults from "@components/search/lyrics/LyricsSearchResults";
-import ShareButton from "@components/buttons/ShareButton";
-import useShare from "@composables/useShare";
 
 // Import the lazy-loaded components.
 const LyricsCard = lazy(() => import("@components/cards/LyricsCard"));
@@ -91,7 +89,6 @@ const Controller: Component = () => {
     goToNextVerse,
     goToVerse,
   } = useQueue();
-  const { shareItem } = useShare();
 
   // Send the data over the channel.
   const broadcast = () => {
@@ -303,15 +300,12 @@ const Controller: Component = () => {
             }
           >
             {/* Title */}
-            <article class="flex items-center gap-2">
-              <ShareButton item={nowPlaying()!} shareHandler={shareItem} />
-              <h2
-                id="title"
-                class="mb-3 text-wrap text-4xl font-black uppercase text-tvc-orange lg:mb-4 lg:text-6xl"
-              >
-                {toTitleCase(nowPlaying()!.title)}
-              </h2>
-            </article>
+            <h2
+              id="title"
+              class="mb-3 text-wrap text-4xl font-black uppercase text-tvc-orange lg:mb-4 lg:text-6xl"
+            >
+              {toTitleCase(nowPlaying()!.title)}
+            </h2>
 
             {/* Content */}
             <div

@@ -29,21 +29,5 @@ export default () => {
     return state;
   };
 
-  const requestWebSharePermissions = async (): Promise<string> => {
-    let state: string = "default";
-
-    try {
-      ({ state } = await navigator.permissions.query({
-        name: "web-share" as PermissionName,
-      }));
-    } catch (err) {
-      if ((err as Error).name !== "TypeError") {
-        return `${(err as Error).name}: ${(err as Error).message}`;
-      }
-    }
-
-    return state;
-  };
-
-  return { requestWindowManagementPermissions, requestWebSharePermissions };
+  return { requestWindowManagementPermissions };
 };
