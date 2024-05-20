@@ -39,8 +39,8 @@ const appShellFiles = [
 
   "/images/musixmatch-logo.webp",
 
-  "/images/failed.png",
-  "/images/waiting.png",
+  "/images/failed.webp",
+  "/images/waiting.webp",
 ];
 
 self.addEventListener("install", (e) => {

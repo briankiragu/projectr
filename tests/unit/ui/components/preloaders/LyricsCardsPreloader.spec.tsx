@@ -12,7 +12,7 @@ describe("<LyricsCardPreloader />", () => {
     const heading = screen.getByRole("heading");
 
     // Assert that the data is correct.
-    expect(img).toHaveAttribute("src", "/images/waiting.png");
+    expect(img).toHaveAttribute("src", "/images/waiting.webp");
     expect(heading).toHaveTextContent("No track is currently playing");
   });
 
@@ -25,7 +25,7 @@ describe("<LyricsCardPreloader />", () => {
     const heading = screen.getByRole("heading");
 
     // Assert that the data is correct.
-    expect(img).toHaveAttribute("src", "/images/failed.png");
+    expect(img).toHaveAttribute("src", "/images/failed.webp");
     expect(heading).toHaveTextContent(
       "Failed to identify/project onto a second screen."
     );

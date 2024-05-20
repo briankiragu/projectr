@@ -8,14 +8,22 @@ const LyricsCardsPreloader: Component<{ canProject: boolean }> = (props) => {
         when={props.canProject}
         fallback={
           <div class="flex flex-col items-center justify-center gap-4">
-            <img src="/images/failed.png" class="h-auto w-44 opacity-90" />
+            <img
+              src="/images/failed.webp"
+              alt="Failed to identify second screen"
+              class="h-auto w-44 opacity-90"
+            />
 
             <h3>Failed to identify/project onto a second screen.</h3>
           </div>
         }
       >
         <div class="flex flex-col items-center justify-center gap-4">
-          <img src="/images/waiting.png" class="h-auto w-32 opacity-90" />
+          <img
+            src="/images/waiting.webp"
+            alt="No items in queue"
+            class="h-auto w-32 opacity-90"
+          />
           <h3>No track is currently playing</h3>
         </div>
       </Show>
