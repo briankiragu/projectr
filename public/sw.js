@@ -30,8 +30,8 @@ const appShellFiles = [
   "/favicons/mstile-310x310.png",
   "/favicons/mstile-310x150.png",
 
-  "/images/long.png",
-  "/images/wide.png",
+  "/images/long-with-data.webp",
+  "/images/wide-with-data.webp",
 
   "/images/logo.webp",
   "/images/tvc-logo.svg",
