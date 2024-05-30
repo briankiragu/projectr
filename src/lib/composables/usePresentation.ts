@@ -25,7 +25,7 @@ export default () => {
   getAvailability(setIsAvailable);
 
   const isConnected = (): boolean =>
-    connections().some((conn) => conn !== undefined);
+    isAvailable() && connections().some((conn) => conn !== undefined);
 
   const openPresentation = async () => {
     try {
