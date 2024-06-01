@@ -9,9 +9,9 @@ export enum IStatus {
   ARCHIVED = "archived",
 }
 
-export type ITrack = {
+export type ILyric = {
   title: string;
-  lyrics: string;
+  content: string;
   artists?: string;
 
   status: IStatus;
@@ -24,8 +24,8 @@ export type ITrack = {
   updated_by?: string;
 };
 
-export interface ISearchItem extends Omit<ITrack, "lyrics" | "artists"> {
-  lyrics: string[][];
+export interface ISearchItem extends Omit<ILyric, "content" | "artists"> {
+  content: string[][];
   artists?: string[];
   source: ISource;
 }

@@ -1,7 +1,7 @@
 import { type Component, Show } from "solid-js";
 
 // Import the interfaces...
-import { type ISearchItem, ISource } from "@interfaces/track";
+import { type ISearchItem, ISource } from "@interfaces/lyric";
 
 // Import the composables...
 import useFormatting from "@composables/useFormatting";
@@ -17,7 +17,7 @@ const LyricsSearchResultsItem: Component<{
       <div class="col-span-2 flex flex-col">
         <h4 class="font-semibold">{toTitleCase(props.track.title)}</h4>
         <span class="text-sm font-light italic">
-          {toTitleCase(props.track.lyrics[0][0])}
+          {toTitleCase(props.track.content[0][0])}
         </span>
       </div>
       <div class="flex items-center justify-end gap-1.5">

@@ -3,7 +3,7 @@ import { debounceTime, distinctUntilChanged, fromEvent, switchMap } from "rxjs";
 import { onMount, type Component } from "solid-js";
 
 // Import the interfaces...
-import type { ISearchItem } from "@interfaces/track";
+import type { ISearchItem } from "@interfaces/lyric";
 
 // Import the composables...
 import useTracks from "@composables/useTracks";
@@ -40,7 +40,7 @@ const LyricsSearchForm: Component<{
           type="search"
           name="search"
           class="w-full rounded-lg px-4 py-3 text-sm text-gray-600 focus:outline-none"
-          placeholder="Search for a track by title or lyrics..."
+          placeholder="Search for a track by title or content..."
           autofocus
         />
       </label>

@@ -47,34 +47,34 @@ def format_extracted_lyrics(
     """Format the extracted data to the expected format"""
 
     titles: list[str] = []
-    tracks: list[dict[str, int | str | list[str] | None]] = []
+    lyrics: list[dict[str, int | str | list[str] | None]] = []
     current_title: str = ""
-    current_lyrics: list[str] = []
+    current_content: list[str] = []
 
     for slide in slides:
         if len(slide) >= 2:
             if current_title not in titles:
                 titles.append(current_title)
-                tracks.append(
+                lyrics.append(
                     {
-                        "id": len(tracks) + 1,
+                        "id": len(lyrics) + 1,
                         "title": current_title,
-                        "lyrics": "\n\n".join(current_lyrics),
+                        "lyrics": "\n\n".join(current_content),
                         "status": "published",
                         "sort": None
                     }
                 )
 
             current_title = extract_title_from_string(slide[0])
-            current_lyrics = [  # type: ignore
+            current_content = [  # type: ignore
                 extract_lyrics_from_string(*slide[1:])  # type: ignore
             ]
         elif len(slide) == 1:
-            current_lyrics.append(  # type: ignore
+            current_content.append(  # type: ignore
                 extract_lyrics_from_string(*slide)  # type: ignore
             )
 
-    return tracks
+    return lyrics
 
 
 def extract_title_from_string(title: str) -> str:
@@ -112,7 +112,7 @@ try:
     log.debug(f"File paths provided.", file_paths=file_paths)
 
     # Set the name of the output file.
-    output_json = f"{dirname}/data/json/lyrics.extracted.json"
+    output_json = f"{dirname}/data/json/content.extracted.json"
     log.info(f"Attempting to extract data...", output=output_json)
 
     # Create a variable to hold all the data.
@@ -137,7 +137,7 @@ try:
     ] = format_extracted_lyrics(extracted_data)
 
     # Set the name of the output file.
-    output_json = f"{dirname}/data/json/lyrics.formatted.json"
+    output_json = f"{dirname}/data/json/content.formatted.json"
     log.info(f"Attempting to format data...", output=output_json)
 
     # Write the json output file.

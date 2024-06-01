@@ -1,5 +1,5 @@
 import LyricsSearch from "@components/search/lyrics/LyricsSearch";
-import type { ISearchItem } from "@interfaces/track";
+import type { ISearchItem } from "@interfaces/lyric";
 import { render, screen } from "@solidjs/testing-library";
 import { describe, expect, test, vi } from "vitest";
 

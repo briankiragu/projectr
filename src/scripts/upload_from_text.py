@@ -41,7 +41,7 @@ def convert_text_as_lyrics(path_to_file: str) -> str:
         raise(e)
 
 
-def update_or_create_in_meilisearch(title: str, lyrics: str):
+def update_or_create_in_meilisearch(title: str, content: str):
     """Add the lyrics and title to Meilisearch"""
 
     try:

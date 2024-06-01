@@ -12,7 +12,7 @@ import { createStore } from "solid-js/store";
 // Import the interfaces...
 import type { IProjectionPayload } from "@interfaces/projection";
 import type { IQueueItem } from "@interfaces/queue";
-import type { ISearchItem } from "@interfaces/track";
+import type { ISearchItem } from "@interfaces/lyric";
 
 // Import the composables...
 import useFormatting from "@composables/useFormatting";
@@ -158,7 +158,7 @@ const Controller: Component = () => {
   };
 
   /**
-   * Edit the currently playing track lyrics.
+   * Edit the currently playing track content.
    */
   const editLyrics = (track: IQueueItem) => {
     // Edit the now playing track.
