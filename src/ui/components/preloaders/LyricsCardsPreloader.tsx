@@ -14,7 +14,9 @@ const LyricsCardsPreloader: Component<{ canProject: boolean }> = (props) => {
               class="h-auto w-44 opacity-90"
             />
 
-            <h3>Failed to identify/project onto a second screen.</h3>
+            <h3 class="dark:text-gray-200">
+              Failed to identify a second screen.
+            </h3>
           </div>
         }
       >
@@ -24,7 +26,9 @@ const LyricsCardsPreloader: Component<{ canProject: boolean }> = (props) => {
             alt="No items in queue"
             class="h-auto w-32 opacity-90"
           />
-          <h3>No track is currently playing</h3>
+          <h3 class="dark:text-gray-200">
+            Waiting for content to be queued...
+          </h3>
         </div>
       </Show>
     </div>
