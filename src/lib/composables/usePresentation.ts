@@ -21,11 +21,17 @@ export default () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [connections, setConnections] = createSignal<(any | undefined)[]>([]);
 
-  // Get and set the availability.
-  getAvailability(setIsAvailable);
-
   const isConnected = (): boolean =>
-    isAvailable() && connections().some((conn) => conn !== undefined);
+    connections().some((conn) => conn !== undefined);
+
+  const setAvailability = (availability: boolean) => {
+    setIsAvailable(availability);
+
+    // When the availability drops, it means the connecting cables or wireless
+    // display will need to be reconnected. We should clear all
+    // existing connections.
+    if (!isAvailable()) setConnections([]);
+  };
 
   const openPresentation = async () => {
     try {
@@ -65,6 +71,9 @@ export default () => {
     // Send the data over the connections.
     connections().forEach((conn) => conn?.send(processedData));
   };
+
+  // Get and set the availability.
+  getAvailability(setAvailability);
 
   return {
     isAvailable,
