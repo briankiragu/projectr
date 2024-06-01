@@ -12,10 +12,10 @@ const ProjectionButton: Component<{
     <button
       type="button"
       title={props.title}
-      class="flex cursor-pointer items-center gap-3 p-2 px-3 font-semibold transition-colors hover:bg-teal-700 hover:text-teal-50 focus:outline-none lg:h-auto lg:w-auto lg:px-4 xl:px-5"
+      class="group flex cursor-pointer items-center gap-3 p-2 px-3 font-semibold transition-colors hover:bg-teal-700 hover:text-teal-50 focus:outline-none lg:h-auto lg:w-auto lg:px-4 xl:px-5 dark:hover:bg-gray-700"
       classList={{
-        "bg-teal-300": props.isAvailable,
-        "hover:bg-transparent disabled:text-gray-300 hover:cursor-not-allowed":
+        "bg-teal-300 dark:bg-teal-400": props.isAvailable,
+        "hover:bg-transparent dark:disabled:text-gray-400 disabled:text-gray-300 hover:cursor-not-allowed":
           !props.isAvailable,
         "rounded-l-xl": props.isProjecting,
         "rounded-full lg:rounded-xl": !props.isProjecting,
@@ -23,7 +23,12 @@ const ProjectionButton: Component<{
       disabled={!props.isAvailable}
       onClick={() => props.startHandler()}
     >
-      <span class="material-symbols-outlined transition">screen_share</span>
+      <span
+        class="material-symbols-outlined transition"
+        classList={{ "group-hover:text-sky-600": props.isProjecting }}
+      >
+        screen_share
+      </span>
       <span class="hidden lg:inline">Launch projection</span>
     </button>
 

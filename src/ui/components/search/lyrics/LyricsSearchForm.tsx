@@ -39,7 +39,7 @@ const LyricsSearchForm: Component<{
           id="search"
           type="search"
           name="search"
-          class="w-full rounded-lg px-4 py-3 text-sm text-gray-600 focus:outline-none"
+          class="w-full rounded-lg px-4 py-3 text-sm text-gray-600 focus:outline-none dark:bg-gray-800 dark:text-gray-50"
           placeholder="Search for a track by title or content..."
           autofocus
         />

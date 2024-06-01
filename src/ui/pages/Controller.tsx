@@ -225,7 +225,7 @@ const Controller: Component = () => {
         {/* Sidebar */}
         <aside class="col-span-1 flex flex-initial flex-col gap-4">
           {/* Searchbar and search results */}
-          <search class="flex h-[45dvh] flex-col gap-4 rounded-lg bg-tvc-orange px-4 pb-4 pt-2">
+          <search class="flex h-[45dvh] flex-col gap-4 rounded-lg bg-tvc-orange px-4 pb-4 pt-2 dark:bg-orange-600">
             {/* Searchbar */}
             <div class="flex flex-col gap-2">
               <h2 class="text-4xl font-black tracking-tight text-gray-900">
@@ -241,7 +241,7 @@ const Controller: Component = () => {
             />
           </search>
 
-          <section class="flex h-[45dvh] flex-col rounded-lg bg-tvc-orange p-4 md:h-[48dvh] xl:h-[48.9dvh]">
+          <section class="flex h-[45dvh] flex-col rounded-lg bg-tvc-orange p-4 md:h-[48dvh] xl:h-[48.9dvh] dark:bg-orange-600">
             {/* Now playing */}
             <div class="mb-2 min-h-24">
               <h3 class="mb-1 text-sm font-semibold text-gray-900">
@@ -262,7 +262,7 @@ const Controller: Component = () => {
             <div class="mb-2 flex justify-between font-semibold text-gray-800">
               <h3 class="text-sm">Up next</h3>
               <button
-                class="flex items-center gap-1.5 rounded-md px-2 text-sm transition hover:text-white"
+                class="flex items-center gap-1.5 rounded-md px-2 text-sm transition hover:text-white dark:hover:text-gray-100"
                 classList={{ hidden: peek() === undefined }}
                 onClick={() => flush()}
               >
@@ -326,8 +326,11 @@ const Controller: Component = () => {
           </Show>
 
           {/* Controls */}
-          <footer id="controls" class="sticky bottom-0 bg-white pt-4">
-            <div class="flex min-h-16 flex-wrap justify-center gap-2 rounded-lg bg-tvc-green p-4 px-6 text-gray-700 lg:justify-between lg:gap-4">
+          <footer
+            id="controls"
+            class="sticky bottom-0 bg-white pt-4 dark:bg-transparent"
+          >
+            <div class="flex min-h-16 flex-wrap justify-center gap-2 rounded-lg bg-tvc-green p-4 px-6 text-gray-700 lg:justify-between lg:gap-4 dark:bg-teal-700">
               <ProjectionButton
                 title="Shift + P"
                 isAvailable={receiverIsAvailable()}

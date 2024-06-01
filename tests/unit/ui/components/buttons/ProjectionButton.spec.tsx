@@ -55,7 +55,7 @@ describe("<ProjectionButton />", () => {
 
     // Make the assertions on the first button.
     expect(firstEl).toContainHTML(
-      `<span class="material-symbols-outlined transition">${startIcon}</span>`
+      `<span class="material-symbols-outlined transition group-hover:text-sky-600">${startIcon}</span>`
     );
     expect(firstEl).toHaveAccessibleName(`${startIcon} ${startText}`);
     expect(firstEl).toHaveAttribute("title", title);
