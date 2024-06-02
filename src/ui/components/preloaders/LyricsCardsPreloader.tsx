@@ -11,7 +11,7 @@ const LyricsCardsPreloader: Component<{ canProject: boolean }> = (props) => {
             <img
               src="/images/failed.webp"
               alt="Failed to identify second screen"
-              class="h-auto w-44 opacity-90"
+              class="size-44 p-3 opacity-90 dark:rounded-full dark:bg-gray-400/40"
             />
 
             <h3 class="dark:text-gray-200">
@@ -24,7 +24,7 @@ const LyricsCardsPreloader: Component<{ canProject: boolean }> = (props) => {
           <img
             src="/images/waiting.webp"
             alt="No items in queue"
-            class="h-auto w-32 opacity-90"
+            class="size-32 opacity-90"
           />
           <h3 class="dark:text-gray-200">
             Waiting for content to be queued...
