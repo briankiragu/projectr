@@ -12,7 +12,7 @@ const ProjectionButton: Component<{
     <button
       type="button"
       title={props.title}
-      class="group flex cursor-pointer items-center gap-3 p-2 px-3 font-semibold transition-colors hover:bg-teal-700 hover:text-teal-50 focus:outline-none lg:h-auto lg:w-auto lg:px-4 xl:px-5 dark:hover:bg-gray-700"
+      class="group flex cursor-pointer items-center gap-3 p-2 px-3 font-semibold transition-colors hover:bg-teal-700 hover:text-teal-50 focus:outline-none lg:h-auto lg:w-auto lg:px-4 xl:px-5"
       classList={{
         "bg-teal-300 dark:bg-teal-400": props.isAvailable,
         "hover:bg-transparent dark:disabled:text-gray-400 disabled:text-gray-300 hover:cursor-not-allowed":
