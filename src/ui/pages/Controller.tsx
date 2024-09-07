@@ -47,25 +47,25 @@ const Controller: Component = () => {
   const { toTitleCase } = useFormatting();
   // eslint-disable-next-line no-empty-pattern
   const {
-    // isAvailable: receiverIsAvailable,
-    // isConnected: receiverIsConnected,
-    // isVisible: receiverIsVisible,
-    // openPresentation: openReceiver,
-    // showPresentation: showOnReceiver,
-    // hidePresentation: hideOnReceiver,
-    // closePresentation: closeReceiver,
-    // sendPresentationData: sendToReceiver,
-  } = usePresentation();
-  // eslint-disable-next-line no-empty-pattern
-  const {
     isAvailable: receiverIsAvailable,
     isConnected: receiverIsConnected,
     isVisible: receiverIsVisible,
-    openProjection: openReceiver,
-    showProjection: showOnReceiver,
-    hideProjection: hideOnReceiver,
-    closeProjection: closeReceiver,
-    sendProjectionData: sendToReceiver,
+    openPresentation: openReceiver,
+    showPresentation: showOnReceiver,
+    hidePresentation: hideOnReceiver,
+    closePresentation: closeReceiver,
+    sendPresentationData: sendToReceiver,
+  } = usePresentation();
+  // eslint-disable-next-line no-empty-pattern
+  const {
+    // isAvailable: receiverIsAvailable,
+    // isConnected: receiverIsConnected,
+    // isVisible: receiverIsVisible,
+    // openProjection: openReceiver,
+    // showProjection: showOnReceiver,
+    // hideProjection: hideOnReceiver,
+    // closeProjection: closeReceiver,
+    // sendProjectionData: sendToReceiver,
   } = useProjection(channel);
   const {
     queue,
