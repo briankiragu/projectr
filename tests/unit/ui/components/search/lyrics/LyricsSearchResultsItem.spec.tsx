@@ -31,7 +31,7 @@ describe("<LyricsSearchResultsItem />", () => {
 
     // Make the assertions.
     expect(listItemEl).toHaveTextContent("This Is The Title");
-    expect(imgEl).toHaveAttribute("src", "/images/MusixMatch-logo.webp");
+    expect(imgEl).toHaveAttribute("src", "/images/musixmatch-logo.webp");
     expect(buttonEl).toBeInTheDocument();
   });
 
