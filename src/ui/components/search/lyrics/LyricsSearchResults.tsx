@@ -1,7 +1,7 @@
 import { type Component, For, lazy } from "solid-js";
 
 // Import the interfaces...
-import type { ISearchItem } from "@interfaces/track";
+import type { ISearchItem } from "@interfaces/lyric";
 import type { IQueueItem } from "@interfaces/queue";
 
 // Import the composables...

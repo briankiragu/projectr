@@ -2,7 +2,7 @@ services:
   mysql:
     image: mysql:latest
     container_name: db
-    restart: always
+    restart: unless-stopped
     command: --binlog-format=ROW --authentication-policy=mysql_native_password
     ports:
       - "${DB_PORT:-3306}:3306"
@@ -20,7 +20,7 @@ services:
   directus:
     image: directus/directus:latest
     container_name: admin
-    restart: always
+    restart: unless-stopped
     ports:
       - "${DIRECTUS_PORT:-8055}:8055"
     environment:
@@ -45,7 +45,7 @@ services:
   meilisearch:
     image: getmeili/meilisearch:latest
     container_name: search
-    restart: always
+    restart: unless-stopped
     ports:
       - "${MEILI_PORT:-7700}:7700"
     environment:
@@ -59,7 +59,7 @@ services:
   meilisync:
     image: long2ice/meilisync:latest
     container_name: meilisync
-    restart: always
+    restart: unless-stopped
     volumes:
       - meilisync_data:/meilisync:rw
       - ./docker/meilisync/config.yml:/meilisync/config.yml:ro
@@ -80,7 +80,7 @@ services:
   nginx:
     image: nginx:alpine
     container_name: proxy
-    restart: always
+    restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"

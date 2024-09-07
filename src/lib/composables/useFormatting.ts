@@ -1,12 +1,12 @@
 export default () => {
-  const toEditableLyrics = (lyrics: string[][]): string =>
-    lyrics.reduce((acc1, verse) => {
+  const toEditableLyrics = (content: string[][]): string =>
+    content.reduce((acc1, verse) => {
       const stanza = verse.reduce((acc2, line) => `${acc2}\n${line}`);
       return `${acc1}${stanza}\n\n`;
     }, ``);
 
-  const fromEditableLyrics = (lyrics: string): string[][] =>
-    lyrics
+  const fromEditableLyrics = (content: string): string[][] =>
+    content
       .split(/\n\n/g)
       .filter((verse) => verse.length)
       .map((verse) => verse.split(/\n/g));

@@ -1,5 +1,7 @@
 """Script to get track lyrics as json data from .PPTX"""
 
+
+import argparse
 import json
 import logging
 import os
@@ -25,57 +27,14 @@ structlog.configure(
 log = structlog.get_logger()
 
 
-def extract_data_from_pptx(input_pptx):
-    log.info("Attempting to extract data from .pptx", file=input_pptx)
-    prs = Presentation(input_pptx)
-    data = []
+def replace_with_ascii(phrase: str) -> str:
+    """Replace the tricky unicode characters"""
 
-    for slide in prs.slides:
-        slide_data = [
-            shape.text.strip()
-            for shape in slide.shapes
-            if shape.has_text_frame and shape.text.strip()
-        ]
-        data.append(slide_data)
-
-    return data
-
-
-def format_extracted_lyrics(
-    slides: list[list[str]]
-) -> list[dict[str, int | str | list[str]]]:
-    """Format the extracted data to the expected format"""
-
-    titles: list[str] = []
-    tracks: list[dict[str, int | str | list[str] | None]] = []
-    current_title: str = ""
-    current_lyrics: list[str] = []
-
-    for slide in slides:
-        if len(slide) >= 2:
-            if current_title not in titles:
-                titles.append(current_title)
-                tracks.append(
-                    {
-                        "id": len(tracks) + 1,
-                        "title": current_title,
-                        "lyrics": "\n\n".join(current_lyrics),
-                        "status": "published",
-                        "sort": None
-                    }
-                )
-
-            current_title = extract_title_from_string(slide[0])
-            current_lyrics = [  # type: ignore
-                extract_lyrics_from_string(*slide[1:])  # type: ignore
-            ]
-        elif len(slide) == 1:
-            current_lyrics.append(  # type: ignore
-                extract_lyrics_from_string(*slide)  # type: ignore
-            )
-
-    return tracks
-
+    return re.sub(
+        r"[\u201c\u201d]",
+        '"',
+        phrase.replace("\u2019", "'").replace("\u2018", "").replace("\u2013", "-")
+    )
 
 def extract_title_from_string(title: str) -> str:
     """Remove formatting from titles"""
@@ -93,56 +52,104 @@ def extract_lyrics_from_string(verse: str) -> str:
     ).strip()
 
 
-def replace_with_ascii(phrase: str) -> str:
-    """Replace the tricky unicode characters"""
+def extract_data_from_pptx(input_pptx: str):
+    log.info("Attempting to extract data from .pptx", file=input_pptx)
+    prs = Presentation(input_pptx)
+    data = []
 
-    return re.sub(
-        r"[\u201c\u201d]",
-        '"',
-        phrase.replace("\u2019", "'").replace("\u2018", "").replace("\u2013", "-")
-    )
+    for slide in prs.slides:
+        slide_data = [
+            shape.text.strip()
+            for shape in slide.shapes
+            if shape.has_text_frame and shape.text.strip()
+        ]
+        data.append(slide_data)
 
+    return data
+
+
+def format_extracted_lyrics(
+    tenant_id: str,
+    slides: list[list[str]]
+) -> list[dict[str, int | str | list[str]]]:
+    """Format the extracted data to the expected format"""
+
+    titles: list[str] = []
+    lyrics: list[dict[str, int | str | list[str] | None]] = []
+    current_title: str = ""
+    current_content: list[str] = []
+
+    for slide in slides:
+        if len(slide) >= 2:
+            if current_title not in titles:
+                titles.append(current_title)
+                lyrics.append(
+                    {
+                        "tenant": tenant_id,
+                        "title": current_title,
+                        "content": "\n\n".join(current_content),
+                        "status": "published",
+                        "sort": None
+                    }
+                )
+
+            current_title = extract_title_from_string(slide[0])
+            current_content = [
+                extract_lyrics_from_string(*slide[1:])
+            ]
+        elif len(slide) == 1:
+            current_content.append(
+                extract_lyrics_from_string(*slide)
+            )
+
+    return lyrics  # type: ignore
 
 try:
+    # Configure the argument parse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-t", "--tenant", help="Tenant ID")
+    parser.add_argument("-p", "--path", nargs='*', action='append',  help="Path to the .pptx file")
+    args = parser.parse_args()
+
+    if args.tenant == None:
+        raise Exception("No tenant ID provided. Use the -t or --tenant option to provide a tenant ID.")
+
+    if args.path == None:
+        raise Exception("No paths to .pptx file(s). Use the -p or --path option to provide a relative path to a .pptx file.")
+
     # Find the directory in which the current script resides:
     dirname = os.path.dirname(os.path.realpath(__file__))
 
-    # Get all the .PPTX files supplied in the CLI.
-    file_paths = sys.argv[1:]
-    log.debug(f"File paths provided.", file_paths=file_paths)
+    # Get the Tenant ID from the CLI.
+    tenant_id = args.tenant
+    log.debug(f"Tenant ID provided.", tenant_id=tenant_id)
 
-    # Set the name of the output file.
-    output_json = f"{dirname}/data/json/lyrics.extracted.json"
-    log.info(f"Attempting to extract data...", output=output_json)
+    # Get all the .PPTX files supplied in the CLI.
+    file_paths = [path for row in args.path for path in row]
+    log.debug(f"File paths provided.", file_paths=file_paths)
 
     # Create a variable to hold all the data.
     extracted_data = []
-
-    # Get all the extracted data from the files in one dataset.
+    log.info(f"Attempting to extract data...",)
     for file_path in file_paths:
         extracted_data += extract_data_from_pptx(file_path)
         log.debug(
             f"Extracted data from pptx file.",
-            total_records=len(extracted_data)
+            records=len(extracted_data)
         )
-
-    # Write the extracted data to the file.
-    with open(output_json, "w", encoding="utf8") as json_file:
-        json.dump(extracted_data, json_file)
-    log.info(f"Data extracted successfully and saved.", output=output_json)
 
     # Format the data as JSON.
     formatted_json_data: list[
         dict[str, int | str | list[str]]
-    ] = format_extracted_lyrics(extracted_data)
+    ] = format_extracted_lyrics(tenant_id, extracted_data)
 
     # Set the name of the output file.
-    output_json = f"{dirname}/data/json/lyrics.formatted.json"
-    log.info(f"Attempting to format data...", output=output_json)
+    output_json = f"{dirname}/data/json/content.formatted.json"
+    log.info(f"Attempting to format data...")
 
     # Write the json output file.
     with open(output_json, "w", encoding="utf8") as json_file:
         json.dump(formatted_json_data, json_file)
-    log.info("JSON lyric data formatted successfully and saved.", output=output_json)
+    log.info("Lyrics data formatted successfully and saved.", output=output_json)
 except Exception as e:
-    print("Error:", str(e))
+    log.error(e)

@@ -13,7 +13,7 @@ describe("<LyricsCardPreloader />", () => {
 
     // Assert that the data is correct.
     expect(img).toHaveAttribute("src", "/images/waiting.webp");
-    expect(heading).toHaveTextContent("No track is currently playing");
+    expect(heading).toHaveTextContent("Waiting for content to be queued...");
   });
 
   test("it renders correctly when the browser cannot project", () => {
@@ -26,8 +26,6 @@ describe("<LyricsCardPreloader />", () => {
 
     // Assert that the data is correct.
     expect(img).toHaveAttribute("src", "/images/failed.webp");
-    expect(heading).toHaveTextContent(
-      "Failed to identify/project onto a second screen."
-    );
+    expect(heading).toHaveTextContent("Failed to identify a second screen.");
   });
 });

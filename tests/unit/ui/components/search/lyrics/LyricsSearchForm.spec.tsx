@@ -16,7 +16,7 @@ describe("<LyricsSearchForm />", () => {
     // Make the assertion.
     expect(el).toHaveAttribute(
       "placeholder",
-      "Search for a track by title or lyrics..."
+      "Search for a track by title or content..."
     );
   });
 

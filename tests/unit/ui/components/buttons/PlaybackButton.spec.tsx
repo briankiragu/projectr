@@ -30,7 +30,7 @@ describe("<PlaybackButton />", () => {
 
     // Run the assertions.
     expect(el).toContainHTML(
-      `<span class="material-symbols-outlined transition">${icon}</span>`
+      `<span class="material-symbols-outlined transition group-hover:text-sky-600">${icon}</span>`
     );
     expect(el).toHaveAccessibleName(`${icon} ${text}`);
     expect(el).toHaveAttribute("title", title);

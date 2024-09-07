@@ -37,7 +37,7 @@ export default () => {
 
     // Make the request.
     const response = await fetch(
-      `${apiUrl}/track.lyrics.get?${searchParams.toString()}`
+      `${apiUrl}/track.content.get?${searchParams.toString()}`
     );
 
     // Return the response.

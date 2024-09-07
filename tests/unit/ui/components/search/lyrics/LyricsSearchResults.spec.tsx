@@ -1,5 +1,5 @@
 import LyricsSearchResults from "@components/search/lyrics/LyricsSearchResults";
-import { ISource, IStatus, type ISearchItem } from "@interfaces/track";
+import { ISource, IStatus, type ISearchItem } from "@interfaces/lyric";
 import { render, screen } from "@solidjs/testing-library";
 import { describe, expect, test, vi } from "vitest";
 
@@ -10,7 +10,7 @@ describe("<LyricsSearchResultsItem />", () => {
   const results: ISearchItem[] = [
     {
       title,
-      lyrics: [[line]],
+      content: [[line]],
       source: ISource.musix,
       status: IStatus.PUBLISHED,
       sort: null,

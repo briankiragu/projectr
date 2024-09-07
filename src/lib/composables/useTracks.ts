@@ -1,5 +1,5 @@
 // Import the interfaces...
-import { type ISearchItem, ISource, type ITrack } from "@interfaces/track";
+import { type ISearchItem, ISource, type ILyric } from "@interfaces/lyric";
 import type { IQueueItem } from "@interfaces/queue";
 
 // Import the composables...
@@ -17,9 +17,9 @@ export default () => {
 
     // Return the combined results.
     return [
-      ...(hits as ITrack[]).map((hit) => ({
+      ...(hits as ILyric[]).map((hit) => ({
         ...hit,
-        lyrics: fromEditableLyrics(hit.lyrics),
+        content: fromEditableLyrics(hit.content),
         artists: hit.artists?.split(";").filter((val) => val),
         source: ISource.meili,
       })),
@@ -29,7 +29,7 @@ export default () => {
   const searchItemToQueueItem = (item: ISearchItem): IQueueItem => ({
     qid: Date.now(),
     title: item.title,
-    content: item.lyrics,
+    content: item.content,
   });
 
   return { searchTracks, searchItemToQueueItem };

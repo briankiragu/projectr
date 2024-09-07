@@ -33,7 +33,7 @@ describe("<DisplayButton />", () => {
 
     // Make the assertions.
     expect(el).toContainHTML(
-      `<span class="material-symbols-outlined transition">${hideIcon}</span>`
+      `<span class="material-symbols-outlined transition group-hover:text-sky-600">${hideIcon}</span>`
     );
     expect(el).toHaveAccessibleName(`${hideIcon} ${hideText}`);
     expect(el).toHaveAttribute("title", title);
@@ -56,7 +56,7 @@ describe("<DisplayButton />", () => {
 
     // Make the assertions.
     expect(el).toContainHTML(
-      `<span class="material-symbols-outlined transition">${showIcon}</span>`
+      `<span class="material-symbols-outlined transition group-hover:text-sky-600">${showIcon}</span>`
     );
     expect(el).toHaveAccessibleName(`${showIcon} ${showText}`);
     expect(el).toHaveAttribute("title", title);
