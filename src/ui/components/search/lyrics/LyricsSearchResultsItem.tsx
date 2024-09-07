@@ -1,7 +1,7 @@
-import { type Component, Show } from "solid-js";
+import { type Component } from "solid-js";
 
 // Import the interfaces...
-import { type ISearchItem, ISource } from "@interfaces/lyric";
+import { type ISearchItem } from "@interfaces/lyric";
 
 // Import the composables...
 import useFormatting from "@composables/useFormatting";

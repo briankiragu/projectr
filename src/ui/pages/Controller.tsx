@@ -47,25 +47,25 @@ const Controller: Component = () => {
   const { toTitleCase } = useFormatting();
   // eslint-disable-next-line no-empty-pattern
   const {
-    isAvailable: receiverIsAvailable,
-    isConnected: receiverIsConnected,
-    isVisible: receiverIsVisible,
-    openPresentation: openReceiver,
-    showPresentation: showOnReceiver,
-    hidePresentation: hideOnReceiver,
-    closePresentation: closeReceiver,
-    sendPresentationData: sendToReceiver,
-  } = usePresentation();
-  // eslint-disable-next-line no-empty-pattern
-  const {
     // isAvailable: receiverIsAvailable,
     // isConnected: receiverIsConnected,
     // isVisible: receiverIsVisible,
-    // openProjection: openReceiver,
-    // showProjection: showOnReceiver,
-    // hideProjection: hideOnReceiver,
-    // closeProjection: closeReceiver,
-    // sendProjectionData: sendToReceiver,
+    // openPresentation: openReceiver,
+    // showPresentation: showOnReceiver,
+    // hidePresentation: hideOnReceiver,
+    // closePresentation: closeReceiver,
+    // sendPresentationData: sendToReceiver,
+  } = usePresentation();
+  // eslint-disable-next-line no-empty-pattern
+  const {
+    isAvailable: receiverIsAvailable,
+    isConnected: receiverIsConnected,
+    isVisible: receiverIsVisible,
+    openProjection: openReceiver,
+    showProjection: showOnReceiver,
+    hideProjection: hideOnReceiver,
+    closeProjection: closeReceiver,
+    sendProjectionData: sendToReceiver,
   } = useProjection(channel);
   const {
     queue,
@@ -241,7 +241,7 @@ const Controller: Component = () => {
             />
           </search>
 
-          <section class="flex h-[45dvh] flex-col rounded-lg bg-tvc-orange p-4 md:h-[48dvh] xl:h-[48.9dvh] dark:bg-orange-600">
+          <section class="flex h-[45dvh] flex-col rounded-lg bg-tvc-orange p-4 md:h-[48dvh] xl:h-[48.9dvh] 2xl:h-[49.9dvh] dark:bg-orange-600">
             {/* Now playing */}
             <div class="mb-2 min-h-24">
               <h3 class="mb-1 text-sm font-semibold text-gray-900">
