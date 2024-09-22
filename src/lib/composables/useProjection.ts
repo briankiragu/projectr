@@ -16,7 +16,7 @@ export default (channel: BroadcastChannel) => {
   const openProjection = async () => {
     // Launch a presentation instance.
     const payload = await project(
-      Date.now().toString(),
+      "projectr",
       import.meta.env.VITE_BROADCAST_NAME
     );
 
