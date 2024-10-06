@@ -118,9 +118,6 @@ const ScripturesSearchForm: Component<{
     <form class="grid grid-cols-4 gap-2" onSubmit={handleSubmit}>
       {/* Version */}
       <label for="version" class="col-span-full">
-        <span class="col-span-full text-sm italic text-gray-800">
-          Search for a Bible version...
-        </span>
         <select
           id="version"
           class="w-full rounded-md p-2 text-sm text-gray-700 focus:outline-none"
@@ -211,7 +208,7 @@ const ScripturesSearchForm: Component<{
       </label>
 
       {/* Verse */}
-      <div class="col-span-full grid grid-cols-4 gap-3">
+      <div class="col-span-full grid h-40 grid-cols-4 gap-3 overflow-y-scroll">
         <Show when={verses.loading}>
           <span class="text-sm">Loading...</span>
         </Show>
@@ -221,7 +218,7 @@ const ScripturesSearchForm: Component<{
               type="button"
               id={`verse-${verse.id}`}
               title={verse.reference}
-              class="col-span-1 flex cursor-pointer justify-center gap-0.5 overflow-hidden text-ellipsis rounded-md border-2 bg-gray-400 px-6 py-1 text-center text-sm text-gray-50"
+              class="col-span-1 flex min-h-8 cursor-pointer items-center justify-center gap-0.5 overflow-hidden text-ellipsis rounded-md border-2 bg-gray-400 text-center text-sm text-gray-50"
               classList={{ "border-gray-700": verseIds()?.includes(verse.id) }}
               onClick={() => handleChangeVerse(verse.id)}
             >
@@ -236,7 +233,7 @@ const ScripturesSearchForm: Component<{
         class={`col-span-full rounded-md py-2 text-sm font-semibold text-gray-50 transition-colors ${hasContent() ? "bg-gray-900" : "disabled cursor-not-allowed bg-gray-400"}`}
         disabled={!hasContent()}
       >
-        Project
+        Add to queue
       </button>
     </form>
   );

@@ -29,6 +29,7 @@ import usePresentation from "@composables/usePresentation";
 import useProjection from "@composables/useProjection";
 import LyricsSearchForm from "@components/search/lyrics/LyricsSearchForm";
 import LyricsSearchResults from "@components/search/lyrics/LyricsSearchResults";
+import ScripturesSearchForm from "@components/search/scriptures/ScripturesSearchForm";
 
 // Import the lazy-loaded components.
 const LyricsCard = lazy(() => import("@components/cards/LyricsCard"));
@@ -41,6 +42,7 @@ const Controller: Component = () => {
 
   // Create the signals.
   const [isOffline, setIsOffline] = createSignal<boolean>(false);
+  const [isShowingLyrics, setIsShowingLyrics] = createSignal<boolean>(false);
   const [results, setResults] = createStore<ISearchItem[]>([]);
 
   // Import the composables.
@@ -228,10 +230,35 @@ const Controller: Component = () => {
           <search class="flex h-[45dvh] flex-col gap-4 rounded-lg bg-tvc-orange px-4 pb-4 pt-2 dark:bg-orange-600">
             {/* Searchbar */}
             <div class="flex flex-col gap-2">
-              <h2 class="text-4xl font-black tracking-tight text-gray-900">
-                Search
-              </h2>
-              <LyricsSearchForm searchHandler={setResults} />
+              <div class="flex items-center justify-between">
+                {/* Search bar title */}
+                <h2 class="text-3xl font-black tracking-tight text-gray-900">
+                  Search{" "}
+                  <span class="text-indigo-600">
+                    {isShowingLyrics() ? "lyrics" : "scripture"}
+                  </span>
+                </h2>
+
+                <button
+                  type="button"
+                  class="flex items-center justify-center text-indigo-500 focus:outline-none"
+                  onClick={() => setIsShowingLyrics((state) => !state)}
+                >
+                  {isShowingLyrics() ? (
+                    <span class="material-symbols-outlined">toggle_on</span>
+                  ) : (
+                    <span class="material-symbols-outlined">toggle_off</span>
+                  )}
+                </button>
+              </div>
+
+              {/* Search forms */}
+              <Show
+                when={isShowingLyrics()}
+                fallback={<ScripturesSearchForm enqueueHandler={addToQueue} />}
+              >
+                <LyricsSearchForm searchHandler={setResults} />
+              </Show>
             </div>
 
             {/* Search results */}

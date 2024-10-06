@@ -29,9 +29,10 @@ const QueueListItem: Component<{
             </small>
           </Show>
         </div>
-        <em class="text-sm font-normal italic leading-4 text-gray-500">
-          {toTitleCase(props.item.content[0][0])}
-        </em>
+        <em
+          class="text-sm font-normal italic leading-4 text-gray-500"
+          innerHTML={toTitleCase(props.item.content[0][0]) || ""}
+        ></em>
       </div>
       <button
         type="button"
