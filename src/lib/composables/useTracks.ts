@@ -29,6 +29,7 @@ export default () => {
   const searchItemToQueueItem = (item: ISearchItem): IQueueItem => ({
     qid: Date.now(),
     title: item.title,
+    artists: item.artists,
     content: item.content,
   });
 

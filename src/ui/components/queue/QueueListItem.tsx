@@ -1,4 +1,4 @@
-import { type Component } from "solid-js";
+import { Show, type Component } from "solid-js";
 
 // Import interfaces...
 import type { IQueueItem } from "@interfaces/queue";
@@ -16,11 +16,23 @@ const QueueListItem: Component<{
   return (
     <li
       data-testId="queue-list-item"
-      class="flex min-h-14 items-center justify-between gap-2 rounded-lg bg-gray-100 px-4 py-2 text-sm text-gray-600 shadow transition-shadow hover:shadow-md dark:bg-gray-300 dark:text-gray-800"
+      class="flex min-h-14 items-center justify-between gap-2 rounded-lg bg-gray-100 px-4 py-3 text-sm text-gray-600 shadow transition-shadow hover:shadow-md dark:bg-gray-300 dark:text-gray-800"
     >
-      <h4 class="col-span-2 w-full py-1 font-semibold">
-        {toTitleCase(props.item.title)}
-      </h4>
+      <div class="flex w-full flex-col">
+        <div class="flex w-8/12 gap-1.5">
+          <h4 class="truncate font-semibold">
+            {toTitleCase(props.item.title)}
+          </h4>
+          <Show when={false}>
+            <small class="truncate text-sm font-normal">
+              ({toTitleCase(props.item.artists?.toString())})
+            </small>
+          </Show>
+        </div>
+        <em class="text-sm font-normal italic leading-4 text-gray-500">
+          {toTitleCase(props.item.content[0][0])}
+        </em>
+      </div>
       <button
         type="button"
         title="remove"
