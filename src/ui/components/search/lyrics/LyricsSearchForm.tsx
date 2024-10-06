@@ -32,7 +32,7 @@ const LyricsSearchForm: Component<{
   });
 
   return (
-    <form onSubmit={(e) => e.preventDefault()}>
+    <form class="animate-slide-in" onSubmit={(e) => e.preventDefault()}>
       <label for="search">
         <input
           ref={inputRef!}

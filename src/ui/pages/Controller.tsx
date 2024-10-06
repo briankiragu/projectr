@@ -42,7 +42,7 @@ const Controller: Component = () => {
 
   // Create the signals.
   const [isOffline, setIsOffline] = createSignal<boolean>(false);
-  const [isShowingLyrics, setIsShowingLyrics] = createSignal<boolean>(false);
+  const [isShowingLyrics, setIsShowingLyrics] = createSignal<boolean>(true);
   const [results, setResults] = createStore<ISearchItem[]>([]);
 
   // Import the composables.
@@ -232,16 +232,23 @@ const Controller: Component = () => {
             <div class="flex flex-col gap-2">
               <div class="flex items-center justify-between">
                 {/* Search bar title */}
-                <h2 class="text-3xl font-black tracking-tight text-gray-900">
-                  Search{" "}
-                  <span class="text-indigo-600">
-                    {isShowingLyrics() ? "lyrics" : "scripture"}
-                  </span>
+                <h2 class="flex items-center gap-2 text-3xl font-black tracking-tight text-gray-900">
+                  Search
+                  <Show
+                    when={isShowingLyrics()}
+                    fallback={
+                      <span class="animate-slide-in text-indigo-600">
+                        scripture
+                      </span>
+                    }
+                  >
+                    <span class="animate-slide-in text-indigo-600">lyrics</span>
+                  </Show>
                 </h2>
 
                 <button
                   type="button"
-                  class="flex items-center justify-center text-indigo-500 focus:outline-none"
+                  class="flex h-9 w-9 items-center justify-center rounded-full text-indigo-500 transition hover:bg-gray-800/20 focus:outline-none"
                   onClick={() => setIsShowingLyrics((state) => !state)}
                 >
                   {isShowingLyrics() ? (
@@ -311,7 +318,7 @@ const Controller: Component = () => {
 
         {/* Live edit */}
         <Show when={isEditing()}>
-          <section class="grow rounded-lg bg-gray-100 p-3 transition">
+          <section class="grow rounded-lg bg-gray-100 p-3 transition dark:bg-gray-200">
             <EditQueueItemForm item={nowPlaying()!} handler={editLyrics} />
           </section>
         </Show>
