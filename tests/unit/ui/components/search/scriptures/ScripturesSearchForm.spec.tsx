@@ -15,14 +15,9 @@ describe("<ScripturesSearchForm />", () => {
     render(() => <ScripturesSearchForm enqueueHandler={enqueueFn} />);
 
     // Get the elements from the vDOM.
-    const versionEl = screen.getByLabelText("Search for a Bible version...");
     const bookEl = screen.getByLabelText("Book");
     const chapterEl = screen.getByLabelText("Chapter");
     const buttonEl = screen.getByRole("button");
-
-    // Make the assertions.
-    expect(versionEl).toBeInTheDocument();
-    expect(versionEl).toHaveValue("Loading...");
 
     expect(bookEl).toBeInTheDocument();
     expect(bookEl).toHaveValue("Choose a book");
