@@ -115,15 +115,15 @@ const ScripturesSearchForm: Component<{
   };
 
   return (
-    <form class="grid grid-cols-4 gap-2" onSubmit={handleSubmit}>
+    <form
+      class="animate-slide-in grid grid-cols-4 gap-2"
+      onSubmit={handleSubmit}
+    >
       {/* Version */}
       <label for="version" class="col-span-full">
-        <span class="col-span-full text-sm italic text-gray-800">
-          Search for a Bible version...
-        </span>
         <select
           id="version"
-          class="w-full rounded-md p-2 text-sm text-gray-700 focus:outline-none"
+          class="w-full rounded-md p-3 text-sm text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400"
           onChange={(e) =>
             handleChangeVersion((e.target as HTMLSelectElement).value)
           }
@@ -159,7 +159,7 @@ const ScripturesSearchForm: Component<{
         </span>
         <select
           id="book"
-          class="w-full rounded-md p-2 text-sm text-gray-700 focus:outline-none"
+          class="w-full rounded-md p-3 text-sm text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400"
           onChange={(e) =>
             handleChangeBook((e.target as HTMLSelectElement).value)
           }
@@ -188,7 +188,7 @@ const ScripturesSearchForm: Component<{
         </span>
         <select
           id="chapter"
-          class="w-full rounded-md p-2 text-sm capitalize text-gray-700 focus:outline-none"
+          class="w-full rounded-md p-3 text-sm capitalize text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400"
           onChange={(e) =>
             handleChangeChapter((e.target as HTMLSelectElement).value)
           }
@@ -211,7 +211,7 @@ const ScripturesSearchForm: Component<{
       </label>
 
       {/* Verse */}
-      <div class="col-span-full grid grid-cols-4 gap-3">
+      <div class="col-span-full grid h-[8.5rem] grid-cols-4 gap-3 overflow-y-scroll">
         <Show when={verses.loading}>
           <span class="text-sm">Loading...</span>
         </Show>
@@ -221,8 +221,12 @@ const ScripturesSearchForm: Component<{
               type="button"
               id={`verse-${verse.id}`}
               title={verse.reference}
-              class="col-span-1 flex cursor-pointer justify-center gap-0.5 overflow-hidden text-ellipsis rounded-md border-2 bg-gray-400 px-6 py-1 text-center text-sm text-gray-50"
-              classList={{ "border-gray-700": verseIds()?.includes(verse.id) }}
+              class="col-span-1 flex min-h-8 cursor-pointer items-center justify-center gap-0.5 overflow-hidden text-ellipsis rounded-md border-2 border-gray-400 bg-gray-400 text-center text-sm text-gray-50 dark:bg-gray-700"
+              classList={{
+                "border-gray-700 dark:border-gray-50": verseIds()?.includes(
+                  verse.id
+                ),
+              }}
               onClick={() => handleChangeVerse(verse.id)}
             >
               {verse.orgId}
@@ -233,10 +237,11 @@ const ScripturesSearchForm: Component<{
 
       <button
         type="submit"
-        class={`col-span-full rounded-md py-2 text-sm font-semibold text-gray-50 transition-colors ${hasContent() ? "bg-gray-900" : "disabled cursor-not-allowed bg-gray-400"}`}
+        class="col-span-full flex items-center justify-center gap-2 rounded-md bg-gray-900 py-2.5 text-sm font-semibold text-gray-50 transition-colors disabled:cursor-not-allowed disabled:bg-gray-400 dark:disabled:bg-gray-700 dark:disabled:text-gray-400"
         disabled={!hasContent()}
       >
-        Project
+        <span class="material-symbols-outlined">add_to_queue</span>
+        Add to queue
       </button>
     </form>
   );

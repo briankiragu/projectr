@@ -32,12 +32,11 @@ const EditQueueItemForm: Component<{
         <textarea
           name="live-edit"
           id="live-edit"
-          rows="30"
-          class="h-full w-full rounded-md px-3 py-2"
+          rows="31"
+          class="h-full w-full rounded-md px-3 py-2 dark:bg-gray-800 dark:text-gray-400"
+          innerHTML={live()}
           onInput={(e) => setLive(e.target.value)}
-        >
-          {live()}
-        </textarea>
+        ></textarea>
       </label>
 
       {/* Submit */}

@@ -29,6 +29,7 @@ import usePresentation from "@composables/usePresentation";
 import useProjection from "@composables/useProjection";
 import LyricsSearchForm from "@components/search/lyrics/LyricsSearchForm";
 import LyricsSearchResults from "@components/search/lyrics/LyricsSearchResults";
+import ScripturesSearchForm from "@components/search/scriptures/ScripturesSearchForm";
 
 // Import the lazy-loaded components.
 const LyricsCard = lazy(() => import("@components/cards/LyricsCard"));
@@ -41,6 +42,7 @@ const Controller: Component = () => {
 
   // Create the signals.
   const [isOffline, setIsOffline] = createSignal<boolean>(false);
+  const [isShowingLyrics, setIsShowingLyrics] = createSignal<boolean>(true);
   const [results, setResults] = createStore<ISearchItem[]>([]);
 
   // Import the composables.
@@ -228,10 +230,42 @@ const Controller: Component = () => {
           <search class="flex h-[45dvh] flex-col gap-4 rounded-lg bg-tvc-orange px-4 pb-4 pt-2 dark:bg-orange-600">
             {/* Searchbar */}
             <div class="flex flex-col gap-2">
-              <h2 class="text-4xl font-black tracking-tight text-gray-900">
-                Search
-              </h2>
-              <LyricsSearchForm searchHandler={setResults} />
+              <div class="flex items-center justify-between">
+                {/* Search bar title */}
+                <h2 class="flex items-center gap-2 text-3xl font-black tracking-tight text-gray-900">
+                  Search
+                  <Show
+                    when={isShowingLyrics()}
+                    fallback={
+                      <span class="animate-slide-in text-indigo-600">
+                        scripture
+                      </span>
+                    }
+                  >
+                    <span class="animate-slide-in text-indigo-600">lyrics</span>
+                  </Show>
+                </h2>
+
+                <button
+                  type="button"
+                  class="flex h-9 w-9 items-center justify-center rounded-full text-indigo-500 transition hover:bg-gray-800/20 focus:outline-none"
+                  onClick={() => setIsShowingLyrics((state) => !state)}
+                >
+                  {isShowingLyrics() ? (
+                    <span class="material-symbols-outlined">toggle_on</span>
+                  ) : (
+                    <span class="material-symbols-outlined">toggle_off</span>
+                  )}
+                </button>
+              </div>
+
+              {/* Search forms */}
+              <Show
+                when={isShowingLyrics()}
+                fallback={<ScripturesSearchForm enqueueHandler={addToQueue} />}
+              >
+                <LyricsSearchForm searchHandler={setResults} />
+              </Show>
             </div>
 
             {/* Search results */}
@@ -284,7 +318,7 @@ const Controller: Component = () => {
 
         {/* Live edit */}
         <Show when={isEditing()}>
-          <section class="grow rounded-lg bg-gray-100 p-3 transition">
+          <section class="grow rounded-lg bg-gray-100 p-3 transition dark:bg-gray-200">
             <EditQueueItemForm item={nowPlaying()!} handler={editLyrics} />
           </section>
         </Show>
