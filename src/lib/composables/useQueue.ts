@@ -4,10 +4,18 @@ import { createStore } from "solid-js/store";
 // Import the interfaces.
 import type { IQueueItem } from "@interfaces/queue";
 
+// Import the composables.
+import usePersistence from "@composables/usePersistence";
+
 export default () => {
-  const [queue, setQueue] = createStore<IQueueItem[]>([]);
+  // Import the composables
+  const { getStoredQueue, setStoredQueue, getStoredNowPlaying } =
+    usePersistence();
+
+  // Define the reactive variables.
+  const [queue, setQueue] = createStore<IQueueItem[]>(getStoredQueue());
   const [nowPlaying, setNowPlaying] = createSignal<IQueueItem | undefined>(
-    undefined
+    getStoredNowPlaying()
   );
   const [currentVerseIndex, setCurrentVerseIndex] = createSignal<number>(0);
   const [isEditing, setIsEditing] = createSignal<boolean>(false);
@@ -19,6 +27,9 @@ export default () => {
   const enqueue = (track: IQueueItem) => {
     // Create a random ID for the track and add it to the queue.
     setQueue([...queue, track]);
+
+    // Update the persistent state.
+    setStoredQueue(queue);
   };
 
   // Dequeue.
@@ -28,10 +39,18 @@ export default () => {
         qid === undefined ? index !== 0 : qid !== track.qid
       )
     );
+
+    // Update the persistent state.
+    setStoredQueue(queue);
   };
 
   // Clear queue
-  const flush = () => setQueue([]);
+  const flush = () => {
+    setQueue([]);
+
+    // Update the persistent state.
+    setStoredQueue(queue);
+  };
 
   // Check if the current verse is not the first.
   const isFirstVerse = (): boolean => currentVerseIndex() === 0;

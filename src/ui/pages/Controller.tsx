@@ -10,12 +10,15 @@ import {
 import { createStore } from "solid-js/store";
 
 // Import the interfaces...
+import type { ISearchItem } from "@interfaces/lyric";
 import type { IProjectionPayload } from "@interfaces/projection";
 import type { IQueueItem } from "@interfaces/queue";
-import type { ISearchItem } from "@interfaces/lyric";
 
 // Import the composables...
 import useFormatting from "@composables/useFormatting";
+import usePersistence from "@composables/usePersistence";
+import usePresentation from "@composables/usePresentation";
+import useProjection from "@composables/useProjection";
 import useQueue from "@composables/useQueue";
 
 // Import the components...
@@ -25,8 +28,6 @@ import PlaybackButton from "@components/buttons/PlaybackButton";
 import ProjectionButton from "@components/buttons/ProjectionButton";
 import EditQueueItemForm from "@components/forms/EditQueueItemForm";
 import LyricsCardsPreloader from "@components/preloaders/LyricsCardsPreloader";
-import usePresentation from "@composables/usePresentation";
-import useProjection from "@composables/useProjection";
 import LyricsSearchForm from "@components/search/lyrics/LyricsSearchForm";
 import LyricsSearchResults from "@components/search/lyrics/LyricsSearchResults";
 import ScripturesSearchForm from "@components/search/scriptures/ScripturesSearchForm";
@@ -37,6 +38,9 @@ const NowPlayingCard = lazy(() => import("@components/cards/NowPlayingCard"));
 const QueueList = lazy(() => import("@components/queue/QueueList"));
 
 const Controller: Component = () => {
+  // Import the composables.
+  const { setStoredNowPlaying } = usePersistence();
+
   // Create a BroadcastAPI channel.
   const channel = new BroadcastChannel(import.meta.env.VITE_BROADCAST_NAME);
 
@@ -107,6 +111,9 @@ const Controller: Component = () => {
       // Send the data.
       sendToReceiver(data);
     }
+
+    // Save the now playing to persistent storage.
+    setStoredNowPlaying(nowPlaying());
   };
 
   const addToQueue = (item: IQueueItem) => {
