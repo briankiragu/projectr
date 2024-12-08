@@ -16,8 +16,8 @@ module.exports = {
       },
       fontSize: {
         large: ["2.25em", { lineHeight: "2.5em" }],
-        larger: ["3.75em", { lineHeight: "1" }],
-        largest: ["6em", { lineHeight: "1" }],
+        larger: ["4.5em", { lineHeight: "1" }],
+        largest: ["8em", { lineHeight: "1" }],
       },
       keyframes: {
         "slide-in": {

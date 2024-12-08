@@ -192,12 +192,18 @@ const Controller: Component = () => {
     });
 
     window.addEventListener("keydown", (e: KeyboardEvent) => {
-      // Start/stop projection.
-      if (e.shiftKey && e.code === "KeyP")
-        receiverIsConnected() ? closeReceiver() : openReceiver();
+      // Start projection.
+      if ((e.shiftKey && e.code === "KeyP") || ["F5"].includes(e.code)) {
+        openReceiver();
+      }
+
+      // Stop projection
+      if ((e.shiftKey && e.code === "KeyP") || ["Escape"].includes(e.code)) {
+        closeReceiver();
+      }
 
       // Show/hide content.
-      if (e.shiftKey && e.code === "KeyS")
+      if ((e.shiftKey && e.code === "KeyS") || ["Period"].includes(e.code))
         receiverIsVisible()
           ? hideOnReceiver()
           : showOnReceiver({
@@ -206,8 +212,8 @@ const Controller: Component = () => {
             });
 
       // Playback events.
-      if (e.code === "ArrowLeft") goToPreviousVerse();
-      if (e.code === "ArrowRight") goToNextVerse();
+      if (["ArrowLeft", "PageUp"].includes(e.code)) goToPreviousVerse();
+      if (["ArrowRight", "PageDown"].includes(e.code)) goToNextVerse();
       if (e.shiftKey && e.code === "ArrowRight") playNext();
     });
   });
