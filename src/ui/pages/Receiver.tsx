@@ -41,7 +41,7 @@ const Receiver: Component = () => {
     <div class="flex h-dvh flex-col items-stretch gap-4 bg-gray-100 p-6">
       {/* Title */}
       <Show when={nowPlaying() !== undefined && currentVerseIndex() === 0}>
-        <h2 class="text-wrap text-center text-2xl font-black uppercase text-[#D15F20] underline md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-9xl">
+        <h2 class="text-wrap text-center font-serif text-2xl font-black uppercase text-[#D15F20] underline md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-9xl">
           {toTitleCase(nowPlaying()?.title)}
         </h2>
       </Show>
@@ -49,14 +49,14 @@ const Receiver: Component = () => {
       {/* Lyrics */}
       <div
         style={{ "font-size": "1em" }}
-        class="flex flex-auto flex-col items-center justify-center gap-2 rounded-lg bg-[url('/images/tvc-logo.svg')] bg-contain bg-center bg-no-repeat text-center text-[#000435] opacity-100 transition-colors"
+        class="flex flex-auto flex-col items-center justify-center gap-2 rounded-lg bg-[url('/images/tvc-logo.svg')] bg-contain bg-center bg-no-repeat text-center text-[#000435] opacity-100 transition-colors 2xl:px-6"
         classList={{ "bg-none opacity-full": nowPlaying() !== undefined }}
       >
         <Show when={nowPlaying() !== undefined}>
           <For each={currentVerse()}>
             {(line) => (
               <div
-                class="text-wrap text-2xl font-extrabold uppercase md:text-large lg:text-larger 2xl:text-largest"
+                class="text-wrap font-serif text-2xl font-black uppercase italic md:text-large lg:text-larger 2xl:mb-8 2xl:text-largest"
                 innerHTML={line}
               ></div>
             )}

@@ -69,19 +69,17 @@ self.addEventListener("activate", (e) => {
   );
 });
 
-/* Network-first cache */
+/* Stale-while-revalidate cache */
 self.addEventListener("fetch", (e) => {
-  // Open the cache
   e.respondWith(
     caches.open(cacheName).then(async (cache) => {
-      // Go to the network first
-      try {
-        const fetchedResponse = await fetch(e.request);
-        cache.put(e.request, fetchedResponse.clone());
-        return fetchedResponse;
-      } catch {
-        return await cache.match(e.request.url);
-      }
+      const cachedResponse = await cache.match(e.request);
+      const fetchedResponse = fetch(e.request).then((networkResponse) => {
+        cache.put(e.request, networkResponse.clone());
+
+        return networkResponse;
+      });
+      return cachedResponse || fetchedResponse;
     })
   );
 });
