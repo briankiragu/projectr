@@ -16,8 +16,3 @@ sync:
     index: lyrics
     pk: id
     full: true
-    fields:
-      - name: id
-      - name: title
-      - name: content
-      - name: artists
