@@ -1,9 +1,9 @@
 services:
   mysql:
-    image: mysql:latest
+    image: mysql:8.0
     container_name: db
     restart: unless-stopped
-    command: --binlog-format=ROW --authentication-policy=mysql_native_password
+    command: --authentication-policy=mysql_native_password --log-bin=mysql-bin --binlog-format=ROW
     ports:
       - "${DB_PORT:-3306}:3306"
       - "33060:33060"
@@ -17,19 +17,35 @@ services:
     networks:
       - projectr
 
+  redis:
+    image: redis:6.2-alpine
+    container_name: cache
+    restart: unless-stopped
+    ports:
+      - "${CACHE_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - projectr
+
   directus:
-    image: directus/directus:latest
+    image: directus/directus:11.5.1
     container_name: admin
     restart: unless-stopped
     ports:
       - "${DIRECTUS_PORT:-8055}:8055"
     environment:
       DB_CLIENT: "mysql"
-      DB_HOST: db
+      DB_HOST: "${DB_HOST}"
       DB_PORT: "${DB_PORT}"
       DB_DATABASE: "${DB_DATABASE}"
       DB_USER: "${DB_USER}"
       DB_PASSWORD: "${DB_PASSWORD}"
+      REDIS_HOST: "${CACHE_HOST}"
+      REDIS_PORT: "${CACHE_PORT}"
+      CACHE_ENABLED: "true"
+      CACHE_AUTO_PURGE: "true"
+      CACHE_STORE: "redis"
       KEY: "${DIRECTUS_KEY}"
       SECRET: "${DIRECTUS_SECRET}"
       ADMIN_EMAIL: "${DIRECTUS_ADMIN_EMAIL}"
@@ -41,6 +57,7 @@ services:
       - projectr
     depends_on:
       - mysql
+      - redis
 
   meilisearch:
     image: getmeili/meilisearch:latest
@@ -69,6 +86,22 @@ services:
       - mysql
       - meilisearch
 
+  meilisync-admin:
+    image: ghcr.io/long2ice/meilisync-admin/meilisync-admin
+    container_name: meilisync-admin
+    restart: unless-stopped
+    ports:
+      - "${MEILISYNC_PORT:-8000}:8000"
+    environment:
+      REDIS_URL: redis://${CACHE_HOST}:${CACHE_PORT}/0
+      DB_URL: mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_DATABASE}
+      SECRET_KEY: "${VITE_MEILI_MASTER_KEY}"
+      SENTRY_DSN: "${SENTRY_DSN}"
+    networks:
+      - projectr
+    depends_on:
+      - meilisync
+
   certbot:
     image: certbot/certbot:latest
     container_name: certbot
@@ -93,6 +126,7 @@ services:
     depends_on:
       - directus
       - meilisearch
+      - meilisync
       - certbot
     healthcheck:
       test: ["CMD", "nginx", "-t"]
@@ -100,6 +134,8 @@ services:
       retries: 3
 
 volumes:
+  redis_data:
+    driver: local
   mysql_data:
     driver: local
   directus_data:

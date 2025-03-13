@@ -61,7 +61,7 @@ const Controller: Component = () => {
     // hidePresentation: hideOnReceiver,
     // closePresentation: closeReceiver,
     // sendPresentationData: sendToReceiver,
-  } = usePresentation();
+  } = usePresentation(); // Presentation API (For Wireless projection)
   // eslint-disable-next-line no-empty-pattern
   const {
     isAvailable: receiverIsAvailable,
@@ -72,7 +72,7 @@ const Controller: Component = () => {
     hideProjection: hideOnReceiver,
     closeProjection: closeReceiver,
     sendProjectionData: sendToReceiver,
-  } = useProjection(channel);
+  } = useProjection(channel); // Window Management API (Regular projection)
   const {
     queue,
     nowPlaying,
