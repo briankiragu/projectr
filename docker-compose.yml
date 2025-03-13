@@ -80,6 +80,8 @@ services:
     volumes:
       - meilisync_data:/meilisync:rw
       - ./docker/meilisync/config.yml:/meilisync/config.yml:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - projectr
     depends_on:
