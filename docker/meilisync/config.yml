@@ -3,16 +3,26 @@ progress:
   type: file
 source:
   type: mysql
-  host: host.docker.internal
+  host: db
   port: 3306
   user: root
   password: "ZBDWmHHDrIxilNQY"
   database: projectr
 meilisearch:
-  api_url: http://host.docker.internal:7700
+  api_url: http://search:7700
   api_key: "018db27a-b774-78af-9756-6531be6607a3"
 sync:
   - table: lyrics
     index: lyrics
     pk: id
     full: true
+    fields:
+      id:
+      account:
+      title:
+      artists:
+      content:
+      sort:
+sentry:
+  dsn: "https://68b84138b36327f18c2c73b89e875b25@o4508975235465216.ingest.de.sentry.io/4508975241232464"
+  environment: "development"

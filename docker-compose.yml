@@ -14,6 +14,8 @@ services:
       MYSQL_DATABASE: "${DB_DATABASE}"
     volumes:
       - mysql_data:/var/lib/mysql:rw
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - projectr
 
@@ -25,6 +27,8 @@ services:
       - "${CACHE_PORT:-6379}:6379"
     volumes:
       - redis_data:/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - projectr
 
@@ -53,6 +57,8 @@ services:
       WEBSOCKETS_ENABLED: "true"
     volumes:
       - directus_data:/directus:rw
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - projectr
     depends_on:
@@ -70,6 +76,8 @@ services:
       MEILI_MASTER_KEY: "${VITE_MEILI_MASTER_KEY}"
     volumes:
       - meili_data:/meili_data:rw
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - projectr
 
@@ -86,6 +94,7 @@ services:
       - projectr
     depends_on:
       - mysql
+      - redis
       - meilisearch
 
   meilisync-admin:
@@ -99,6 +108,8 @@ services:
       DB_URL: mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_DATABASE}
       SECRET_KEY: "${VITE_MEILI_MASTER_KEY}"
       SENTRY_DSN: "${SENTRY_DSN}"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - projectr
     depends_on:
@@ -113,6 +124,8 @@ services:
       - "443:443"
     volumes:
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - projectr
     depends_on:
