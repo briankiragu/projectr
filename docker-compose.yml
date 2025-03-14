@@ -119,7 +119,6 @@ services:
       - directus
       - meilisearch
       - meilisync
-      - certbot
     healthcheck:
       test: ["CMD", "nginx", "-t"]
       timeout: 10s
