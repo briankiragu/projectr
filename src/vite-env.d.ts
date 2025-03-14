@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly VITE_TENANT_ID: string;
+  readonly VITE_ACCOUNT_ID: number;
 
   readonly VITE_BROADCAST_NAME: string;
 

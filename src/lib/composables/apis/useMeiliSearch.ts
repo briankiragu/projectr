@@ -19,7 +19,7 @@ export default () => {
   // Make a GET request for the data.
   const searchMeiliSearch = async (phrase: string) =>
     index.searchGet(phrase, {
-      filter: `tenant = ${import.meta.env.VITE_TENANT_ID} AND status = ${IStatus.PUBLISHED}`,
+      filter: `account = ${import.meta.env.VITE_ACCOUNT_ID} AND status = ${IStatus.PUBLISHED}`,
     });
 
   return {
