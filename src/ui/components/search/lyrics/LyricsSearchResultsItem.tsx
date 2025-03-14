@@ -15,7 +15,7 @@ const LyricsSearchResultsItem: Component<{
   return (
     <li class="flex items-center justify-between gap-5 rounded-lg bg-gray-100 px-4 py-2 text-sm text-gray-600 shadow transition-shadow hover:shadow-md dark:bg-gray-300 dark:text-gray-800">
       <div class="col-span-2 flex flex-col gap-0.5">
-        <h4 class="font-bold">{toTitleCase(props.track.title)}</h4>
+        <h4 class="font-semibold">{toTitleCase(props.track.title)}</h4>
         <Show when={props.track.artists?.length}>
           <span
             class="oblique text-xs font-light"
@@ -23,7 +23,7 @@ const LyricsSearchResultsItem: Component<{
           ></span>
         </Show>
         <span
-          class="text-sm font-medium italic"
+          class="text-sm font-medium italic leading-tight"
           innerHTML={toTitleCase(props.track.content[0][0]) || ""}
         ></span>
       </div>
