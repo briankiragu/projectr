@@ -94,7 +94,6 @@ services:
       - projectr
     depends_on:
       - mysql
-      - redis
       - meilisearch
 
   meilisync-admin:
@@ -113,6 +112,7 @@ services:
     networks:
       - projectr
     depends_on:
+      - redis
       - meilisync
 
   certbot:
@@ -144,7 +144,7 @@ services:
       - meilisync
       - certbot
     healthcheck:
-      test: ["CMD", "nginx", "-t"]
+      test: [ "CMD", "nginx", "-t" ]
       timeout: 10s
       retries: 3
 
