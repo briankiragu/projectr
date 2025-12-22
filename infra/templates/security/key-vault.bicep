@@ -18,7 +18,7 @@ param tags object
 
 resource keyVault 'Microsoft.KeyVault/vaults@2025-05-01' = {
   location: location
-  name: '${name}${location}'
+  name: name
   properties: {
     sku: {
       family: 'A'
