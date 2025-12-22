@@ -10,6 +10,7 @@ param logAnalyticsWorkspaceName = 'projectr-logs'
 // ========================================================================
 param managedIdentityName = 'projectr-uami'
 param keyVaultName = 'projectr-kv'
+param keyVaultCreateRoleAssignments = false
 
 // ========================================================================
 // Networking
@@ -17,6 +18,9 @@ param keyVaultName = 'projectr-kv'
 param publicIpName = 'projectr-public-ip'
 param natGatewayName = 'projectr-nat-gateway'
 param vnetName = 'projectr-vnet'
+param vnetAddressPrefix = '10.0.0.0/16'
+param mysqlSubnetAddressPrefix = '10.0.0.0/24'
+param acaSubnetAddressPrefix = '10.0.1.0/24'
 
 // ========================================================================
 // Storage

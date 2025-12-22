@@ -3,6 +3,9 @@ param name string
 param logAnalyticsWorkspaceId string
 param managedIdentityPrincipalId string
 
+@description('When true, create RBAC role assignments on the Key Vault for the managed identity. Requires roleAssignments/write permissions for the deploying identity.')
+param createRoleAssignments bool = false
+
 @description('Tags to apply to resources')
 param tags object
 
@@ -32,7 +35,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2025-05-01' = {
 }
 
 // Assign Key Vault Secrets User role to the managed identity
-resource secretsUserRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+resource secretsUserRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (createRoleAssignments) {
   name: guid(keyVault.id, managedIdentityPrincipalId, 'Key Vault Secrets User')
   scope: keyVault
   properties: {

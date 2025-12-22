@@ -7,10 +7,22 @@ param logAnalyticsWorkspaceName string
 param managedIdentityName string
 param keyVaultName string
 
+@description('If true, the deployment will create RBAC role assignments on the Key Vault. Requires the deploying identity to have Microsoft.Authorization/roleAssignments/write (e.g. Owner or User Access Administrator).')
+param keyVaultCreateRoleAssignments bool = false
+
 // Networking
 param publicIpName string
 param natGatewayName string
 param vnetName string
+
+@description('CIDR for the VNet address space. Must match existing VNet if re-deploying to the same name.')
+param vnetAddressPrefix string = '10.0.0.0/16'
+
+@description('CIDR for the MySQL delegated subnet. Must not overlap other subnets in the VNet.')
+param mysqlSubnetAddressPrefix string = '10.0.0.0/24'
+
+@description('CIDR for the Container Apps Environment subnet. Must not overlap other subnets in the VNet.')
+param acaSubnetAddressPrefix string = '10.0.1.0/24'
 
 // Storage
 param storageAccountName string
@@ -36,10 +48,12 @@ param meiliMasterKey string
 
 @secure()
 param directusKey string
+
 @secure()
 param directusSecret string
 
 param directusAdminEmail string
+
 @secure()
 param directusAdminPassword string
 
@@ -76,6 +90,7 @@ module keyVault 'templates/security/key-vault.bicep' = {
     name: keyVaultName
     logAnalyticsWorkspaceId: logAnalyticsWorkspace.outputs.id
     managedIdentityPrincipalId: managedIdentity.outputs.principalId
+    createRoleAssignments: keyVaultCreateRoleAssignments
     tags: tags
   }
 }
@@ -98,11 +113,11 @@ module virtualNetwork 'templates/networking/virtual-network.bicep' = {
   params: {
     location: location
     name: vnetName
-    addressPrefix: '10.0.0.0/16'
+    addressPrefix: vnetAddressPrefix
     subnets: [
       {
         name: 'mysql-subnet'
-        addressPrefix: '10.0.0.0/23'
+        addressPrefix: mysqlSubnetAddressPrefix
         natGateway: null
         delegations: [
           {
@@ -115,7 +130,7 @@ module virtualNetwork 'templates/networking/virtual-network.bicep' = {
       }
       {
         name: 'aca-subnet'
-        addressPrefix: '10.0.0.0/24'
+        addressPrefix: acaSubnetAddressPrefix
         natGateway: {
           id: natGateway.outputs.id
         }
