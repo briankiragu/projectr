@@ -101,13 +101,13 @@ resource mysqlServer 'Microsoft.DBforMySQL/flexibleServers@2025-06-01-preview' =
     }
   }
 
-  // resource firewallRule 'firewallRules' = {
-  //   name: 'allow-all-azure-ips'
-  //   properties: {
-  //     startIpAddress: '0.0.0.0'
-  //     endIpAddress: '0.0.0.0'
-  //   }
-  // }
+  resource firewallRule 'firewallRules' = {
+    name: 'allow-all-azure-ips'
+    properties: {
+      startIpAddress: '0.0.0.0'
+      endIpAddress: '0.0.0.0'
+    }
+  }
 }
 
 resource mysqlDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
