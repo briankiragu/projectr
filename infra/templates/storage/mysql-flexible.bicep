@@ -58,6 +58,7 @@ resource privateDnsZone 'Microsoft.Network/privateDnsZones@2024-06-01' = {
 }
 
 resource mysqlServer 'Microsoft.DBforMySQL/flexibleServers@2025-06-01-preview' = {
+  dependsOn: [privateDnsZone::privateDnsZoneLink]
   location: location
   tags: tags
   name: '${name}-${location}'
