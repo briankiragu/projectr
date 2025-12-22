@@ -16,13 +16,13 @@ param natGatewayName string
 param vnetName string
 
 @description('CIDR for the VNet address space. Must match existing VNet if re-deploying to the same name.')
-param vnetAddressPrefix string = '10.0.0.0/16'
+param vnetAddressPrefix string
 
 @description('CIDR for the MySQL delegated subnet. Must not overlap other subnets in the VNet.')
-param mysqlSubnetAddressPrefix string = '10.0.0.0/24'
+param mysqlSubnetAddressPrefix string
 
 @description('CIDR for the Container Apps Environment subnet. Must not overlap other subnets in the VNet.')
-param acaSubnetAddressPrefix string = '10.0.1.0/24'
+param acaSubnetAddressPrefix string
 
 // Storage
 param storageAccountName string

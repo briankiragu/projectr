@@ -20,7 +20,7 @@ var keyVaultName = take('${kvBaseName}${kvSuffix}', 24)
 
 resource keyVault 'Microsoft.KeyVault/vaults@2025-05-01' = {
   location: location
-  name: keyVaultName
+  name: '${name}kv${location}'
   properties: {
     sku: {
       family: 'A'
