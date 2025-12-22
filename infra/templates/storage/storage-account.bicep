@@ -13,7 +13,7 @@ param tags object
 resource storageAccount 'Microsoft.Storage/storageAccounts@2025-06-01' = {
   location: location
   tags: tags
-  name: name
+  name: '${name}${location}'
   sku: {
     name: 'Standard_LRS'
   }
