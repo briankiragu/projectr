@@ -16,7 +16,7 @@ permissions:
 
 env:
   AZURE_LOCATION: "southafricanorth"
-  AZURE_RESOURCE_GROUP: "projectr-rg-southafricanorth"
+  AZURE_RESOURCE_GROUP: "projectr1-rg-southafricanorth"
 
 jobs:
   deploy:
