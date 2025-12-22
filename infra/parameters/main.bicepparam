@@ -27,9 +27,9 @@ param storageAccountName = 'projectrsa'
 // Database
 // ========================================================================
 param sqlServerName = 'projectr-sql-server'
-param mySQLDBUser = 'projectr'
-param mySQLDBUserPassword = ''
-param mySQLDBName = 'projectr'
+param sqlDBName = 'projectrdb'
+param sqlDBUser = '********'
+param sqlDBUserPassword = '********'
 
 // ========================================================================
 // Caching
@@ -52,8 +52,8 @@ param meiliMasterKey = '00000000-0000-0000-0000-000000000000'
 param directusKey = '00000000-0000-0000-0000-000000000000'
 param directusSecret = '00000000-0000-0000-0000-000000000000'
 
-param directusAdminEmail = ''
-param directusAdminPassword = ''
+param directusAdminEmail = '********'
+param directusAdminPassword = '********'
 
 // ========================================================================
 // Tags

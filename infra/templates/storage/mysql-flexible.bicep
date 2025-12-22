@@ -20,13 +20,13 @@ param dbCollation string = 'utf8mb4_unicode_ci'
 param tags object
 
 resource privateDnsZone 'Microsoft.Network/privateDnsZones@2024-06-01' = {
-  location: location
+  location: 'global'
   tags: tags
   name: '${name}.mysql.database.azure.com'
 
   resource privateDnsZoneLink 'virtualNetworkLinks' = {
-    name: 'virtual-network-link'
-    location: location
+    name: 'vnet-link-${virtualNetworkId}'
+    location: 'global'
     properties: {
       virtualNetwork: {
         id: virtualNetworkId

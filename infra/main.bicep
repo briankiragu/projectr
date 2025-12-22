@@ -17,10 +17,11 @@ param storageAccountName string
 
 // Database
 param sqlServerName string
-param mySQLDBName string
-param mySQLDBUser string
+param sqlDBName string
 @secure()
-param mySQLDBUserPassword string
+param sqlDBUser string
+@secure()
+param sqlDBUserPassword string
 
 // Caching
 param redisCacheName string
@@ -156,9 +157,9 @@ module mysql 'templates/storage/mysql-flexible.bicep' = {
     logAnalyticsWorkspaceId: logAnalyticsWorkspace.outputs.id
     virtualNetworkId: virtualNetwork.outputs.id
     delegatedSubnetId: virtualNetwork.outputs.subnetIds[0] // mysql-subnet
-    dbUser: mySQLDBUser
-    dbUserPassword: mySQLDBUserPassword
-    dbName: mySQLDBName
+    dbUser: sqlDBUser
+    dbUserPassword: sqlDBUserPassword
+    dbName: sqlDBName
     tags: tags
   }
 }
@@ -241,7 +242,7 @@ module directus 'templates/compute/container-app.bicep' = {
     externalIngress: true
     targetPort: 8055
     secrets: [
-      { name: 'db-password', value: mySQLDBUserPassword }
+      { name: 'db-password', value: sqlDBUserPassword }
       { name: 'redis-key', value: redis.outputs.primaryKey }
       { name: 'key', value: directusKey }
       { name: 'secret', value: directusSecret }
@@ -251,9 +252,9 @@ module directus 'templates/compute/container-app.bicep' = {
       { name: 'DB_CLIENT', value: 'mysql' }
       { name: 'DB_HOST', value: mysql.outputs.fqdn }
       { name: 'DB_PORT', value: mysql.outputs.port }
-      { name: 'DB_USER', value: mySQLDBUser }
+      { name: 'DB_USER', value: sqlDBUser }
       { name: 'DB_PASSWORD', secretRef: 'db-password' }
-      { name: 'DB_DATABASE', value: mySQLDBName }
+      { name: 'DB_DATABASE', value: sqlDBName }
       { name: 'REDIS_HOST', value: redis.outputs.hostName }
       { name: 'REDIS_PORT', value: redis.outputs.port }
       { name: 'CACHE_ENABLED', value: 'true' }
@@ -315,7 +316,7 @@ module meilisyncAdmin 'templates/compute/container-app.bicep' = {
     externalIngress: true
     targetPort: 8000
     secrets: [
-      { name: 'db-password', value: mySQLDBUserPassword }
+      { name: 'db-password', value: sqlDBUserPassword }
       { name: 'redis-key', value: redis.outputs.primaryKey }
       { name: 'secret-key', value: meiliMasterKey }
     ]
@@ -326,7 +327,7 @@ module meilisyncAdmin 'templates/compute/container-app.bicep' = {
       } // Note: rediss:// for SSL
       {
         name: 'DB_URL'
-        value: 'mysql://${mySQLDBUser}:${mySQLDBUserPassword}@${mysql.outputs.fqdn}:${mysql.outputs.port}/${mySQLDBName}'
+        value: 'mysql://${sqlDBUser}:${sqlDBUserPassword}@${mysql.outputs.fqdn}:${mysql.outputs.port}/${sqlDBName}'
       }
       { name: 'SECRET_KEY', secretRef: 'secret-key' }
     ]
