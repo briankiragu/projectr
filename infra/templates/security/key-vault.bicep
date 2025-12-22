@@ -9,9 +9,18 @@ param createRoleAssignments bool = false
 @description('Tags to apply to resources')
 param tags object
 
+// Key Vault naming constraints:
+// - 3-24 characters
+// - alphanumeric only
+// - must start with a letter
+// Key Vault names are globally unique, so append a deterministic suffix.
+var kvBaseName = toLower(replace(replace(name, '-', ''), '_', ''))
+var kvSuffix = uniqueString(resourceGroup().id, name)
+var keyVaultName = take('kv${kvBaseName}${kvSuffix}', 24)
+
 resource keyVault 'Microsoft.KeyVault/vaults@2025-05-01' = {
   location: location
-  name: '${name}-${location}'
+  name: keyVaultName
   properties: {
     sku: {
       family: 'A'
@@ -49,7 +58,7 @@ resource secretsUserRoleAssignment 'Microsoft.Authorization/roleAssignments@2022
 }
 
 resource kvDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: '${name}-diagnostics'
+  name: '${keyVaultName}-diagnostics'
   scope: keyVault
   properties: {
     workspaceId: logAnalyticsWorkspaceId
