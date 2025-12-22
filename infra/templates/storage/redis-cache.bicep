@@ -16,7 +16,7 @@ var redisCacheName = take('${redisBaseName}-${redisSuffix}', 63)
 
 resource redisCache 'Microsoft.Cache/redis@2024-11-01' = {
   location: location
-  name: '${name}redis${location}'
+  name: '${name}-${location}'
   properties: {
     sku: {
       name: skuName
