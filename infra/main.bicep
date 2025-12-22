@@ -162,14 +162,7 @@ module virtualNetwork 'templates/networking/virtual-network.bicep' = {
         natGateway: {
           id: natGateway.outputs.id
         }
-        delegations: [
-          {
-            name: 'aca-delegation'
-            properties: {
-              serviceName: 'Microsoft.App/environments'
-            }
-          }
-        ]
+        delegations: []
       }
     ]
     tags: tags
