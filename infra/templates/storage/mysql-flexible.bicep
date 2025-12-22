@@ -46,7 +46,7 @@ resource privateDnsZone 'Microsoft.Network/privateDnsZones@2024-06-01' = {
   name: '${name}.mysql.database.azure.com'
 
   resource privateDnsZoneLink 'virtualNetworkLinks' = {
-    name: 'vnet-link-${virtualNetworkId}'
+    name: 'vnet-link-${uniqueString(virtualNetworkId)}'
     location: 'global'
     properties: {
       virtualNetwork: {
