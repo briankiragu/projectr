@@ -266,7 +266,7 @@ module meilisearch 'templates/compute/container-app.bicep' = {
       {
         name: 'meili-data'
         storageType: 'AzureFile'
-        storageName: storageAccountName
+        storageName: storage.outputs.name
       }
     ]
     tags: tags
@@ -317,7 +317,7 @@ module directus 'templates/compute/container-app.bicep' = {
       {
         name: 'directus-data'
         storageType: 'AzureFile'
-        storageName: storageAccountName
+        storageName: storage.outputs.name
       }
     ]
     tags: tags
@@ -340,7 +340,7 @@ module meilisync 'templates/compute/container-app.bicep' = {
       {
         name: 'meilisync-data'
         storageType: 'AzureFile'
-        storageName: storageAccountName
+        storageName: storage.outputs.name
       }
     ]
     tags: tags
