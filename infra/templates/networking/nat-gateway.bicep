@@ -20,11 +20,6 @@ resource publicIp 'Microsoft.Network/publicIPAddresses@2024-10-01' = {
     name: publicIpSkuName
     tier: 'Regional'
   }
-  zones: [
-    '1'
-    '2'
-    '3'
-  ]
   properties: {
     publicIPAllocationMethod: 'Static'
     publicIPAddressVersion: 'IPv4'
