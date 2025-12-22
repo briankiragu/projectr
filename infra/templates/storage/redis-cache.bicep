@@ -12,7 +12,7 @@ param tags object
 // Keep it readable while avoiding collisions.
 var redisBaseName = toLower(replace(name, '_', '-'))
 var redisSuffix = uniqueString(resourceGroup().id, name)
-var redisCacheName = take('r${redisBaseName}-${redisSuffix}', 63)
+var redisCacheName = take('${redisBaseName}-${redisSuffix}', 63)
 
 resource redisCache 'Microsoft.Cache/redis@2024-11-01' = {
   location: location

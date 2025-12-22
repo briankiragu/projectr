@@ -16,7 +16,7 @@ param tags object
 // Key Vault names are globally unique, so append a deterministic suffix.
 var kvBaseName = toLower(replace(replace(name, '-', ''), '_', ''))
 var kvSuffix = uniqueString(resourceGroup().id, name)
-var keyVaultName = take('kv${kvBaseName}${kvSuffix}', 24)
+var keyVaultName = take('${kvBaseName}${kvSuffix}', 24)
 
 resource keyVault 'Microsoft.KeyVault/vaults@2025-05-01' = {
   location: location

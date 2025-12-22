@@ -9,7 +9,7 @@ param logAnalyticsWorkspaceName = 'projectr-logs'
 // Security & Identity
 // ========================================================================
 param managedIdentityName = 'projectr-uami'
-param keyVaultName = 'projectr-kv'
+param keyVaultName = 'projectrkv'
 param keyVaultCreateRoleAssignments = false
 
 // ========================================================================
