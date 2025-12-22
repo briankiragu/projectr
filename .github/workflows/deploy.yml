@@ -1,9 +1,11 @@
 name: Deploy Infrastructure
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Coverage"]
+    branches: [main]
+    types:
+      - completed
   workflow_dispatch:
 
 permissions:
@@ -11,11 +13,12 @@ permissions:
   contents: read
 
 env:
-  AZURE_RESOURCE_GROUP: "projectr-rg-southafricanorth"
   AZURE_LOCATION: "southafricanorth"
+  AZURE_RESOURCE_GROUP: "projectr-rg-southafricanorth"
 
 jobs:
   deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
