@@ -30,6 +30,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2024-05-01' = {
         addressPrefix: subnet.addressPrefix
         natGateway: subnet.natGateway
         delegations: subnet.delegations
+        defaultOutboundAccess: false
       }
     }
   ]
