@@ -85,10 +85,10 @@ resource mysqlServer 'Microsoft.DBforMySQL/flexibleServers@2025-06-01-preview' =
     }
   }
 
-  resource binlogFormat 'configurations' = {
-    name: 'binlog_format'
+  resource binlogRowImage 'configurations' = {
+    name: 'binlog_row_image'
     properties: {
-      value: 'ROW'
+      value: 'FULL'
       source: 'user-override'
     }
   }
