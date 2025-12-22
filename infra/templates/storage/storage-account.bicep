@@ -1,5 +1,10 @@
+@description('The Azure region where the Storage Account will be deployed.')
 param location string
+
+@description('The name of the Storage Account.')
 param name string
+
+@description('The ID of the Log Analytics Workspace.')
 param logAnalyticsWorkspaceId string
 
 @description('Tags to apply to resources')
@@ -85,7 +90,10 @@ resource fileServicesDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-
   }
 }
 
+@description('The ID of the Storage Account.')
 output id string = storageAccount.id
+@description('The name of the Storage Account.')
 output name string = storageAccount.name
 @secure()
+@description('The primary key of the Storage Account.')
 output primaryKey string = storageAccount.listKeys().keys[0].value

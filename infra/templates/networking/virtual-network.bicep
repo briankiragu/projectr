@@ -1,6 +1,13 @@
+@description('The Azure region where the Virtual Network will be deployed.')
 param location string
+
+@description('The name of the Virtual Network.')
 param name string
+
+@description('The address prefix for the Virtual Network.')
 param addressPrefix string
+
+@description('The subnets to create in the Virtual Network.')
 param subnets array
 
 @description('Tags to apply to resources')
@@ -28,6 +35,11 @@ resource vnet 'Microsoft.Network/virtualNetworks@2025-01-01' = {
   ]
 }
 
+@description('The ID of the Virtual Network.')
 output id string = vnet.id
+
+@description('The name of the Virtual Network.')
 output name string = vnet.name
+
+@description('The IDs of the subnets created in the Virtual Network.')
 output subnetIds array = [for (subnet, i) in subnets: vnet::vnetSubnets[i].id]

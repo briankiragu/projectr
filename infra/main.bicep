@@ -1,18 +1,28 @@
+@description('The Azure region where all resources will be deployed.')
 param location string = resourceGroup().location
 
 // Monitoring & Logging
+@description('The name of the Log Analytics Workspace.')
 param logAnalyticsWorkspaceName string
 
 // Security & Identity
+@description('The name of the User Assigned Managed Identity.')
 param managedIdentityName string
+
+@description('The name of the Key Vault.')
 param keyVaultName string
 
 @description('If true, the deployment will create RBAC role assignments on the Key Vault. Requires the deploying identity to have Microsoft.Authorization/roleAssignments/write (e.g. Owner or User Access Administrator).')
 param keyVaultCreateRoleAssignments bool = false
 
 // Networking
+@description('The name of the Public IP Address for the NAT Gateway.')
 param publicIpName string
+
+@description('The name of the NAT Gateway.')
 param natGatewayName string
+
+@description('The name of the Virtual Network.')
 param vnetName string
 
 @description('CIDR for the VNet address space. Must match existing VNet if re-deploying to the same name.')
@@ -25,38 +35,56 @@ param mysqlSubnetAddressPrefix string
 param acaSubnetAddressPrefix string
 
 // Storage
+@description('The name of the Storage Account.')
 param storageAccountName string
 
 // Database
+@description('The name of the MySQL Flexible Server.')
 param sqlServerName string
+
+@description('The name of the MySQL Database.')
 param sqlDBName string
+
 @secure()
+@description('The admin username for the MySQL Flexible Server.')
 param sqlDBUser string
+
 @secure()
+@description('The admin password for the MySQL Flexible Server.')
 param sqlDBUserPassword string
 
 // Caching
+@description('The name of the Redis Cache.')
 param redisCacheName string
 
 // Compute
+@description('The name of the Container Apps Environment.')
 param containerAppEnvName string
+
+@description('The base name for the Container Apps.')
 param containerAppName string
 
 // Application Secrets
 @secure()
+@description('The master key for MeiliSearch.')
 param meiliMasterKey string
 
 @secure()
+@description('The key for Directus.')
 param directusKey string
 
 @secure()
+@description('The secret for Directus.')
 param directusSecret string
 
+@description('The admin email for Directus.')
 param directusAdminEmail string
 
 @secure()
+@description('The admin password for Directus.')
 param directusAdminPassword string
 
+@description('Tags to apply to all resources.')
 param tags object
 
 // ========================================================================

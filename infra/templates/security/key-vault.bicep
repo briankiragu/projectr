@@ -1,6 +1,13 @@
+@description('The Azure region where the Key Vault will be deployed.')
 param location string
+
+@description('The name of the Key Vault.')
 param name string
+
+@description('The ID of the Log Analytics Workspace.')
 param logAnalyticsWorkspaceId string
+
+@description('The Principal ID of the Managed Identity.')
 param managedIdentityPrincipalId string
 
 @description('When true, create RBAC role assignments on the Key Vault for the managed identity. Requires roleAssignments/write permissions for the deploying identity.')
@@ -72,6 +79,11 @@ resource kvDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview
   }
 }
 
+@description('The ID of the Key Vault.')
 output id string = keyVault.id
+
+@description('The name of the Key Vault.')
 output name string = keyVault.name
+
+@description('The URI of the Key Vault.')
 output vaultUri string = keyVault.properties.vaultUri

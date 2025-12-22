@@ -1,16 +1,27 @@
+@description('The Azure region where the Container Apps Environment will be deployed.')
 param location string
+
+@description('The name of the Container Apps Environment.')
 param name string
 
+@description('The ID of the Log Analytics Workspace.')
 param logAnalyticsWorkspaceId string
+
 @secure()
+@description('The Customer ID of the Log Analytics Workspace.')
 param logAnalyticsCustomerId string
+
 @secure()
+@description('The Shared Key of the Log Analytics Workspace.')
 param logAnalyticsSharedKey string
 
+@description('The ID of the subnet where the Container Apps Environment will be deployed.')
 param infrastructureSubnetId string
 
+@description('The name of the Storage Account to mount.')
 param storageAccountName string
 @secure()
+@description('The key of the Storage Account to mount.')
 param storageAccountKey string
 
 @description('Tags to apply to resources')
@@ -61,5 +72,8 @@ resource envDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-previe
   }
 }
 
+@description('The ID of the Container Apps Environment.')
 output id string = containerAppEnv.id
+
+@description('The default domain of the Container Apps Environment.')
 output defaultDomain string = containerAppEnv.properties.defaultDomain

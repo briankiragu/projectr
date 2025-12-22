@@ -5,7 +5,7 @@ param location string
 param publicIpName string
 
 @description('The SKU for the public IP address and NAT Gateway')
-param publicIpSkuName string = 'StandardV2'
+param publicIpSkuName string = 'Standard'
 
 @description('The name of the NAT Gateway')
 param natGatewayName string
@@ -49,5 +49,8 @@ resource natGateway 'Microsoft.Network/natGateways@2024-10-01' = {
   tags: tags
 }
 
+@description('The ID of the NAT Gateway.')
 output id string = natGateway.id
+
+@description('The name of the NAT Gateway.')
 output name string = natGateway.name

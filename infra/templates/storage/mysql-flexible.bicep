@@ -1,19 +1,40 @@
+@description('The Azure region where the MySQL Flexible Server will be deployed.')
 param location string
+
+@description('The ID of the Log Analytics Workspace.')
 param logAnalyticsWorkspaceId string
+
+@description('The ID of the Virtual Network.')
 param virtualNetworkId string
+
+@description('The ID of the delegated subnet.')
 param delegatedSubnetId string
 
+@description('The name of the MySQL Flexible Server.')
 param name string
+
+@description('The SKU name of the MySQL Flexible Server.')
 param skuName string = 'Standard_B1ms'
+
+@description('The tier of the MySQL Flexible Server.')
 param tier string = 'Burstable'
+
+@description('The version of the MySQL Flexible Server.')
 param version string = '8.0.21'
 
+@description('The admin username for the MySQL Flexible Server.')
 param dbUser string
 @secure()
+@description('The admin password for the MySQL Flexible Server.')
 param dbUserPassword string
 
+@description('The name of the MySQL Database.')
 param dbName string
+
+@description('The charset of the MySQL Database.')
 param dbCharset string = 'utf8mb4'
+
+@description('The collation of the MySQL Database.')
 param dbCollation string = 'utf8mb4_unicode_ci'
 
 @description('Tags to apply to resources')
@@ -112,8 +133,13 @@ resource mysqlDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-prev
   }
 }
 
+@description('The ID of the MySQL Flexible Server.')
 output id string = mysqlServer.id
+@description('The name of the MySQL Flexible Server.')
 output name string = mysqlServer.name
+@description('The FQDN of the MySQL Flexible Server.')
 output fqdn string = mysqlServer.properties.fullyQualifiedDomainName
+@description('The port of the MySQL Flexible Server.')
 output port int = mysqlServer.properties.databasePort
+@description('The name of the MySQL Database.')
 output database string = mysqlServer::mysqlDatabase.name
