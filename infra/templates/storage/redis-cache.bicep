@@ -8,12 +8,6 @@ param logAnalyticsWorkspaceId string
 @description('Tags to apply to resources')
 param tags object
 
-// Redis cache name is globally unique (DNS). Add a deterministic suffix.
-// Keep it readable while avoiding collisions.
-var redisBaseName = toLower(replace(name, '_', '-'))
-var redisSuffix = uniqueString(resourceGroup().id, name)
-var redisCacheName = take('${redisBaseName}-${redisSuffix}', 63)
-
 resource redisCache 'Microsoft.Cache/redis@2024-11-01' = {
   location: location
   name: '${name}-${location}'
@@ -30,7 +24,7 @@ resource redisCache 'Microsoft.Cache/redis@2024-11-01' = {
 }
 
 resource redisDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: '${redisCacheName}-diagnostics'
+  name: '${redisCache.name}-diagnostics'
   scope: redisCache
   properties: {
     workspaceId: logAnalyticsWorkspaceId
