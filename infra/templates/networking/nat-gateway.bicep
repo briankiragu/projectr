@@ -13,12 +13,11 @@ param natGatewayName string
 @description('Tags to apply to resources')
 param tags object
 
-resource publicIp 'Microsoft.Network/publicIPAddresses@2024-10-01' = {
+resource publicIp 'Microsoft.Network/publicIPAddresses@2024-05-01' = {
   location: location
   name: '${publicIpName}-${location}'
   sku: {
     name: publicIpSkuName
-    tier: 'Regional'
   }
   properties: {
     publicIPAllocationMethod: 'Static'
@@ -27,7 +26,7 @@ resource publicIp 'Microsoft.Network/publicIPAddresses@2024-10-01' = {
   tags: tags
 }
 
-resource natGateway 'Microsoft.Network/natGateways@2024-10-01' = {
+resource natGateway 'Microsoft.Network/natGateways@2024-05-01' = {
   name: '${natGatewayName}-${location}'
   location: location
   sku: {

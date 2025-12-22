@@ -13,7 +13,7 @@ param subnets array
 @description('Tags to apply to resources')
 param tags object
 
-resource vnet 'Microsoft.Network/virtualNetworks@2025-01-01' = {
+resource vnet 'Microsoft.Network/virtualNetworks@2024-05-01' = {
   location: location
   name: '${name}-${location}'
   properties: {
