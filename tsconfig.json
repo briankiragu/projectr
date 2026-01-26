@@ -57,8 +57,7 @@
     "public/sw.js"
   ],
   "exclude": [
-    "vite.config.ts",
-    "tests.config.ts",
+    "*.config.ts"
   ],
   "references": [
     {
