@@ -13,7 +13,7 @@ const LyricsSearchResultsItem: Component<{
   const { toTitleCase } = useFormatting();
 
   return (
-    <li class="flex items-center justify-between gap-5 rounded-lg bg-gray-100 px-4 py-2 text-sm text-gray-600 shadow transition-shadow hover:shadow-md dark:bg-gray-300 dark:text-gray-800">
+    <li class="flex items-center justify-between gap-5 rounded-lg bg-gray-100 px-4 py-2 text-sm text-gray-600 shadow-sm transition-shadow hover:shadow-md dark:bg-gray-300 dark:text-gray-800">
       <div class="col-span-2 flex flex-col gap-1">
         <div class="div flex flex-col gap-0">
           <h4 class="font-bold">{toTitleCase(props.track.title)}</h4>
@@ -36,7 +36,7 @@ const LyricsSearchResultsItem: Component<{
           class="size-5"
         />
         <button
-          class="material-symbols-outlined h-9 w-9 rounded-full p-1.5 transition-colors hover:bg-tvc-orange hover:text-green-50 focus:outline-none dark:hover:bg-orange-600"
+          class="material-symbols-outlined h-9 w-9 rounded-full p-1.5 transition-colors hover:bg-tvc-orange hover:text-green-50 focus:outline-hidden dark:hover:bg-orange-600"
           onClick={() => props.handler()}
         >
           add_to_queue

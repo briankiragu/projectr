@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 @font-face {
   font-family: "NYT Imperial";
   src: url("/fonts/nyt-imperial/imperial-normal-500.ttf");
@@ -43,10 +45,6 @@
   ascent-override: 91%;
   src: local(system-ui);
 }
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 :root {
   font-family:

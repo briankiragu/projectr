@@ -261,7 +261,7 @@ const Controller: Component = () => {
 
                 <button
                   type="button"
-                  class="flex h-9 w-9 items-center justify-center rounded-full text-indigo-500 transition hover:bg-gray-800/20 focus:outline-none"
+                  class="flex h-9 w-9 items-center justify-center rounded-full text-indigo-500 transition hover:bg-gray-800/20 focus:outline-hidden"
                   onClick={() => setIsShowingLyrics((state) => !state)}
                 >
                   {isShowingLyrics() ? (

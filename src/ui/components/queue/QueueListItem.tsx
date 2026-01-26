@@ -16,7 +16,7 @@ const QueueListItem: Component<{
   return (
     <li
       data-testId="queue-list-item"
-      class="flex items-center justify-between gap-2 rounded-lg bg-gray-100 px-4 py-3 text-sm text-gray-600 shadow transition-shadow hover:shadow-md dark:bg-gray-300 dark:text-gray-800"
+      class="flex items-center justify-between gap-2 rounded-lg bg-gray-100 px-4 py-3 text-sm text-gray-600 shadow-sm transition-shadow hover:shadow-md dark:bg-gray-300 dark:text-gray-800"
     >
       <div class="flex w-8/12 flex-col">
         <div class="flex gap-1.5">

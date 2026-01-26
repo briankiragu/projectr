@@ -123,7 +123,7 @@ const ScripturesSearchForm: Component<{
       <label for="version" class="col-span-full">
         <select
           id="version"
-          class="w-full rounded-md p-3 text-sm text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400"
+          class="w-full rounded-md p-3 text-sm text-gray-700 focus:outline-hidden dark:bg-gray-800 dark:text-gray-400"
           onChange={(e) =>
             handleChangeVersion((e.target as HTMLSelectElement).value)
           }
@@ -159,7 +159,7 @@ const ScripturesSearchForm: Component<{
         </span>
         <select
           id="book"
-          class="w-full rounded-md p-3 text-sm text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400"
+          class="w-full rounded-md p-3 text-sm text-gray-700 focus:outline-hidden dark:bg-gray-800 dark:text-gray-400"
           onChange={(e) =>
             handleChangeBook((e.target as HTMLSelectElement).value)
           }
@@ -188,7 +188,7 @@ const ScripturesSearchForm: Component<{
         </span>
         <select
           id="chapter"
-          class="w-full rounded-md p-3 text-sm capitalize text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400"
+          class="w-full rounded-md p-3 text-sm capitalize text-gray-700 focus:outline-hidden dark:bg-gray-800 dark:text-gray-400"
           onChange={(e) =>
             handleChangeChapter((e.target as HTMLSelectElement).value)
           }
