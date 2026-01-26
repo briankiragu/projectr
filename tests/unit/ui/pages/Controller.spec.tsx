@@ -38,13 +38,13 @@ const mockSendProjectionData = vi.fn();
 const mockSetStoredNowPlaying = vi.fn();
 
 // State holders for dynamic mock behavior
-let mockNowPlaying: (() => IQueueItem | undefined) = () => undefined;
+let mockNowPlaying: () => IQueueItem | undefined = () => undefined;
 let mockQueue: IQueueItem[] = [];
-let mockPeek: (() => IQueueItem | undefined) = () => undefined;
-let mockIsVisible: (() => boolean) = () => true;
-let mockIsConnected: (() => boolean) = () => false;
-let mockIsEditing: (() => boolean) = () => false;
-let mockCurrentVerseIndex: (() => number) = () => 0;
+let mockPeek: () => IQueueItem | undefined = () => undefined;
+let mockIsVisible: () => boolean = () => true;
+let mockIsConnected: () => boolean = () => false;
+let mockIsEditing: () => boolean = () => false;
+let mockCurrentVerseIndex: () => number = () => 0;
 
 // Mock the composables
 vi.mock("@composables/useFormatting", () => ({
@@ -143,8 +143,19 @@ vi.mock("@composables/useTracks", () => ({
   }),
 }));
 
+vi.mock("@composables/useScriptures", () => ({
+  default: () => ({
+    loadVersions: vi.fn().mockResolvedValue([]),
+    loadBooks: vi.fn().mockResolvedValue([]),
+    loadChapters: vi.fn().mockResolvedValue([]),
+    loadChapterContent: vi.fn().mockResolvedValue([]),
+  }),
+}));
+
 // Helper to create a mock queue item
-const createMockQueueItem = (overrides: Partial<IQueueItem> = {}): IQueueItem => ({
+const createMockQueueItem = (
+  overrides: Partial<IQueueItem> = {}
+): IQueueItem => ({
   qid: Date.now(),
   title: "Test Song",
   content: [["Line 1"], ["Line 2"]],
