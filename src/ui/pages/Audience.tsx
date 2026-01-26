@@ -56,7 +56,7 @@ const Audience: Component = () => {
           <For each={currentVerse()}>
             {(line) => (
               <div
-                class="text-wrap font-serif text-2xl font-black uppercase italic md:text-large lg:text-larger 2xl:mb-8 2xl:text-largest"
+                class="text-wrap font-serif text-2xl 2xl:mb-8 font-black uppercase italic md:text-4xl lg:text-7xl 2xl:text-8xl"
                 innerHTML={line}
               ></div>
             )}

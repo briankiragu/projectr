@@ -40,7 +40,7 @@
     "meilisearch": "^0.37.0",
     "postcss": "^8.5.6",
     "prettier": "^3.8.1",
-    "prettier-plugin-tailwindcss": "^0.5.14",
+    "prettier-plugin-tailwindcss": "^0.7.2",
     "rxjs": "^7.8.2",
     "solid-js": "^1.9.11",
     "tailwindcss": "^4.1.18",

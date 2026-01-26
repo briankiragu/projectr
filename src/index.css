@@ -46,6 +46,38 @@
   src: local(system-ui);
 }
 
+@theme {
+  @keyframes slide-in {
+    0% {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slide-out {
+      0% {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      100% {
+        opacity: 0;
+        transform: translateX(-100%);
+      }
+    }
+
+  --color-tvc-orange: #ff9538;
+  --color-tvc-green: #0ab9aa;
+
+  --font-serif: "NYT Imperial", "Georgia", ui-serif;
+
+  --animate-slide-in: slide-in 0.5s ease forwards;
+  --animate-slide-out: slide-out 0.5s ease forwards;
+}
+
 :root {
   font-family:
     "Inter",

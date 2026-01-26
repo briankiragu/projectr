@@ -211,7 +211,7 @@ const ScripturesSearchForm: Component<{
       </label>
 
       {/* Verse */}
-      <div class="col-span-full grid h-[8.5rem] grid-cols-4 gap-3 overflow-y-scroll">
+      <div class="col-span-full grid h-34 grid-cols-4 gap-3 overflow-y-scroll">
         <Show when={verses.loading}>
           <span class="text-sm">Loading...</span>
         </Show>

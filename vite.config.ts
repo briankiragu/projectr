@@ -3,16 +3,17 @@
 
 import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
-import solid from "vite-plugin-solid";
+import solidPlugin from 'vite-plugin-solid';
 import { join, resolve } from "path";
 import { partytownVite } from "@builder.io/partytown/utils";
 
 export default defineConfig({
   plugins: [
-    solid(),
+    solidPlugin(),
     tailwindcss(),
     partytownVite({ dest: join(__dirname, "dist", "~partytown") }),
   ],
+  build: { target: "esnext" },
   resolve: {
     alias: {
       "@components": resolve(__dirname, "./src/ui/components"),
