@@ -30,7 +30,7 @@ export default defineConfig({
       "node_modules/@testing-library/jest-dom/vitest",
       "tests.config",
     ],
-    include: ["./tests/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+    include: ["./tests/unit/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     coverage: {
       reporter: ["text", "json-summary", "json"],
       reportOnFailure: true,
