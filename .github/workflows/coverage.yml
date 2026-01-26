@@ -13,11 +13,6 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: "notify vercel"
-        uses: "vercel/repository-dispatch/actions/status@v1"
-        with:
-          name: "Vercel - projectr: lint"
-
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v3
         with:
