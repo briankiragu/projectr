@@ -3,10 +3,10 @@
 
 import { join, resolve } from "path";
 
-import { partytownVite } from "@builder.io/partytown/utils";
-import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
 import solidPlugin from "vite-plugin-solid";
+import tailwindcss from "@tailwindcss/vite";
+import { partytownVite } from "@qwik.dev/partytown/utils";
 
 export default defineConfig({
   plugins: [
@@ -35,10 +35,10 @@ export default defineConfig({
       reporter: ["text", "json-summary", "json"],
       reportOnFailure: true,
       thresholds: {
-        lines: 80,
-        branches: 80,
-        functions: 80,
-        statements: 80,
+        lines: 90,
+        branches: 90,
+        functions: 90,
+        statements: 90,
       },
       exclude: ["src/index.tsx", "public/sw.js"],
     },
