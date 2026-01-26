@@ -14,40 +14,30 @@ export default () => {
   const { getVersions, getBooks, getChapters, getVerses, getContent } =
     useBibleAPI();
 
-  const loadVersions = async (): Promise<IBibleVersion[]> => {
-    const versions = await getVersions();
-    return versions.data;
-  };
+  const loadVersions = async (): Promise<IBibleVersion[]> =>
+    await getVersions();
 
-  const loadBooks = async (versionId: string): Promise<IBibleBook[]> => {
-    const books = await getBooks(versionId);
-    return books.data;
-  };
+  const loadBooks = async (versionId: string): Promise<IBibleBook[]> =>
+    await getBooks(versionId);
 
   const loadChapters = async (
     versionId: string,
     bookId: string
-  ): Promise<IBibleChapter[]> => {
-    const response = await getChapters(versionId, bookId);
-    return response.data;
-  };
+  ): Promise<IBibleChapter[]> => await getChapters(versionId, bookId);
 
   const loadVerses = async (
     versionId: string,
     chapterId: string
-  ): Promise<IBibleVerse[]> => {
-    const response = await getVerses(versionId, chapterId);
-    return response.data;
-  };
+  ): Promise<IBibleVerse[]> => await getVerses(versionId, chapterId);
 
   const loadContent = async (
     versionId: string,
     verseIds: string[]
   ): Promise<IBibleVerseContent[]> => {
-    const contentPromises = verseIds.map(async (verseId) => {
-      const response = await getContent(versionId, verseId);
-      return response.data as IBibleVerseContent;
-    });
+    const contentPromises = verseIds.map(
+      async (verseId) => await getContent(versionId, verseId)
+    );
+
     return Promise.all(contentPromises);
   };
 
@@ -57,8 +47,10 @@ export default () => {
   ): Promise<IBibleVerseContent[]> => {
     // First load all verses for the chapter
     const verses = await loadVerses(versionId, chapterId);
+
     // Then load content for each verse
     const verseIds = verses.map((verse) => verse.id);
+
     return loadContent(versionId, verseIds);
   };
 
