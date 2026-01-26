@@ -1,5 +1,11 @@
 // Import the modules.
-import { Show, For, createResource, createSignal, type Component } from "solid-js";
+import {
+  Show,
+  For,
+  createResource,
+  createSignal,
+  type Component,
+} from "solid-js";
 
 // Import the interfaces...
 import type { IQueueItem } from "@interfaces/queue";
@@ -115,7 +121,7 @@ const ScripturesSearchForm: Component<{
 
       {/* Book */}
       <label for="book" class="col-span-2">
-        <span class="col-span-full hidden text-sm italic text-gray-800">
+        <span class="col-span-full hidden text-sm text-gray-800 italic">
           Book
         </span>
         <select
@@ -144,12 +150,12 @@ const ScripturesSearchForm: Component<{
 
       {/* Chapter */}
       <label for="chapter" class="col-span-2">
-        <span class="col-span-full hidden text-sm italic text-gray-800">
+        <span class="col-span-full hidden text-sm text-gray-800 italic">
           Chapter
         </span>
         <select
           id="chapter"
-          class="w-full rounded-md p-3 text-sm capitalize text-gray-700 focus:outline-hidden dark:bg-gray-800 dark:text-gray-400"
+          class="w-full rounded-md p-3 text-sm text-gray-700 capitalize focus:outline-hidden dark:bg-gray-800 dark:text-gray-400"
           onChange={(e) =>
             handleChangeChapter((e.target as HTMLSelectElement).value)
           }
@@ -174,7 +180,7 @@ const ScripturesSearchForm: Component<{
       {/* Loading indicator */}
       <Show when={content.loading}>
         <div class="col-span-full flex items-center justify-center gap-2 py-4 text-sm text-gray-700">
-          <span class="material-symbols-outlined animate-spin">progress_activity</span>
+          <span class="material-symbols-outlined animate-spin">autorenew</span>
           Loading verses...
         </div>
       </Show>
@@ -182,13 +188,16 @@ const ScripturesSearchForm: Component<{
       {/* Verse count indicator */}
       <Show when={!content.loading && content() && content()!.length > 0}>
         <div class="col-span-full rounded-md bg-gray-200 px-3 py-2 text-sm text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+          <span class="material-symbols-outlined animate-spin">
+            download_done
+          </span>
           {content()!.length} verses loaded
         </div>
       </Show>
 
       <button
         type="submit"
-        class="col-span-full flex items-center justify-center gap-2 rounded-md bg-gray-900 py-2.5 text-sm font-semibold text-gray-50 transition-colors disabled:cursor-not-allowed disabled:bg-gray-400 dark:disabled:bg-gray-700 dark:disabled:text-gray-400"
+        class="col-span-full flex cursor-pointer items-center justify-center gap-2 rounded-md bg-gray-900 py-2.5 text-sm font-semibold text-gray-50 transition-colors disabled:cursor-not-allowed disabled:bg-gray-400 dark:disabled:bg-gray-700 dark:disabled:text-gray-400"
         disabled={!hasContent()}
       >
         <span class="material-symbols-outlined">add_to_queue</span>
