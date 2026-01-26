@@ -9,13 +9,13 @@ import { onCLS, onFID, onLCP } from "web-vitals";
 // Import global styles.
 import "./index.css";
 
-// Import constants...
-import { RECEIVER_PAGE } from "./lib/constants";
-
 // Import components...
 import App from "@pages/App";
 import Controller from "@pages/Controller";
-const Receiver = lazy(() => import("@pages/Receiver"));
+
+// Lazy-load components
+const Audience = lazy(() => import("@pages/Audience"));
+const Prompter = lazy(() => import("@pages/Prompter"));
 
 // Get the root element
 const root = document.getElementById("root");
@@ -38,7 +38,8 @@ render(
   () => (
     <Router root={App}>
       <Route path="/" component={Controller} />
-      <Route path={`/${RECEIVER_PAGE}/:id?`} component={Receiver} />
+      <Route path={`/audience/:id?`} component={Audience} />
+      <Route path={`/prompter/:id?`} component={Prompter} />
     </Router>
   ),
   root!

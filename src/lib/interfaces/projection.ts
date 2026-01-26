@@ -9,3 +9,8 @@ export type IProjectionPayload = {
   nowPlaying: IQueueItem | undefined;
   currentVerseIndex: number;
 };
+
+export enum IProjectionScreenTypes {
+  audience = "audience",
+  prompter = "prompter",
+}

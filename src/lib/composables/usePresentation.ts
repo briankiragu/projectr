@@ -1,7 +1,10 @@
 import { createSignal } from "solid-js";
 
 // Import interfaces...
-import type { IProjectionPayload } from "@interfaces/projection";
+import {
+  IProjectionScreenTypes,
+  type IProjectionPayload,
+} from "@interfaces/projection";
 
 // Import composables...
 import usePresentationAPI from "@composables/apis/usePresentationAPI";
@@ -33,10 +36,12 @@ export default () => {
     if (!isAvailable()) setConnections([]);
   };
 
-  const openPresentation = async () => {
+  const openPresentation = async (
+    screenType: IProjectionScreenTypes = IProjectionScreenTypes.audience,
+  ) => {
     try {
       // Launch the presentation.
-      const conn = await startPresentation(Date.now().toString());
+      const conn = await startPresentation(Date.now().toString(), screenType);
 
       // Setup the connection
       setConnections([...connections(), conn]);

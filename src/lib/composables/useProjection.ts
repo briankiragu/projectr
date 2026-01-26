@@ -2,7 +2,10 @@ import { createSignal } from "solid-js";
 
 // Import composables.
 import useWindowManagementAPI from "@composables/apis/useWindowManagementAPI";
-import type { IProjectionPayload } from "@interfaces/projection";
+import {
+  IProjectionScreenTypes,
+  type IProjectionPayload,
+} from "@interfaces/projection";
 
 export default (channel: BroadcastChannel) => {
   // Import the composables.
@@ -13,11 +16,14 @@ export default (channel: BroadcastChannel) => {
 
   const isConnected = (): boolean => presentations().length > 0;
 
-  const openProjection = async () => {
+  const openProjection = async (
+    screenType: IProjectionScreenTypes = IProjectionScreenTypes.audience,
+  ) => {
     // Launch a presentation instance.
     const payload = await project(
       "projectr",
-      import.meta.env.VITE_BROADCAST_NAME
+      import.meta.env.VITE_BROADCAST_NAME,
+      screenType,
     );
 
     if (payload?.proxy !== undefined) {

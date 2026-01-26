@@ -1,8 +1,8 @@
-// Import constants...
-import { RECEIVER_PAGE } from "../../constants";
-
 // Import the interfaces...
-import type { IProjection } from "@interfaces/projection";
+import {
+  IProjectionScreenTypes,
+  type IProjection,
+} from "@interfaces/projection";
 
 // Import composables...
 import usePermissionsAPI from "@composables/apis/usePermissionsAPI";
@@ -17,7 +17,8 @@ export default () => {
 
   const project = async (
     id: string,
-    channel: string
+    channel: string,
+    screenType: IProjectionScreenTypes = IProjectionScreenTypes.audience,
   ): Promise<IProjection | undefined> => {
     // If the API is not available, do not project.
     if (!isAvailable) return;
@@ -49,14 +50,15 @@ export default () => {
     // Open the popup with the correct data.
     return {
       screen: projectionScreen,
-      proxy: openPopup(projectionScreen!, id, channel) ?? undefined,
+      proxy: openPopup(projectionScreen!, id, channel, screenType) ?? undefined,
     };
   };
 
   const openPopup = (
     screen: ScreenDetailed,
     id: string,
-    channel: string
+    channel: string,
+    screenType: IProjectionScreenTypes,
   ): WindowProxy | null => {
     // Set the popup configuration.
     const features = [
@@ -66,7 +68,7 @@ export default () => {
       `height=${screen.height}`,
     ].join(",");
 
-    return window.open(`/${RECEIVER_PAGE}/${id}`, `${channel}-${id}`, features);
+    return window.open(`/${screenType}/${id}`, `${channel}-${id}-${screenType}`, features);
   };
 
   return { isAvailable, project };

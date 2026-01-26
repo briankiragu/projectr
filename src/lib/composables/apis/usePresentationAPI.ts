@@ -1,13 +1,12 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
-// Import constants...
-import { RECEIVER_PAGE } from "../../constants";
+import { IProjectionScreenTypes } from "@interfaces/projection";
 
 export default () => {
   // Define the default request.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const defaultRequest: any = new PresentationRequest([RECEIVER_PAGE]);
+  const defaultRequest: any = new PresentationRequest([IProjectionScreenTypes.audience]);
   defaultRequest.onconnectionavailable = ({ conn }) =>
     setPresentationConnection(conn);
 
@@ -34,13 +33,18 @@ export default () => {
       });
 
   // Prepare the request with the presentation URLs.
-  const getPresentationRequest = (id: string) =>
-    new PresentationRequest([`${RECEIVER_PAGE}/${id}`]);
+  const getPresentationRequest = (
+    id: string,
+    screenType: IProjectionScreenTypes = IProjectionScreenTypes.audience,
+  ) => new PresentationRequest([`${screenType}/${id}`]);
 
-  const startPresentation = async (id: string) => {
+  const startPresentation = async (
+    id: string,
+    screenType: IProjectionScreenTypes = IProjectionScreenTypes.audience,
+  ) => {
     try {
       // Create a PresentationRequest
-      const presentationRequest = getPresentationRequest(id);
+      const presentationRequest = getPresentationRequest(id, screenType);
 
       // Start new presentation.
       let connection = await presentationRequest.start();
@@ -95,7 +99,7 @@ export default () => {
   const addPresentationConnection = (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     conn: any,
-    callback: (message: MessageEvent) => void
+    callback: (message: MessageEvent) => void,
   ) => {
     // Listen for new messages.
     conn.onmessage = (message: MessageEvent) => callback(message);

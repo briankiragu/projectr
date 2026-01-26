@@ -382,7 +382,7 @@ const Controller: Component = () => {
                 title="Shift + P"
                 isAvailable={receiverIsAvailable()}
                 isProjecting={receiverIsConnected()}
-                startHandler={openReceiver}
+                startHandler={(screenType) => openReceiver(screenType)}
                 stopHandler={closeReceiver}
               />
               <DisplayButton
