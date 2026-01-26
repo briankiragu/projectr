@@ -3,7 +3,19 @@ import { ISource, IStatus, type ISearchItem } from "@interfaces/lyric";
 import { render, screen } from "@solidjs/testing-library";
 import { describe, expect, test, vi } from "vitest";
 
-describe("<LyricsSearchResultsItem />", () => {
+// Mock the useTracks composable
+vi.mock("@composables/useTracks", () => ({
+  default: () => ({
+    searchItemToQueueItem: vi.fn((item) => ({
+      qid: Date.now(),
+      title: item.title,
+      artists: item.artists,
+      content: item.content,
+    })),
+  }),
+}));
+
+describe("<LyricsSearchResults />", () => {
   // Define the component props.
   const title = "ThIs IS-tHe-tItLe";
   const line = "This is a line";
@@ -31,5 +43,16 @@ describe("<LyricsSearchResultsItem />", () => {
     expect(el).toBeInTheDocument();
   });
 
-  test.todo("it renders the list items");
+  test("it renders the correct number of list items", async () => {
+    // Render the component in the vDOM.
+    render(() => (
+      <LyricsSearchResults results={results} enqueueHandler={enqueueFn} />
+    ));
+
+    // Get the list items from the vDOM (async because LyricsSearchResultsItem is lazy-loaded).
+    const items = await screen.findAllByRole("listitem");
+
+    // Make the assertions.
+    expect(items).toHaveLength(1);
+  });
 });

@@ -34,10 +34,10 @@ export default defineConfig({
       reporter: ["text", "json-summary", "json"],
       reportOnFailure: true,
       thresholds: {
-        // lines: 80,
-        // branches: 80,
-        // functions: 80,
-        // statements: 80,
+        lines: 80,
+        branches: 80,
+        functions: 80,
+        statements: 80,
       },
     },
     // if you have few tests, try commenting this
