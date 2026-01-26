@@ -188,9 +188,6 @@ const ScripturesSearchForm: Component<{
       {/* Verse count indicator */}
       <Show when={!content.loading && content() && content()!.length > 0}>
         <div class="col-span-full rounded-md bg-gray-200 px-3 py-2 text-sm text-gray-700 dark:bg-gray-700 dark:text-gray-300">
-          <span class="material-symbols-outlined animate-spin">
-            download_done
-          </span>
           {content()!.length} verses loaded
         </div>
       </Show>
