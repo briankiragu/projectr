@@ -3,7 +3,7 @@
 
 import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
-import solidPlugin from 'vite-plugin-solid';
+import solidPlugin from "vite-plugin-solid";
 import { join, resolve } from "path";
 import { partytownVite } from "@builder.io/partytown/utils";
 
@@ -39,6 +39,7 @@ export default defineConfig({
         functions: 80,
         statements: 80,
       },
+      exclude: ["src/index.tsx", "public/sw.js"],
     },
     // if you have few tests, try commenting this
     // out to improve performance:

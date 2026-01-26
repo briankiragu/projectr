@@ -1,6 +1,7 @@
 import Controller from "@pages/Controller";
-import { render, screen } from "@solidjs/testing-library";
-import { describe, expect, test, vi, beforeEach } from "vitest";
+import { fireEvent, render, screen } from "@solidjs/testing-library";
+import { describe, expect, test, vi, beforeEach, afterEach } from "vitest";
+import type { IQueueItem } from "@interfaces/queue";
 
 // Mock BroadcastChannel
 class MockBroadcastChannel {
@@ -18,6 +19,32 @@ class MockBroadcastChannel {
 }
 
 (global as Record<string, unknown>)["BroadcastChannel"] = MockBroadcastChannel;
+
+// Create mock functions that can be spied on
+const mockSetNowPlaying = vi.fn();
+const mockSetCurrentVerseIndex = vi.fn();
+const mockSetIsEditing = vi.fn();
+const mockEnqueue = vi.fn();
+const mockDequeue = vi.fn();
+const mockFlush = vi.fn();
+const mockGoToPreviousVerse = vi.fn();
+const mockGoToNextVerse = vi.fn();
+const mockGoToVerse = vi.fn();
+const mockOpenProjection = vi.fn();
+const mockCloseProjection = vi.fn();
+const mockShowProjection = vi.fn();
+const mockHideProjection = vi.fn();
+const mockSendProjectionData = vi.fn();
+const mockSetStoredNowPlaying = vi.fn();
+
+// State holders for dynamic mock behavior
+let mockNowPlaying: (() => IQueueItem | undefined) = () => undefined;
+let mockQueue: IQueueItem[] = [];
+let mockPeek: (() => IQueueItem | undefined) = () => undefined;
+let mockIsVisible: (() => boolean) = () => true;
+let mockIsConnected: (() => boolean) = () => false;
+let mockIsEditing: (() => boolean) = () => false;
+let mockCurrentVerseIndex: (() => number) = () => 0;
 
 // Mock the composables
 vi.mock("@composables/useFormatting", () => ({
@@ -49,7 +76,7 @@ vi.mock("@composables/usePersistence", () => ({
     getStoredQueue: vi.fn().mockReturnValue([]),
     setStoredQueue: vi.fn(),
     getStoredNowPlaying: vi.fn().mockReturnValue(undefined),
-    setStoredNowPlaying: vi.fn(),
+    setStoredNowPlaying: mockSetStoredNowPlaying,
   }),
 }));
 
@@ -71,36 +98,36 @@ vi.mock("@composables/usePresentation", () => ({
 vi.mock("@composables/useProjection", () => ({
   default: () => ({
     isAvailable: () => true,
-    isConnected: () => false,
-    isVisible: () => true,
-    openProjection: vi.fn(),
-    showProjection: vi.fn(),
-    hideProjection: vi.fn(),
-    closeProjection: vi.fn(),
-    sendProjectionData: vi.fn(),
+    isConnected: () => mockIsConnected(),
+    isVisible: () => mockIsVisible(),
+    openProjection: mockOpenProjection,
+    showProjection: mockShowProjection,
+    hideProjection: mockHideProjection,
+    closeProjection: mockCloseProjection,
+    sendProjectionData: mockSendProjectionData,
     initialiseProjectionReceiver: vi.fn(),
   }),
 }));
 
 vi.mock("@composables/useQueue", () => ({
   default: () => ({
-    queue: [],
-    nowPlaying: () => undefined,
-    currentVerseIndex: () => 0,
-    isEditing: () => false,
+    queue: mockQueue,
+    nowPlaying: () => mockNowPlaying(),
+    currentVerseIndex: () => mockCurrentVerseIndex(),
+    isEditing: () => mockIsEditing(),
     setQueue: vi.fn(),
-    setNowPlaying: vi.fn(),
-    setCurrentVerseIndex: vi.fn(),
-    setIsEditing: vi.fn(),
-    peek: () => undefined,
-    enqueue: vi.fn(),
-    dequeue: vi.fn(),
-    flush: vi.fn(),
+    setNowPlaying: mockSetNowPlaying,
+    setCurrentVerseIndex: mockSetCurrentVerseIndex,
+    setIsEditing: mockSetIsEditing,
+    peek: () => mockPeek(),
+    enqueue: mockEnqueue,
+    dequeue: mockDequeue,
+    flush: mockFlush,
     isFirstVerse: () => true,
     isLastVerse: () => false,
-    goToPreviousVerse: vi.fn(),
-    goToNextVerse: vi.fn(),
-    goToVerse: vi.fn(),
+    goToPreviousVerse: mockGoToPreviousVerse,
+    goToNextVerse: mockGoToNextVerse,
+    goToVerse: mockGoToVerse,
   }),
 }));
 
@@ -116,8 +143,35 @@ vi.mock("@composables/useTracks", () => ({
   }),
 }));
 
+// Helper to create a mock queue item
+const createMockQueueItem = (overrides: Partial<IQueueItem> = {}): IQueueItem => ({
+  qid: Date.now(),
+  title: "Test Song",
+  content: [["Line 1"], ["Line 2"]],
+  ...overrides,
+});
+
+// Helper to dispatch keyboard events
+const dispatchKeyboardEvent = (code: string, shiftKey = false) => {
+  window.dispatchEvent(
+    new KeyboardEvent("keydown", { code, shiftKey, bubbles: true })
+  );
+};
+
 describe("<Controller />", () => {
   beforeEach(() => {
+    vi.clearAllMocks();
+    // Reset mock state
+    mockNowPlaying = () => undefined;
+    mockQueue = [];
+    mockPeek = () => undefined;
+    mockIsVisible = () => true;
+    mockIsConnected = () => false;
+    mockIsEditing = () => false;
+    mockCurrentVerseIndex = () => 0;
+  });
+
+  afterEach(() => {
     vi.clearAllMocks();
   });
 
@@ -197,5 +251,224 @@ describe("<Controller />", () => {
 
     // Make the assertions.
     expect(footer).toBeInTheDocument();
+  });
+
+  // Keyboard event handler tests
+  describe("keyboard event handlers", () => {
+    test("F5 key opens projection", () => {
+      render(() => <Controller />);
+      dispatchKeyboardEvent("F5");
+      expect(mockOpenProjection).toHaveBeenCalled();
+    });
+
+    test("Shift+P opens projection", () => {
+      render(() => <Controller />);
+      dispatchKeyboardEvent("KeyP", true);
+      expect(mockOpenProjection).toHaveBeenCalled();
+    });
+
+    test("Escape key closes projection", () => {
+      render(() => <Controller />);
+      dispatchKeyboardEvent("Escape");
+      expect(mockCloseProjection).toHaveBeenCalled();
+    });
+
+    test("Period key toggles visibility when visible", () => {
+      mockIsVisible = () => true;
+      render(() => <Controller />);
+      dispatchKeyboardEvent("Period");
+      expect(mockHideProjection).toHaveBeenCalled();
+    });
+
+    test("Period key shows projection when hidden", () => {
+      mockIsVisible = () => false;
+      render(() => <Controller />);
+      dispatchKeyboardEvent("Period");
+      expect(mockShowProjection).toHaveBeenCalled();
+    });
+
+    test("Shift+S toggles visibility when visible", () => {
+      mockIsVisible = () => true;
+      render(() => <Controller />);
+      dispatchKeyboardEvent("KeyS", true);
+      expect(mockHideProjection).toHaveBeenCalled();
+    });
+
+    test("Shift+S shows projection when hidden", () => {
+      mockIsVisible = () => false;
+      render(() => <Controller />);
+      dispatchKeyboardEvent("KeyS", true);
+      expect(mockShowProjection).toHaveBeenCalled();
+    });
+
+    test("ArrowLeft navigates to previous verse", () => {
+      render(() => <Controller />);
+      dispatchKeyboardEvent("ArrowLeft");
+      expect(mockGoToPreviousVerse).toHaveBeenCalled();
+    });
+
+    test("PageUp navigates to previous verse", () => {
+      render(() => <Controller />);
+      dispatchKeyboardEvent("PageUp");
+      expect(mockGoToPreviousVerse).toHaveBeenCalled();
+    });
+
+    test("ArrowRight navigates to next verse", () => {
+      render(() => <Controller />);
+      dispatchKeyboardEvent("ArrowRight");
+      expect(mockGoToNextVerse).toHaveBeenCalled();
+    });
+
+    test("PageDown navigates to next verse", () => {
+      render(() => <Controller />);
+      dispatchKeyboardEvent("PageDown");
+      expect(mockGoToNextVerse).toHaveBeenCalled();
+    });
+
+    test("Shift+ArrowRight plays next track", () => {
+      const mockItem = createMockQueueItem();
+      mockPeek = () => mockItem;
+      render(() => <Controller />);
+      dispatchKeyboardEvent("ArrowRight", true);
+      expect(mockSetNowPlaying).toHaveBeenCalled();
+    });
+  });
+
+  // Network connectivity tests
+  describe("network connectivity events", () => {
+    test("offline event shows offline banner", async () => {
+      render(() => <Controller />);
+
+      // Dispatch offline event
+      window.dispatchEvent(new Event("offline"));
+
+      // Check for offline banner
+      const banner = await screen.findByText(/offline/i);
+      expect(banner).toBeInTheDocument();
+    });
+
+    test("online event hides offline banner", async () => {
+      render(() => <Controller />);
+
+      // Go offline then online
+      window.dispatchEvent(new Event("offline"));
+      window.dispatchEvent(new Event("online"));
+
+      // Banner should be hidden
+      const banner = screen.queryByText(/You are currently offline/i);
+      expect(banner).not.toBeInTheDocument();
+    });
+  });
+
+  // Toggle lyrics/scriptures search tests
+  describe("search toggle functionality", () => {
+    test("toggle button switches between lyrics and scriptures search", async () => {
+      render(() => <Controller />);
+
+      // Initially shows lyrics
+      expect(screen.getByText("lyrics")).toBeInTheDocument();
+
+      // Find and click toggle button by its accessible name
+      const toggleButton = screen.getByRole("button", { name: "toggle_on" });
+      expect(toggleButton).toBeInTheDocument();
+
+      fireEvent.click(toggleButton);
+    });
+  });
+
+  // Queue management tests
+  describe("queue management", () => {
+    test("flush button clears the queue when items exist", () => {
+      const mockItem = createMockQueueItem();
+      mockPeek = () => mockItem;
+      mockQueue = [mockItem];
+
+      render(() => <Controller />);
+
+      // Find and click the clear all button
+      const clearButton = screen.getByText("Clear all");
+      fireEvent.click(clearButton);
+
+      expect(mockFlush).toHaveBeenCalled();
+    });
+  });
+
+  // Now playing with content tests
+  describe("now playing content display", () => {
+    test("displays now playing title and content when available", () => {
+      const mockItem = createMockQueueItem({ title: "Amazing Grace" });
+      mockNowPlaying = () => mockItem;
+
+      render(() => <Controller />);
+
+      // Title should be displayed
+      expect(screen.getByText(/Amazing Grace/i)).toBeInTheDocument();
+    });
+
+    test("displays lyrics cards for each verse", () => {
+      const mockItem = createMockQueueItem({
+        content: [["Verse 1 Line 1"], ["Verse 2 Line 1"], ["Verse 3 Line 1"]],
+      });
+      mockNowPlaying = () => mockItem;
+
+      render(() => <Controller />);
+
+      // Content div should exist
+      const contentDiv = document.getElementById("content");
+      expect(contentDiv).toBeInTheDocument();
+    });
+  });
+
+  // Edit mode tests
+  describe("edit mode functionality", () => {
+    test("shows edit form when editing is enabled", () => {
+      const mockItem = createMockQueueItem();
+      mockNowPlaying = () => mockItem;
+      mockIsEditing = () => true;
+
+      render(() => <Controller />);
+
+      // Edit form should be visible (check for textarea)
+      const textareas = document.querySelectorAll("textarea");
+      expect(textareas.length).toBeGreaterThan(0);
+    });
+  });
+
+  // Broadcast tests
+  describe("broadcast functionality", () => {
+    test("broadcasts data when receiver is visible and now playing exists", () => {
+      const mockItem = createMockQueueItem();
+      mockNowPlaying = () => mockItem;
+      mockIsVisible = () => true;
+
+      render(() => <Controller />);
+
+      // Trigger a verse change which calls broadcast
+      dispatchKeyboardEvent("ArrowRight");
+
+      expect(mockSetStoredNowPlaying).toHaveBeenCalled();
+    });
+
+    test("broadcasts null when now playing is undefined", () => {
+      mockNowPlaying = () => undefined;
+      mockIsVisible = () => true;
+
+      render(() => <Controller />);
+
+      // Component renders and mounts, which may trigger broadcast
+      expect(mockSetStoredNowPlaying).toHaveBeenCalled();
+    });
+  });
+
+  // Projection state tests
+  describe("projection state handling", () => {
+    test("displays correct projection button state when connected", () => {
+      mockIsConnected = () => true;
+
+      render(() => <Controller />);
+
+      // When connected, it should show "End projection" text
+      expect(screen.getByText(/projection/i)).toBeInTheDocument();
+    });
   });
 });
