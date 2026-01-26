@@ -40,13 +40,13 @@ jobs:
               });
               return data.workflow_runs.length > 0 ? data.workflow_runs[0] : null;
             }));
-            
+
             const allSucceeded = results.every(r => r !== null);
             const sameCommit = allSucceeded && results.every(r => r.head_sha === results[0].head_sha);
-            
+
             console.log(`All workflows succeeded: ${allSucceeded}`);
             console.log(`Same commit: ${sameCommit}`);
-            
+
             core.setOutput('deploy', allSucceeded && sameCommit);
 
   deploy:
