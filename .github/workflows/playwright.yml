@@ -1,10 +1,12 @@
 name: Playwright Tests
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Coverage Tests"]
     branches: [main]
-  pull_request:
-    branches: [main]
+    types:
+      - completed
+  workflow_dispatch:
 
 jobs:
   test:
