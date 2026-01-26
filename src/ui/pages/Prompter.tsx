@@ -75,7 +75,7 @@ const Prompter: Component = () => {
             {(verse, index) => (
               <div
                 ref={(el) => (verseRefs[index()] = el)}
-                class="text-wrap mb-10 2xl:mb-8 font-serif text-2xl font-black uppercase italic"
+                class="text-wrap mb-20 font-serif text-2xl font-black uppercase italic"
                 classList={{
                   "md:text-4xl lg:text-7xl 2xl:text-8xl":
                     currentVerseIndex() === index(),
