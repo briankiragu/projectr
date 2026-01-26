@@ -2,7 +2,7 @@ name: Deploy Infrastructure
 
 on:
   workflow_run:
-    workflows: ["Test"]
+    workflows: ["Coverage Tests", "Playwright Tests"]
     branches: [main]
     types:
       - completed
