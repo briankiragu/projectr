@@ -37,4 +37,18 @@ describe("useFormatting", () => {
   test("it should return null if input is undefined", () => {
     expect(null).toEqual(toTitleCase(undefined));
   });
+
+  test("it should return null if input is empty string", () => {
+    expect(null).toEqual(toTitleCase(""));
+  });
+
+  test("it handles single word title case", () => {
+    expect("Hello").toEqual(toTitleCase("hello"));
+  });
+
+  test("it handles single verse with single line", () => {
+    const lyrics = [["Single Line"]];
+    const expected = "Single Line\n\n";
+    expect(expected).toEqual(toEditableLyrics(lyrics));
+  });
 });

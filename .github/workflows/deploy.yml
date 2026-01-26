@@ -3,12 +3,12 @@ name: Deploy Infrastructure
 on:
   push:
     branches: [main]
-  # workflow_run:
-  #   workflows: ["Coverage"]
-  #   branches: [main]
-  #   types:
-  #     - completed
-  # workflow_dispatch:
+  workflow_run:
+    workflows: ["Coverage"]
+    branches: [main]
+    types:
+      - completed
+  workflow_dispatch:
 
 permissions:
   id-token: write
@@ -36,13 +36,14 @@ jobs:
       - name: Deploy Bicep
         uses: azure/arm-deploy@v2
         with:
+          scope: "ResourceGroup"
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
           template: ./infra/main.bicep
           parameters: >-
             ./infra/parameters/main.bicepparam
             sqlDBUser=${{ secrets.MYSQL_DB_USER }}
-            sqlDBUserPassword=${{ secrets.MYSQL_DB_USER_PASSWORD }}
+            sqlDBUserPassword=${{ secrets.MYSQL_DB_PASSWORD }}
             meiliMasterKey=${{ secrets.MEILI_MASTER_KEY }}
             directusKey=${{ secrets.DIRECTUS_KEY }}
             directusSecret=${{ secrets.DIRECTUS_SECRET }}

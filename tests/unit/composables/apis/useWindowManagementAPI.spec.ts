@@ -5,9 +5,7 @@ import { IProjectionScreenTypes } from "@interfaces/projection";
 // Mock usePermissionsAPI
 vi.mock("@composables/apis/usePermissionsAPI", () => ({
   default: () => ({
-    requestWindowManagementPermissions: vi
-      .fn()
-      .mockResolvedValue("granted"),
+    requestWindowManagementPermissions: vi.fn().mockResolvedValue("granted"),
   }),
 }));
 
@@ -78,7 +76,7 @@ describe("useWindowManagementAPI", () => {
 
     test("it returns true when getScreens is available", () => {
       // Remove getScreenDetails, add getScreens
-      delete (window as Record<string, unknown>).getScreenDetails;
+      delete (window as unknown as Record<string, unknown>)["getScreenDetails"];
       Object.defineProperty(window, "getScreens", {
         value: vi.fn(),
         writable: true,
@@ -91,8 +89,8 @@ describe("useWindowManagementAPI", () => {
     });
 
     test("it returns false when neither is available", () => {
-      delete (window as Record<string, unknown>).getScreenDetails;
-      delete (window as Record<string, unknown>).getScreens;
+      delete (window as unknown as Record<string, unknown>)["getScreenDetails"];
+      delete (window as unknown as Record<string, unknown>)["getScreens"];
 
       const { isAvailable } = useWindowManagementAPI();
 
@@ -144,11 +142,7 @@ describe("useWindowManagementAPI", () => {
     test("it uses prompter screen type when specified", async () => {
       const { project } = useWindowManagementAPI();
 
-      await project(
-        "test-id",
-        "test-channel",
-        IProjectionScreenTypes.prompter
-      );
+      await project("test-id", "test-channel", IProjectionScreenTypes.prompter);
 
       expect(window.open).toHaveBeenCalledWith(
         expect.stringContaining("/prompter/test-id"),
@@ -162,13 +156,14 @@ describe("useWindowManagementAPI", () => {
       vi.resetModules();
       vi.doMock("@composables/apis/usePermissionsAPI", () => ({
         default: () => ({
-          requestWindowManagementPermissions: vi.fn().mockResolvedValue("denied"),
+          requestWindowManagementPermissions: vi
+            .fn()
+            .mockResolvedValue("denied"),
         }),
       }));
 
-      const { default: freshUseWindowManagementAPI } = await import(
-        "@composables/apis/useWindowManagementAPI"
-      );
+      const { default: freshUseWindowManagementAPI } =
+        await import("@composables/apis/useWindowManagementAPI");
       const { project } = freshUseWindowManagementAPI();
 
       await project("test-id", "test-channel");
@@ -186,8 +181,8 @@ describe("useWindowManagementAPI", () => {
       const { isAvailable } = useWindowManagementAPI();
 
       // When getScreenDetails/getScreens are removed, isAvailable should return false
-      delete (window as Record<string, unknown>).getScreenDetails;
-      delete (window as Record<string, unknown>).getScreens;
+      delete (window as unknown as Record<string, unknown>)["getScreenDetails"];
+      delete (window as unknown as Record<string, unknown>)["getScreens"];
 
       expect(isAvailable()).toBe(false);
     });

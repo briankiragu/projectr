@@ -1,31 +1,30 @@
 import { describe, expect, test, vi, beforeEach } from "vitest";
 
+// Hoist the mock function so it's available during mock initialization
+const mockSearchGet = vi.hoisted(() => vi.fn());
+
 // Mock the MeiliSearch module before importing
-vi.mock("meilisearch", () => {
-  const mockSearchGet = vi.fn();
-  return {
-    MeiliSearch: vi.fn().mockImplementation(() => ({
-      index: vi.fn().mockReturnValue({
-        searchGet: mockSearchGet,
-      }),
-    })),
-    __mockSearchGet: mockSearchGet,
-  };
-});
+vi.mock("meilisearch", () => ({
+  MeiliSearch: vi.fn().mockImplementation(() => ({
+    index: vi.fn().mockReturnValue({
+      searchGet: mockSearchGet,
+    }),
+  })),
+}));
 
 // Import after mocking
 import useMeiliSearch from "@composables/apis/useMeiliSearch";
-import { MeiliSearch } from "meilisearch";
 
 describe("useMeiliSearch", () => {
-  let mockSearchGet: ReturnType<typeof vi.fn>;
-
   beforeEach(() => {
     vi.clearAllMocks();
-    // Get the mock function from the mocked module
-    const mockClient = new MeiliSearch({ host: "" });
-    const mockIndex = mockClient.index("test");
-    mockSearchGet = mockIndex.searchGet as ReturnType<typeof vi.fn>;
+  });
+
+  test("it returns the searchMeiliSearch function", () => {
+    const { searchMeiliSearch } = useMeiliSearch();
+
+    expect(searchMeiliSearch).toBeDefined();
+    expect(typeof searchMeiliSearch).toBe("function");
   });
 
   test("it searches MeiliSearch with a phrase", async () => {
@@ -42,15 +41,30 @@ describe("useMeiliSearch", () => {
     const { searchMeiliSearch } = useMeiliSearch();
     const results = await searchMeiliSearch("test song");
 
+    expect(mockSearchGet).toHaveBeenCalledWith("test song", expect.any(Object));
     expect(results).toEqual(mockResults);
   });
 
   test("it returns empty hits when no results", async () => {
-    mockSearchGet.mockResolvedValueOnce({ hits: [] });
+    mockSearchGet.mockResolvedValueOnce({ hits: [], estimatedTotalHits: 0 });
 
     const { searchMeiliSearch } = useMeiliSearch();
     const results = await searchMeiliSearch("nonexistent");
 
     expect(results.hits).toHaveLength(0);
+  });
+
+  test("it passes filter parameters to searchGet", async () => {
+    mockSearchGet.mockResolvedValueOnce({ hits: [] });
+
+    const { searchMeiliSearch } = useMeiliSearch();
+    await searchMeiliSearch("worship");
+
+    expect(mockSearchGet).toHaveBeenCalledWith(
+      "worship",
+      expect.objectContaining({
+        filter: expect.stringContaining("account"),
+      })
+    );
   });
 });

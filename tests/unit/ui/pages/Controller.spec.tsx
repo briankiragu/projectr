@@ -17,7 +17,7 @@ class MockBroadcastChannel {
   removeEventListener = vi.fn();
 }
 
-(global as Record<string, unknown>).BroadcastChannel = MockBroadcastChannel;
+(global as Record<string, unknown>)["BroadcastChannel"] = MockBroadcastChannel;
 
 // Mock the composables
 vi.mock("@composables/useFormatting", () => ({
