@@ -51,5 +51,23 @@ export default () => {
     return Promise.all(contentPromises);
   };
 
-  return { loadVersions, loadBooks, loadChapters, loadVerses, loadContent };
+  const loadChapterContent = async (
+    versionId: string,
+    chapterId: string
+  ): Promise<IBibleVerseContent[]> => {
+    // First load all verses for the chapter
+    const verses = await loadVerses(versionId, chapterId);
+    // Then load content for each verse
+    const verseIds = verses.map((verse) => verse.id);
+    return loadContent(versionId, verseIds);
+  };
+
+  return {
+    loadVersions,
+    loadBooks,
+    loadChapters,
+    loadVerses,
+    loadContent,
+    loadChapterContent,
+  };
 };

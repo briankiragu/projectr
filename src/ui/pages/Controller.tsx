@@ -240,7 +240,7 @@ const Controller: Component = () => {
         {/* Sidebar */}
         <aside class="col-span-1 flex flex-initial flex-col gap-4">
           {/* Searchbar and search results */}
-          <search class="flex h-[45dvh] flex-col gap-4 rounded-lg bg-tvc-orange px-4 pb-4 pt-2 dark:bg-orange-600">
+          <search class="flex max-h-[45dvh] flex-col gap-4 rounded-lg bg-tvc-orange px-4 pb-4 pt-2 dark:bg-orange-600">
             {/* Searchbar */}
             <div class="flex flex-col gap-2">
               <div class="flex items-center justify-between">
@@ -288,7 +288,7 @@ const Controller: Component = () => {
             />
           </search>
 
-          <section class="flex h-[45dvh] flex-col rounded-lg bg-tvc-orange p-4 md:h-[48dvh] xl:h-[48.9dvh] 2xl:h-[49.9dvh] dark:bg-orange-600">
+          <section class="flex min-h-0 flex-1 flex-col rounded-lg bg-tvc-orange p-4 dark:bg-orange-600">
             {/* Now playing */}
             <div class="mb-2 min-h-24">
               <h3 class="mb-1 text-sm font-semibold text-gray-900">

@@ -1,11 +1,5 @@
 // Import the modules.
-import {
-  Show,
-  For,
-  createResource,
-  createSignal,
-  type Component,
-} from "solid-js";
+import { Show, For, createResource, createSignal, type Component } from "solid-js";
 
 // Import the interfaces...
 import type { IQueueItem } from "@interfaces/queue";
@@ -17,14 +11,13 @@ const ScripturesSearchForm: Component<{
   enqueueHandler: (item: IQueueItem) => void;
 }> = (props) => {
   // Import the composables.
-  const { loadVersions, loadBooks, loadChapters, loadVerses, loadContent } =
+  const { loadVersions, loadBooks, loadChapters, loadChapterContent } =
     useScriptures();
 
   // Create the signals.
   const [versionId, setVersionId] = createSignal<string>();
   const [bookId, setBookId] = createSignal<string>();
   const [chapterId, setChapterId] = createSignal<string>();
-  const [verseIds, setVerseIds] = createSignal<string[]>();
 
   // Create the resources
   const [versions] = createResource(loadVersions);
@@ -33,13 +26,9 @@ const ScripturesSearchForm: Component<{
     bookId,
     (bookId) => loadChapters(versionId()!, bookId)
   );
-  const [verses, { mutate: mutateVerses }] = createResource(
-    chapterId,
-    (chapterId) => loadVerses(versionId()!, chapterId)
-  );
   const [content, { mutate: mutateContent }] = createResource(
-    verseIds,
-    (verseIds) => loadContent(versionId()!, verseIds)
+    chapterId,
+    (chapterId) => loadChapterContent(versionId()!, chapterId)
   );
 
   // Create the derived signals.
@@ -50,56 +39,22 @@ const ScripturesSearchForm: Component<{
     setVersionId(versionId);
     setBookId(undefined);
     setChapterId(undefined);
-    setVerseIds(undefined);
 
     mutateBooks(undefined);
     mutateChapters(undefined);
-    mutateVerses(undefined);
     mutateContent(undefined);
   };
 
   const handleChangeBook = (bookId: string) => {
     setBookId(bookId);
     setChapterId(undefined);
-    setVerseIds(undefined);
 
     mutateChapters(undefined);
-    mutateVerses(undefined);
     mutateContent(undefined);
   };
 
   const handleChangeChapter = (chapterId: string) => {
     setChapterId(chapterId);
-    setVerseIds(undefined);
-
-    mutateVerses(undefined);
-    mutateContent(undefined);
-  };
-
-  const handleChangeVerse = (verseId: string) => {
-    let ids: string[] | undefined = [];
-
-    // If the verse is already selected, remove it.
-    if (verseIds()?.includes(verseId)) {
-      ids = verseIds()?.filter((id) => id !== verseId);
-    } else {
-      ids = [...(verseIds() || []), verseId];
-    }
-
-    // Sort the verses
-    ids?.sort((a, b) => {
-      const newA = a.match(/\d+$/g)?.at(0);
-      const newB = b.match(/\d+$/g)?.at(0);
-
-      if (newA && newB) {
-        if (parseInt(newA, 10) < parseInt(newB, 10)) return -1;
-        if (parseInt(newA, 10) > parseInt(newB, 10)) return 1;
-      }
-
-      return 0;
-    });
-
-    setVerseIds(ids);
     mutateContent(undefined);
   };
 
@@ -107,10 +62,16 @@ const ScripturesSearchForm: Component<{
     // Stop form submission.
     e.preventDefault();
 
+    const verses = content()!;
+    const firstVerse = verses.at(0)?.reference;
+    const lastVerse = verses.at(-1)?.reference;
+    const title =
+      verses.length === 1 ? firstVerse : `${firstVerse} - ${lastVerse}`;
+
     props.enqueueHandler({
       qid: Date.now(),
-      title: `${verseIds()?.at(0)} to ${verseIds()?.at(-1)}`,
-      content: content()!.map((verse) => [verse.content]),
+      title: title ?? chapterId()!,
+      content: verses.map((verse) => [verse.content]),
     });
   };
 
@@ -210,30 +171,20 @@ const ScripturesSearchForm: Component<{
         </select>
       </label>
 
-      {/* Verse */}
-      <div class="col-span-full grid h-34 grid-cols-4 gap-3 overflow-y-scroll">
-        <Show when={verses.loading}>
-          <span class="text-sm">Loading...</span>
-        </Show>
-        <For each={verses()}>
-          {(verse) => (
-            <button
-              type="button"
-              id={`verse-${verse.id}`}
-              title={verse.reference}
-              class="col-span-1 flex min-h-8 cursor-pointer items-center justify-center gap-0.5 overflow-hidden text-ellipsis rounded-md border-2 border-gray-400 bg-gray-400 text-center text-sm text-gray-50 dark:bg-gray-700"
-              classList={{
-                "border-gray-700 dark:border-gray-50": verseIds()?.includes(
-                  verse.id
-                ),
-              }}
-              onClick={() => handleChangeVerse(verse.id)}
-            >
-              {verse.orgId}
-            </button>
-          )}
-        </For>
-      </div>
+      {/* Loading indicator */}
+      <Show when={content.loading}>
+        <div class="col-span-full flex items-center justify-center gap-2 py-4 text-sm text-gray-700">
+          <span class="material-symbols-outlined animate-spin">progress_activity</span>
+          Loading verses...
+        </div>
+      </Show>
+
+      {/* Verse count indicator */}
+      <Show when={!content.loading && content() && content()!.length > 0}>
+        <div class="col-span-full rounded-md bg-gray-200 px-3 py-2 text-sm text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+          {content()!.length} verses loaded
+        </div>
+      </Show>
 
       <button
         type="submit"
