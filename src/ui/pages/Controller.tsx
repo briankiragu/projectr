@@ -181,6 +181,8 @@ const Controller: Component = () => {
   };
 
   onMount(() => {
+    document.title = "Projectr | Controller";
+
     // When the network connectivity is lost.
     window.addEventListener("offline", () => {
       setIsOffline(true);
@@ -203,13 +205,16 @@ const Controller: Component = () => {
       }
 
       // Show/hide content.
-      if ((e.shiftKey && e.code === "KeyS") || ["Period"].includes(e.code))
-        receiverIsVisible()
-          ? hideOnReceiver()
-          : showOnReceiver({
-              nowPlaying: nowPlaying(),
-              currentVerseIndex: currentVerseIndex(),
-            });
+      if ((e.shiftKey && e.code === "KeyS") || ["Period"].includes(e.code)) {
+        if (receiverIsVisible()) {
+          hideOnReceiver();
+        } else {
+          showOnReceiver({
+            nowPlaying: nowPlaying(),
+            currentVerseIndex: currentVerseIndex(),
+          });
+        }
+      }
 
       // Playback events.
       if (["ArrowLeft", "PageUp"].includes(e.code)) goToPreviousVerse();
@@ -240,7 +245,7 @@ const Controller: Component = () => {
         {/* Sidebar */}
         <aside class="col-span-1 flex flex-initial flex-col gap-4">
           {/* Searchbar and search results */}
-          <search class="flex max-h-[45dvh] flex-col gap-4 rounded-lg bg-tvc-orange px-4 pb-4 pt-2 dark:bg-orange-600">
+          <search class="bg-tvc-orange flex max-h-[45dvh] flex-col gap-4 rounded-lg px-4 pt-2 pb-4 dark:bg-orange-600">
             {/* Searchbar */}
             <div class="flex flex-col gap-2">
               <div class="flex items-center justify-between">
@@ -288,7 +293,7 @@ const Controller: Component = () => {
             />
           </search>
 
-          <section class="flex min-h-0 flex-1 flex-col rounded-lg bg-tvc-orange p-4 dark:bg-orange-600">
+          <section class="bg-tvc-orange flex min-h-0 flex-1 flex-col rounded-lg p-4 dark:bg-orange-600">
             {/* Now playing */}
             <div class="mb-2 min-h-24">
               <h3 class="mb-1 text-sm font-semibold text-gray-900">
@@ -349,7 +354,7 @@ const Controller: Component = () => {
             {/* Title */}
             <h2
               id="title"
-              class="mb-3 text-wrap text-4xl font-black uppercase text-tvc-orange lg:mb-4 lg:text-6xl"
+              class="text-tvc-orange mb-3 text-4xl font-black text-wrap uppercase lg:mb-4 lg:text-6xl"
             >
               {toTitleCase(nowPlaying()!.title)}
             </h2>
@@ -377,7 +382,7 @@ const Controller: Component = () => {
             id="controls"
             class="sticky bottom-0 bg-white pt-4 dark:bg-transparent"
           >
-            <div class="flex min-h-16 flex-wrap justify-center gap-2 rounded-lg bg-tvc-green p-4 px-6 text-gray-700 lg:justify-between lg:gap-4 dark:bg-teal-700">
+            <div class="bg-tvc-green flex min-h-16 flex-wrap justify-center gap-2 rounded-lg p-4 px-6 text-gray-700 lg:justify-between lg:gap-4 dark:bg-teal-700">
               <ProjectionButton
                 title="Shift + P"
                 isAvailable={receiverIsAvailable()}

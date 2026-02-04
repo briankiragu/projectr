@@ -53,6 +53,8 @@ const Prompter: Component = () => {
   });
 
   onMount(() => {
+    document.title = "Projectr | Prompter";
+
     initialisePresentationReceiver(updatePresentation);
     initialiseProjectionReceiver(updatePresentation);
   });

@@ -33,6 +33,8 @@ const Audience: Component = () => {
   };
 
   onMount(() => {
+    document.title = "Projectr | Audience";
+
     initialisePresentationReceiver(updatePresentation);
     initialiseProjectionReceiver(updatePresentation);
   });
