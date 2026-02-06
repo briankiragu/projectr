@@ -118,7 +118,7 @@ html:has(dialog[open][modal-mode="mega"]) {
 }
 
 .v {
-  color: #1e40af;
+  color: var(--color-tvc-orange);
   font-size: 0.64em;
   margin-right: 0.1em;
   mix-blend-mode: difference;

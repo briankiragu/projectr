@@ -287,10 +287,12 @@ const Controller: Component = () => {
             </div>
 
             {/* Search results */}
-            <LyricsSearchResults
-              results={results}
-              enqueueHandler={addToQueue}
-            />
+            <Show when={isShowingLyrics()}>
+              <LyricsSearchResults
+                results={results}
+                enqueueHandler={addToQueue}
+              />
+            </Show>
           </search>
 
           <section class="bg-tvc-orange flex min-h-0 flex-1 flex-col rounded-lg p-4 dark:bg-orange-600">
