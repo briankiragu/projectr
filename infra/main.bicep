@@ -227,7 +227,7 @@ module directus 'templates/compute/container-app.bicep' = {
   name: 'directus'
   params: {
     location: location
-    name: '${containerAppName}directus'
+    name: '${containerAppName}-directus'
     logAnalyticsWorkspaceId: logAnalyticsWorkspace.outputs.id
     userAssignedIdentityId: managedIdentity.outputs.id
     containerAppEnvironmentId: containerAppEnv.outputs.id
@@ -278,7 +278,7 @@ module meilisearch 'templates/compute/container-app.bicep' = {
   name: 'meilisearch'
   params: {
     location: location
-    name: '${containerAppName}meilisearch'
+    name: '${containerAppName}-meilisearch'
     logAnalyticsWorkspaceId: logAnalyticsWorkspace.outputs.id
     userAssignedIdentityId: managedIdentity.outputs.id
     containerAppEnvironmentId: containerAppEnv.outputs.id
@@ -310,7 +310,7 @@ module meilisync 'templates/compute/container-app.bicep' = {
   name: 'meilisync'
   params: {
     location: location
-    name: '${containerAppName}meilisync'
+    name: '${containerAppName}-meilisync'
     logAnalyticsWorkspaceId: logAnalyticsWorkspace.outputs.id
     userAssignedIdentityId: managedIdentity.outputs.id
     containerAppEnvironmentId: containerAppEnv.outputs.id
@@ -333,7 +333,7 @@ module meilisyncAdmin 'templates/compute/container-app.bicep' = {
   name: 'meilisync-admin'
   params: {
     location: location
-    name: '${containerAppName}meilisyncadmin'
+    name: '${containerAppName}-meilisync-admin'
     logAnalyticsWorkspaceId: logAnalyticsWorkspace.outputs.id
     userAssignedIdentityId: managedIdentity.outputs.id
     containerAppEnvironmentId: containerAppEnv.outputs.id

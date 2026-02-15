@@ -42,7 +42,7 @@ param redisCacheName = 'projectr-redis'
 // Compute
 // ========================================================================
 param containerAppEnvName = 'projectrappenv'
-param containerAppName = 'projectrapp'
+param containerAppName = 'projectr-app'
 
 // ========================================================================
 // Application Secrets
