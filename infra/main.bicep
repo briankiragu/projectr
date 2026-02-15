@@ -144,7 +144,14 @@ module virtualNetwork 'templates/networking/virtual-network.bicep' = {
         natGateway: {
           id: natGateway.outputs.id
         }
-        delegations: []
+        delegations: [
+          {
+            name: 'Microsoft.App.environments'
+            properties: {
+              serviceName: 'Microsoft.App/environments'
+            }
+          }
+        ]
       }
     ]
     tags: tags
