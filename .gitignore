@@ -26,11 +26,10 @@ dist-ssr
 *.sw?
 
 # Testing
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-/coverage
+.nyc_output
+coverage
+playwright-report
+test-results
 
 # Environment variables
 .env*

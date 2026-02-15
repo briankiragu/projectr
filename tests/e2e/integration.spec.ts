@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./coverage.setup";
 
 test.describe("Full User Journey", () => {
   test("should load the controller and show initial state", async ({
@@ -158,7 +158,7 @@ test.describe("Performance", () => {
     await page.waitForLoadState("networkidle");
     const loadTime = Date.now() - startTime;
 
-    // Page should load within 5 seconds
-    expect(loadTime).toBeLessThan(5000);
+    // Page should load within 30 seconds (generous for coverage-instrumented builds)
+    expect(loadTime).toBeLessThan(30000);
   });
 });

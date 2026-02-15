@@ -23,8 +23,11 @@ export default defineConfig({
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
 
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  /* Limit workers when coverage instrumentation is active to avoid server overload */
+  workers: process.env.CI ? 1 : process.env.E2E_COVERAGE ? 2 : undefined,
+
+  /* Increase timeout for coverage-instrumented builds */
+  timeout: process.env.E2E_COVERAGE ? 60000 : 30000,
 
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: "html",
@@ -47,41 +50,13 @@ export default defineConfig({
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
     },
-
-    // {
-    //   name: "firefox",
-    //   use: { ...devices["Desktop Firefox"] },
-    // },
-
-    // {
-    //   name: "webkit",
-    //   use: { ...devices["Desktop Safari"] },
-    // },
-
-    /* Test against mobile viewports. */
-    // {
-    //   name: "Mobile Chrome",
-    //   use: { ...devices["Pixel 5"] },
-    // },
-    // {
-    //   name: "Mobile Safari",
-    //   use: { ...devices["iPhone 12"] },
-    // },
-
-    // /* Test against branded browsers. */
-    // {
-    //   name: "Microsoft Edge",
-    //   use: { ...devices["Desktop Edge"], channel: "msedge" },
-    // },
-    // {
-    //   name: "Google Chrome",
-    //   use: { ...devices["Desktop Chrome"], channel: "chrome" },
-    // },
   ],
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: "npm run dev",
+    command: process.env.E2E_COVERAGE
+      ? "npx cross-env E2E_COVERAGE=true npx vite"
+      : "npm run dev",
     url: "http://localhost:5173",
     reuseExistingServer: !process.env.CI,
   },

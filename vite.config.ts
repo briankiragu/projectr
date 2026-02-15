@@ -7,12 +7,28 @@ import { defineConfig } from "vite";
 import solidPlugin from "vite-plugin-solid";
 import tailwindcss from "@tailwindcss/vite";
 import { partytownVite } from "@qwik.dev/partytown/utils";
+import istanbul from "vite-plugin-istanbul";
 
 export default defineConfig({
   plugins: [
     solidPlugin(),
     tailwindcss(),
     partytownVite({ dest: join(__dirname, "dist", "~partytown") }),
+    ...(process.env.E2E_COVERAGE
+      ? [
+          istanbul({
+            include: "src/**/*",
+            exclude: [
+              "node_modules",
+              "tests",
+              "src/vite-env.d.ts",
+            ],
+            extension: [".ts", ".tsx"],
+            requireEnv: false,
+            checkProd: false,
+          }),
+        ]
+      : []),
   ],
   build: { target: "esnext" },
   resolve: {
