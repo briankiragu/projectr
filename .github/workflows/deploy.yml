@@ -34,7 +34,7 @@ jobs:
       - name: Deploy Bicep
         uses: azure/arm-deploy@v2
         with:
-          scope: "ResourceGroup"
+          scope: "resourcegroup"
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
           template: ./infra/main.bicep
