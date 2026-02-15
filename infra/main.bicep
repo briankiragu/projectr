@@ -9,12 +9,6 @@ param logAnalyticsWorkspaceName string
 @description('The name of the User Assigned Managed Identity.')
 param managedIdentityName string
 
-@description('The name of the Key Vault.')
-param keyVaultName string
-
-@description('If true, the deployment will create RBAC role assignments on the Key Vault. Requires the deploying identity to have Microsoft.Authorization/roleAssignments/write (e.g. Owner or User Access Administrator).')
-param keyVaultCreateRoleAssignments bool = false
-
 // Networking
 @description('The name of the Public IP Address for the NAT Gateway.')
 param publicIpName string
@@ -107,18 +101,6 @@ module managedIdentity 'templates/security/managed-identity.bicep' = {
   params: {
     location: location
     name: managedIdentityName
-    tags: tags
-  }
-}
-
-module keyVault 'templates/security/key-vault.bicep' = {
-  name: 'keyVault'
-  params: {
-    location: location
-    name: keyVaultName
-    logAnalyticsWorkspaceId: logAnalyticsWorkspace.outputs.id
-    managedIdentityPrincipalId: managedIdentity.outputs.principalId
-    createRoleAssignments: keyVaultCreateRoleAssignments
     tags: tags
   }
 }
