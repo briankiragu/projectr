@@ -29,7 +29,7 @@ param tags object
 
 resource containerAppEnv 'Microsoft.App/managedEnvironments@2025-10-02-preview' = {
   location: location
-  name: '${name}-${location}'
+  name: '${name}${location}'
   properties: {
     appLogsConfiguration: {
       destination: 'log-analytics'

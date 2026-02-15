@@ -48,7 +48,7 @@ param logAnalyticsWorkspaceId string
 
 resource containerApp 'Microsoft.App/containerApps@2025-10-02-preview' = {
   location: location
-  name: '${name}-${location}'
+  name: '${name}${location}'
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
