@@ -78,10 +78,6 @@ resource diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-pr
     workspaceId: logAnalyticsWorkspaceId
     logs: [
       {
-        category: 'ContainerAppConsoleLogs'
-        enabled: true
-      }
-      {
         category: 'ContainerAppSystemLogs'
         enabled: true
       }
