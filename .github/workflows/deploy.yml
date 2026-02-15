@@ -47,3 +47,4 @@ jobs:
             directusSecret=${{ secrets.DIRECTUS_SECRET }}
             directusAdminEmail=${{ secrets.DIRECTUS_ADMIN_EMAIL }}
             directusAdminPassword=${{ secrets.DIRECTUS_ADMIN_PASSWORD }}
+          additionalArguments: --verbose
