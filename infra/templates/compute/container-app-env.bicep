@@ -24,6 +24,9 @@ param storageAccountName string
 @description('The key of the Storage Account to mount.')
 param storageAccountKey string
 
+@description('Azure File share configurations to register as environment storages.')
+param fileShares array // e.g. [{ name: 'directus-data', shareName: 'directus-data' }, ...]
+
 @description('Tags to apply to resources')
 param tags object
 
@@ -49,20 +52,23 @@ resource containerAppEnv 'Microsoft.App/managedEnvironments@2025-10-02-preview' 
     ]
   }
   tags: tags
+}
 
-  // Link Azure Files to the Environment
-  resource storageMount 'storages' = {
-    name: storageAccountName
+// Create a separate storage mount for each Azure File share
+resource storageMounts 'Microsoft.App/managedEnvironments/storages@2025-10-02-preview' = [
+  for share in fileShares: {
+    parent: containerAppEnv
+    name: share.name
     properties: {
       azureFile: {
         accountName: storageAccountName
         accountKey: storageAccountKey
-        shareName: 'default' // Placeholder, individual apps specify the share
+        shareName: share.shareName
         accessMode: 'ReadWrite'
       }
     }
   }
-}
+]
 
 resource envDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   scope: containerAppEnv

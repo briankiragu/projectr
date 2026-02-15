@@ -216,6 +216,11 @@ module containerAppEnv 'templates/compute/container-app-env.bicep' = {
     infrastructureSubnetId: virtualNetwork.outputs.subnetIds[1] // aca-subnet
     storageAccountName: storage.outputs.name
     storageAccountKey: storage.outputs.primaryKey
+    fileShares: [
+      { name: 'directus-data', shareName: 'directus-data' }
+      { name: 'meili-data', shareName: 'meili-data' }
+      { name: 'meilisync-data', shareName: 'meilisync-data' }
+    ]
     tags: tags
   }
 }
@@ -267,7 +272,7 @@ module directus 'templates/compute/container-app.bicep' = {
       {
         name: 'directus-data'
         storageType: 'AzureFile'
-        storageName: storage.outputs.name
+        storageName: 'directus-data'
       }
     ]
     tags: tags
@@ -299,7 +304,7 @@ module meilisearch 'templates/compute/container-app.bicep' = {
       {
         name: 'meili-data'
         storageType: 'AzureFile'
-        storageName: storage.outputs.name
+        storageName: 'meili-data'
       }
     ]
     tags: tags
@@ -322,7 +327,7 @@ module meilisync 'templates/compute/container-app.bicep' = {
       {
         name: 'meilisync-data'
         storageType: 'AzureFile'
-        storageName: storage.outputs.name
+        storageName: 'meilisync-data'
       }
     ]
     tags: tags

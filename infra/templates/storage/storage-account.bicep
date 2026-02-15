@@ -20,11 +20,11 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-06-01' = {
   kind: 'StorageV2'
   properties: {
     accessTier: 'Hot'
-    allowSharedKeyAccess: false
+    allowSharedKeyAccess: true // Required for Azure Container Apps SMB volume mounts
     defaultToOAuthAuthentication: true
     minimumTlsVersion: 'TLS1_2'
     allowBlobPublicAccess: false
-    publicNetworkAccess: 'Disabled'
+    publicNetworkAccess: 'Enabled'
     networkAcls: {
       bypass: 'AzureServices'
       defaultAction: 'Allow'
