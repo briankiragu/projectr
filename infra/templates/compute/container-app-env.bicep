@@ -41,6 +41,12 @@ resource containerAppEnv 'Microsoft.App/managedEnvironments@2025-10-02-preview' 
     vnetConfiguration: {
       infrastructureSubnetId: infrastructureSubnetId
     }
+    workloadProfiles: [
+      {
+        name: 'Consumption'
+        workloadProfileType: 'Consumption'
+      }
+    ]
   }
   tags: tags
 
