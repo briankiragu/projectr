@@ -20,19 +20,19 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-06-01' = {
   kind: 'StorageV2'
   properties: {
     accessTier: 'Hot'
+    allowSharedKeyAccess: false
+    defaultToOAuthAuthentication: true
+    minimumTlsVersion: 'TLS1_2'
+    allowBlobPublicAccess: false
+    publicNetworkAccess: 'Disabled'
+    networkAcls: {
+      bypass: 'AzureServices'
+      defaultAction: 'Allow'
+    }
   }
 
   resource fileServices 'fileServices' = {
     name: 'default'
-
-    // Create shares matching your docker volumes
-    resource shareMysql 'shares' = {
-      name: 'mysql-data'
-    }
-
-    resource shareRedis 'shares' = {
-      name: 'redis-data'
-    }
 
     resource shareDirectus 'shares' = {
       name: 'directus-data'

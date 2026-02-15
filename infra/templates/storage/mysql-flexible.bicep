@@ -46,7 +46,7 @@ resource privateDnsZone 'Microsoft.Network/privateDnsZones@2024-06-01' = {
   name: '${name}.mysql.database.azure.com'
 
   resource privateDnsZoneLink 'virtualNetworkLinks' = {
-    name: 'vnet-link-${uniqueString(virtualNetworkId)}'
+    name: '${name}-vnet-link-${location}'
     location: 'global'
     properties: {
       virtualNetwork: {
@@ -134,13 +134,8 @@ resource mysqlDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-prev
   }
 }
 
-@description('The ID of the MySQL Flexible Server.')
 output id string = mysqlServer.id
-@description('The name of the MySQL Flexible Server.')
 output name string = mysqlServer.name
-@description('The FQDN of the MySQL Flexible Server.')
 output fqdn string = mysqlServer.properties.fullyQualifiedDomainName
-@description('The port of the MySQL Flexible Server.')
 output port int = mysqlServer.properties.databasePort
-@description('The name of the MySQL Database.')
 output database string = mysqlServer::mysqlDatabase.name
