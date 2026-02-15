@@ -91,12 +91,40 @@ test.describe("Controller Page", () => {
   });
 
   test("should display scriptures form when toggled", async ({ page }) => {
+    // Mock the Bible API response
+    // Use a broad pattern to ensure we catch the request
+    await page.route(/bibles/, async (route) => {
+      console.log("Intercepted bibles request");
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          data: [
+            {
+              id: "de4e12af7f28f599-01",
+              name: "King James Version",
+              abbreviation: "KJV",
+              abbreviationLocal: "KJV",
+              descriptionLocal: "Protestant",
+            },
+          ],
+        }),
+      });
+    });
+
     // Toggle to scriptures
     const toggleButton = page.locator('button:has-text("toggle_on")');
     await toggleButton.click();
 
     // Should show version selector
-    await expect(page.getByText("Choose a version")).toBeVisible();
+    const versionSelect = page.locator("select#version");
+    await expect(versionSelect).toBeVisible();
+
+    // Wait for loading to finish (should not see "Loading..." option)
+    await expect(versionSelect).not.toContainText("Loading...");
+
+    // Should contain "Choose a version" option
+    await expect(versionSelect).toContainText("Choose a version");
   });
 });
 

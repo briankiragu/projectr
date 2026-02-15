@@ -248,7 +248,7 @@ const Controller: Component = () => {
           <search class="bg-tvc-orange flex max-h-[45dvh] flex-col gap-4 rounded-lg px-4 pt-2 pb-4 dark:bg-orange-600">
             {/* Searchbar */}
             <div class="flex flex-col gap-2">
-              <div class="flex items-center justify-between">
+              <div class="flex flex-wrap items-center justify-between gap-2">
                 {/* Search bar title */}
                 <h2 class="flex items-center gap-2 text-3xl font-black tracking-tight text-gray-900">
                   Search
@@ -266,7 +266,7 @@ const Controller: Component = () => {
 
                 <button
                   type="button"
-                  class="flex h-9 w-9 items-center justify-center rounded-full text-indigo-500 transition hover:bg-gray-800/20 focus:outline-hidden"
+                  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-indigo-500 transition hover:bg-gray-800/20 focus:outline-hidden"
                   onClick={() => setIsShowingLyrics((state) => !state)}
                 >
                   {isShowingLyrics() ? (

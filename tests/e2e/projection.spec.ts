@@ -27,6 +27,31 @@ test.describe("Audience Page", () => {
     await page.setViewportSize({ width: 3840, height: 2160 });
     await expect(page.locator("div.flex.h-dvh")).toBeVisible();
   });
+
+  test("should update content when receiving broadcast message", async ({
+    page,
+  }) => {
+    // Simulate receiving a broadcast message
+    await page.evaluate(() => {
+      const channel = new BroadcastChannel("projectr");
+      const payload = {
+        nowPlaying: {
+          qid: 123,
+          title: "Test Song",
+          content: [["Line 1", "Line 2"]],
+        },
+        currentVerseIndex: 0,
+      };
+      channel.postMessage(JSON.stringify(payload));
+    });
+
+    // Verify title is visible (only on verse index 0)
+    await expect(page.locator("h2", { hasText: "Test Song" })).toBeVisible();
+
+    // Verify lyrics are visible
+    await expect(page.getByText("Line 1")).toBeVisible();
+    await expect(page.getByText("Line 2")).toBeVisible();
+  });
 });
 
 test.describe("Prompter Page", () => {

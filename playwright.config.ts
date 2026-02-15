@@ -38,7 +38,7 @@ export default defineConfig({
     trace: "on-first-retry",
 
     /* Take screenshot on failure */
-    screenshot: "only-on-failure"
+    screenshot: "only-on-failure",
   },
 
   /* Configure projects for major browsers */
@@ -81,7 +81,7 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: "pnpm run dev",
+    command: "npm run dev",
     url: "http://localhost:5173",
     reuseExistingServer: !process.env.CI,
   },
