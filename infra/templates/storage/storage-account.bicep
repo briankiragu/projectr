@@ -8,7 +8,7 @@ param name string
 param logAnalyticsWorkspaceId string
 
 @description('The names of the Azure File shares to create in the Storage Account.')
-param fileShareNames string[]
+param fileShareNames array
 
 @description('Tags to apply to resources')
 param tags object

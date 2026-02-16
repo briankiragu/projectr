@@ -33,7 +33,7 @@ param acaSubnetAddressPrefix string
 param storageAccountName string
 
 @description('The names of the Azure File shares to create in the Storage Account.')
-param fileShareNames string[]
+param fileShareNames array
 
 // Database
 @description('The name of the MySQL Flexible Server.')
