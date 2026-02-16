@@ -1008,7 +1008,7 @@ test.describe("Keyboard Shortcuts", () => {
       await route.fulfill({ json: mockLyricsResults });
     });
     await page.goto("/");
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("domcontentloaded");
 
     // Add content
     const searchInput = page.getByPlaceholder(
