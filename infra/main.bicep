@@ -228,38 +228,6 @@ module containerAppEnv 'templates/compute/container-app-env.bicep' = {
 // ========================================================================
 // Compute (Apps)
 // ========================================================================
-module meilisearch 'templates/compute/container-app.bicep' = {
-  name: 'meilisearch'
-  params: {
-    location: location
-    name: '${containerAppName}-meilisearch'
-    logAnalyticsWorkspaceId: logAnalyticsWorkspace.outputs.id
-    userAssignedIdentityId: managedIdentity.outputs.id
-    containerAppEnvironmentId: containerAppEnv.outputs.id
-    image: 'getmeili/meilisearch:latest'
-    externalIngress: true
-    targetPort: 7700
-    secrets: [
-      { name: 'master-key', value: meiliMasterKey }
-    ]
-    env: [
-      { name: 'MEILI_ENV', value: 'production' }
-      { name: 'MEILI_MASTER_KEY', secretRef: 'master-key' }
-    ]
-    volumeMounts: [
-      { volumeName: 'meili-data', mountPath: '/meili_data' }
-    ]
-    volumes: [
-      {
-        name: 'meili-data'
-        storageType: 'AzureFile'
-        storageName: 'meili-data'
-      }
-    ]
-    tags: tags
-  }
-}
-
 module directus 'templates/compute/container-app.bicep' = {
   name: 'directus'
   params: {
@@ -311,6 +279,38 @@ module directus 'templates/compute/container-app.bicep' = {
   }
 }
 
+module meilisearch 'templates/compute/container-app.bicep' = {
+  name: 'meilisearch'
+  params: {
+    location: location
+    name: '${containerAppName}-meilisearch'
+    logAnalyticsWorkspaceId: logAnalyticsWorkspace.outputs.id
+    userAssignedIdentityId: managedIdentity.outputs.id
+    containerAppEnvironmentId: containerAppEnv.outputs.id
+    image: 'getmeili/meilisearch:latest'
+    externalIngress: true
+    targetPort: 7700
+    secrets: [
+      { name: 'master-key', value: meiliMasterKey }
+    ]
+    env: [
+      { name: 'MEILI_ENV', value: 'production' }
+      { name: 'MEILI_MASTER_KEY', secretRef: 'master-key' }
+    ]
+    volumeMounts: [
+      { volumeName: 'meili-data', mountPath: '/meili_data' }
+    ]
+    volumes: [
+      {
+        name: 'meili-data'
+        storageType: 'AzureFile'
+        storageName: 'meili-data'
+      }
+    ]
+    tags: tags
+  }
+}
+
 module meilisync 'templates/compute/container-app.bicep' = {
   name: 'meilisync'
   params: {
@@ -319,7 +319,7 @@ module meilisync 'templates/compute/container-app.bicep' = {
     logAnalyticsWorkspaceId: logAnalyticsWorkspace.outputs.id
     userAssignedIdentityId: managedIdentity.outputs.id
     containerAppEnvironmentId: containerAppEnv.outputs.id
-    image: 'long2ice/meilisync:latest'
+    image: 'long2ice/meilisync:sha-052c4de' // pinned to stable release 0.1.3
     volumeMounts: [
       { volumeName: 'meilisync-data', mountPath: '/meilisync' }
     ]

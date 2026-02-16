@@ -25,7 +25,7 @@ param storageAccountName string
 param storageAccountKey string
 
 @description('The names of the Azure File shares to mount as environment-level storages.')
-param fileShareNames array // e.g. ['directus-data', 'meili-data', 'meilisync-data']
+param fileShareNames array
 
 @description('Tags to apply to resources')
 param tags object

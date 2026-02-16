@@ -82,7 +82,7 @@ services:
       - projectr
 
   meilisync:
-    image: long2ice/meilisync:latest
+    image: long2ice/meilisync:sha-052c4de # pinned to stable release 0.1.3
     container_name: meilisync
     restart: unless-stopped
     volumes:
