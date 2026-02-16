@@ -25,7 +25,7 @@ param storageAccountName string
 param storageAccountKey string
 
 @description('The names of the Azure File shares to mount as environment-level storages.')
-param fileShareNames string[]
+param fileShareNames array // e.g. ['directus-data', 'meili-data', 'meilisync-data']
 
 @description('Tags to apply to resources')
 param tags object
@@ -44,21 +44,29 @@ resource containerAppEnv 'Microsoft.App/managedEnvironments@2025-10-02-preview' 
     vnetConfiguration: {
       infrastructureSubnetId: infrastructureSubnetId
     }
+    workloadProfiles: [
+      {
+        name: 'Consumption'
+        workloadProfileType: 'Consumption'
+      }
+    ]
   }
   tags: tags
 
   // Link each Azure File share to the environment as a named storage mount
-  resource storageMounts 'storages' = [for shareName in fileShareNames: {
-    name: shareName
-    properties: {
-      azureFile: {
-        accountName: storageAccountName
-        accountKey: storageAccountKey
-        shareName: shareName
-        accessMode: 'ReadWrite'
+  resource storageMounts 'storages' = [
+    for shareName in fileShareNames: {
+      name: shareName
+      properties: {
+        azureFile: {
+          accountName: storageAccountName
+          accountKey: storageAccountKey
+          shareName: shareName
+          accessMode: 'ReadWrite'
+        }
       }
     }
-  }]
+  ]
 }
 
 resource envDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {

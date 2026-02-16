@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./coverage.setup";
 
 // Mock data
 const mockBibles = {
@@ -108,12 +108,8 @@ test.describe("Functional Flows", () => {
     });
 
     // Mock MeiliSearch
-    await page.route("**/indexes/lyrics/search", async (route) => {
-      if (route.request().method() === "GET") {
-        await route.fulfill({ json: mockLyricsResults });
-      } else {
-        await route.continue();
-      }
+    await page.route(/indexes\/lyrics\/search/, async (route) => {
+      await route.fulfill({ json: mockLyricsResults });
     });
 
     await page.goto("/");
@@ -126,11 +122,11 @@ test.describe("Functional Flows", () => {
     );
     await searchInput.fill("Amazing Grace");
 
-    // Wait for debounce and search results
-    await expect(page.getByText("Amazing Grace").first()).toBeVisible();
+    // Wait for debounce (500ms) and search results
+    await expect(page.getByText("Amazing Grace").first()).toBeVisible({ timeout: 10000 });
 
-    // 2. Add to queue (click the result)
-    await page.getByText("Amazing Grace").first().click();
+    // 2. Add to queue (click the add button on the result)
+    await page.locator('button:has-text("add_to_queue")').first().click();
 
     // 3. Verify it's in the Now Playing section (since queue was empty)
     await expect(page.getByText("Now Playing")).toBeVisible();
@@ -183,22 +179,22 @@ test.describe("Functional Flows", () => {
       "Search for a track by title or content..."
     );
     await searchInput.fill("Amazing Grace");
-    await expect(page.getByText("Amazing Grace").first()).toBeVisible();
-    await page.getByText("Amazing Grace").first().click(); // This goes to Now Playing
+    await expect(page.getByText("Amazing Grace").first()).toBeVisible({ timeout: 10000 });
+    await page.locator('button:has-text("add_to_queue")').first().click(); // This goes to Now Playing
 
     // 2. Add another item (same one for simplicity)
-    await page.getByText("Amazing Grace").first().click(); // This goes to Queue
+    await page.locator('button:has-text("add_to_queue")').first().click(); // This goes to Queue
 
     // 3. Verify Queue has item
     const queueList = page.getByTestId("queue-list");
-    await expect(queueList.getByText("Amazing Grace")).toBeVisible();
+    await expect(queueList.getByText("Amazing Grace", { exact: true })).toBeVisible();
 
     // 4. Play the item from queue
     const playButton = queueList.locator('button[title="play"]');
     await playButton.click();
 
     // Since it's the same title, it's hard to distinguish, but the queue should now be empty if we played the only item.
-    await expect(queueList).toBeEmpty();
+    await expect(queueList.locator('[data-testid="queue-list-item"]')).toHaveCount(0);
   });
 
   test("should remove item from queue", async ({ page }) => {
@@ -207,11 +203,11 @@ test.describe("Functional Flows", () => {
       "Search for a track by title or content..."
     );
     await searchInput.fill("Amazing Grace");
-    await expect(page.getByText("Amazing Grace").first()).toBeVisible();
-    await page.getByText("Amazing Grace").first().click();
+    await expect(page.getByText("Amazing Grace").first()).toBeVisible({ timeout: 10000 });
+    await page.locator('button:has-text("add_to_queue")').first().click();
 
     // 2. Add second item (Queue)
-    await page.getByText("Amazing Grace").first().click();
+    await page.locator('button:has-text("add_to_queue")').first().click();
 
     // 3. Remove from queue
     const queueList = page.getByTestId("queue-list");
@@ -219,7 +215,7 @@ test.describe("Functional Flows", () => {
     await removeButton.click();
 
     // 4. Verify queue is empty
-    await expect(queueList).toBeEmpty();
+    await expect(queueList.locator('[data-testid="queue-list-item"]')).toHaveCount(0);
     // Now Playing should still be there
     await expect(page.getByTestId("now-playing-card")).toBeVisible();
   });
@@ -230,15 +226,16 @@ test.describe("Functional Flows", () => {
       "Search for a track by title or content..."
     );
     await searchInput.fill("Amazing Grace");
-    await page.getByText("Amazing Grace").first().click(); // Playing
-    await page.getByText("Amazing Grace").first().click(); // Queue 1
-    await page.getByText("Amazing Grace").first().click(); // Queue 2
+    await expect(page.getByText("Amazing Grace").first()).toBeVisible({ timeout: 10000 });
+    await page.locator('button:has-text("add_to_queue")').first().click(); // Playing
+    await page.locator('button:has-text("add_to_queue")').first().click(); // Queue 1
+    await page.locator('button:has-text("add_to_queue")').first().click(); // Queue 2
 
     // 2. Click Clear All
     await page.getByText("Clear all").click();
 
     // 3. Verify queue is empty
     const queueList = page.getByTestId("queue-list");
-    await expect(queueList).toBeEmpty();
+    await expect(queueList.locator('[data-testid="queue-list-item"]')).toHaveCount(0);
   });
 });

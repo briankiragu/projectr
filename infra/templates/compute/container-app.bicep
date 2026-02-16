@@ -48,7 +48,7 @@ param logAnalyticsWorkspaceId string
 
 resource containerApp 'Microsoft.App/containerApps@2025-10-02-preview' = {
   location: location
-  name: '${name}${location}'
+  name: name
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
@@ -76,16 +76,7 @@ resource diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-pr
   scope: containerApp
   properties: {
     workspaceId: logAnalyticsWorkspaceId
-    logs: [
-      {
-        category: 'ContainerAppConsoleLogs'
-        enabled: true
-      }
-      {
-        category: 'ContainerAppSystemLogs'
-        enabled: true
-      }
-    ]
+    logs: []
     metrics: [
       {
         category: 'AllMetrics'

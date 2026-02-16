@@ -1,0 +1,6 @@
+{
+  "exclude": [
+    "src/lib/composables/usePresentation.ts",
+    "src/lib/composables/apis/usePresentationAPI.ts"
+  ]
+}

@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./coverage.setup";
 
 test.describe("Audience Page", () => {
   test.beforeEach(async ({ page }) => {
@@ -61,7 +61,7 @@ test.describe("Prompter Page", () => {
 
   test("should display the prompter view", async ({ page }) => {
     // The page should load without errors
-    await expect(page.locator("div")).toBeVisible();
+    await expect(page.locator("div.flex.min-h-dvh")).toBeVisible();
   });
 
   test("should be responsive on various screen sizes", async ({ page }) => {

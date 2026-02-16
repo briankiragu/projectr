@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./coverage.setup";
 
 test.describe("Controller Page", () => {
   test.beforeEach(async ({ page }) => {
