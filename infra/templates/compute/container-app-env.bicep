@@ -24,6 +24,9 @@ param storageAccountName string
 @description('The key of the Storage Account to mount.')
 param storageAccountKey string
 
+@description('The names of the Azure File shares to mount as environment-level storages.')
+param fileShareNames string[]
+
 @description('Tags to apply to resources')
 param tags object
 
@@ -44,18 +47,18 @@ resource containerAppEnv 'Microsoft.App/managedEnvironments@2025-10-02-preview' 
   }
   tags: tags
 
-  // Link Azure Files to the Environment
-  resource storageMount 'storages' = {
-    name: storageAccountName
+  // Link each Azure File share to the environment as a named storage mount
+  resource storageMounts 'storages' = [for shareName in fileShareNames: {
+    name: shareName
     properties: {
       azureFile: {
         accountName: storageAccountName
         accountKey: storageAccountKey
-        shareName: 'default' // Placeholder, individual apps specify the share
+        shareName: shareName
         accessMode: 'ReadWrite'
       }
     }
-  }
+  }]
 }
 
 resource envDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {

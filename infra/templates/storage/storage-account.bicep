@@ -7,6 +7,9 @@ param name string
 @description('The ID of the Log Analytics Workspace.')
 param logAnalyticsWorkspaceId string
 
+@description('The names of the Azure File shares to create in the Storage Account.')
+param fileShareNames string[]
+
 @description('Tags to apply to resources')
 param tags object
 
@@ -20,11 +23,11 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-06-01' = {
   kind: 'StorageV2'
   properties: {
     accessTier: 'Hot'
-    allowSharedKeyAccess: false
+    allowSharedKeyAccess: true // Required for Azure File mounts in Container Apps
     defaultToOAuthAuthentication: true
     minimumTlsVersion: 'TLS1_2'
     allowBlobPublicAccess: false
-    publicNetworkAccess: 'Disabled'
+    publicNetworkAccess: 'Enabled' // Required for Container Apps to mount Azure File shares
     networkAcls: {
       bypass: 'AzureServices'
       defaultAction: 'Allow'
@@ -34,17 +37,11 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-06-01' = {
   resource fileServices 'fileServices' = {
     name: 'default'
 
-    resource shareDirectus 'shares' = {
-      name: 'directus-data'
-    }
-
-    resource shareMeili 'shares' = {
-      name: 'meili-data'
-    }
-
-    resource shareMeiliSync 'shares' = {
-      name: 'meilisync-data'
-    }
+    resource fileShares 'shares' = [
+      for shareName in fileShareNames: {
+        name: shareName
+      }
+    ]
   }
 }
 
@@ -92,8 +89,10 @@ resource fileServicesDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-
 
 @description('The ID of the Storage Account.')
 output id string = storageAccount.id
+
 @description('The name of the Storage Account.')
 output name string = storageAccount.name
+
 @secure()
 @description('The primary key of the Storage Account.')
 output primaryKey string = storageAccount.listKeys().keys[0].value

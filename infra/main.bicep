@@ -32,6 +32,9 @@ param acaSubnetAddressPrefix string
 @description('The name of the Storage Account.')
 param storageAccountName string
 
+@description('The names of the Azure File shares to create in the Storage Account.')
+param fileShareNames string[]
+
 // Database
 @description('The name of the MySQL Flexible Server.')
 param sqlServerName string
@@ -167,6 +170,7 @@ module storage 'templates/storage/storage-account.bicep' = {
     location: location
     name: storageAccountName
     logAnalyticsWorkspaceId: logAnalyticsWorkspace.outputs.id
+    fileShareNames: fileShareNames
     tags: tags
   }
 }
@@ -216,6 +220,7 @@ module containerAppEnv 'templates/compute/container-app-env.bicep' = {
     infrastructureSubnetId: virtualNetwork.outputs.subnetIds[1] // aca-subnet
     storageAccountName: storage.outputs.name
     storageAccountKey: storage.outputs.primaryKey
+    fileShareNames: fileShareNames
     tags: tags
   }
 }
@@ -248,7 +253,7 @@ module meilisearch 'templates/compute/container-app.bicep' = {
       {
         name: 'meili-data'
         storageType: 'AzureFile'
-        storageName: storage.outputs.name
+        storageName: 'meili-data'
       }
     ]
     tags: tags
@@ -299,7 +304,7 @@ module directus 'templates/compute/container-app.bicep' = {
       {
         name: 'directus-data'
         storageType: 'AzureFile'
-        storageName: storage.outputs.name
+        storageName: 'directus-data'
       }
     ]
     tags: tags
@@ -322,7 +327,7 @@ module meilisync 'templates/compute/container-app.bicep' = {
       {
         name: 'meilisync-data'
         storageType: 'AzureFile'
-        storageName: storage.outputs.name
+        storageName: 'meilisync-data'
       }
     ]
     tags: tags

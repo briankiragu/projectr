@@ -24,6 +24,7 @@ param acaSubnetAddressPrefix = '10.0.2.0/23'
 // Storage
 // ========================================================================
 param storageAccountName = 'projectrsa'
+param fileShareNames = ['directus-data', 'meili-data', 'meilisync-data']
 
 // ========================================================================
 // Database
