@@ -319,7 +319,7 @@ module meilisync 'templates/compute/container-app.bicep' = {
     logAnalyticsWorkspaceId: logAnalyticsWorkspace.outputs.id
     userAssignedIdentityId: managedIdentity.outputs.id
     containerAppEnvironmentId: containerAppEnv.outputs.id
-    image: 'long2ice/meilisync:sha-052c4de' // pinned to stable release 0.1.3
+    image: 'long2ice/meilisync:v0.1.3'
     volumeMounts: [
       { volumeName: 'meilisync-data', mountPath: '/meilisync' }
     ]
