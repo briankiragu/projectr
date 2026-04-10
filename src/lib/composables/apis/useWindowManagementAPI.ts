@@ -18,17 +18,16 @@ export default () => {
   const project = async (
     id: string,
     channel: string,
-    screenType: IProjectionScreenTypes = IProjectionScreenTypes.audience,
+    screenType: IProjectionScreenTypes = IProjectionScreenTypes.audience
   ): Promise<IProjection | undefined> => {
     // If the API is not available, do not project.
     if (!isAvailable) return;
 
     // Request the permissions.
-    const isEnabled: boolean =
-      (await requestWindowManagementPermissions()) === "granted";
+    const permissionState = await requestWindowManagementPermissions();
 
-    // If the permission is blocked, notify the user.
-    if (!isEnabled) {
+    // If the permission is explicitly denied, notify the user.
+    if (permissionState === "denied") {
       window.alert(
         `Your BROWSER does not support multi-window management or it has been blocked.`
       );
@@ -58,7 +57,7 @@ export default () => {
     screen: ScreenDetailed,
     id: string,
     channel: string,
-    screenType: IProjectionScreenTypes,
+    screenType: IProjectionScreenTypes
   ): WindowProxy | null => {
     // Set the popup configuration.
     const features = [
@@ -68,7 +67,11 @@ export default () => {
       `height=${screen.height}`,
     ].join(",");
 
-    return window.open(`/${screenType}/${id}`, `${channel}-${id}-${screenType}`, features);
+    return window.open(
+      `/${screenType}/${id}`,
+      `${channel}-${id}-${screenType}`,
+      features
+    );
   };
 
   return { isAvailable, project };

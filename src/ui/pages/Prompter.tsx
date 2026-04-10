@@ -60,16 +60,16 @@ const Prompter: Component = () => {
   });
 
   return (
-    <div class="flex min-h-dvh flex-col items-stretch gap-4 bg-gray-100 p-6">
+    <div class="flex min-h-dvh flex-col items-stretch gap-4 bg-white p-6 dark:bg-black">
       {/* Title */}
-      <h2 class="text-wrap text-center font-serif text-2xl font-black uppercase text-[#D15F20] underline md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-9xl">
+      <h2 class="text-center font-serif text-2xl font-black text-wrap text-[#D15F20] uppercase underline md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-9xl">
         {toTitleCase(nowPlaying()?.title)}
       </h2>
 
       {/* Lyrics - Scrollable list */}
       <div
         style={{ "font-size": "1em" }}
-        class="flex flex-auto flex-col items-center justify-center gap-2 rounded-lg bg-[url('/images/tvc-logo.svg')] bg-contain bg-center bg-no-repeat text-center text-[#000435] opacity-100 transition-colors 2xl:px-6"
+        class="flex flex-auto flex-col items-center justify-center gap-2 rounded-lg bg-[url('/images/upperroom-logo.png')] bg-contain bg-center bg-no-repeat text-center text-[#000435] opacity-100 transition-colors 2xl:px-6"
         classList={{ "bg-none opacity-full": nowPlaying() !== undefined }}
       >
         <Show when={nowPlaying() !== undefined}>
@@ -77,11 +77,11 @@ const Prompter: Component = () => {
             {(verse, index) => (
               <div
                 ref={(el) => (verseRefs[index()] = el)}
-                class="text-wrap mb-20 font-serif text-2xl font-black uppercase italic"
+                class="mb-20 font-serif text-2xl font-black text-wrap uppercase italic"
                 classList={{
-                  "md:text-4xl lg:text-7xl 2xl:text-8xl":
+                  "text-gray-900 md:text-4xl lg:text-7xl 2xl:text-8xl dark:text-gray-50":
                     currentVerseIndex() === index(),
-                  "text-gray-600 md:text-3xl lg:text-6xl 2xl:text-7xl":
+                  "text-gray-600 md:text-3xl lg:text-6xl 2xl:text-7xl dark:text-gray-400":
                     currentVerseIndex() !== index(),
                 }}
               >
