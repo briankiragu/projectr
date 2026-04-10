@@ -151,7 +151,7 @@ describe("useWindowManagementAPI", () => {
       );
     });
 
-    test("it shows alert when permission is not granted", async () => {
+    test("it shows alert when permission is denied", async () => {
       // Re-mock with denied permission
       vi.resetModules();
       vi.doMock("@composables/apis/usePermissionsAPI", () => ({
@@ -171,6 +171,31 @@ describe("useWindowManagementAPI", () => {
       expect(window.alert).toHaveBeenCalledWith(
         expect.stringContaining("does not support multi-window management")
       );
+    });
+
+    test("it proceeds to open projection when permission state is prompt", async () => {
+      // Re-mock with prompt permission (user hasn't been asked yet)
+      vi.resetModules();
+      vi.doMock("@composables/apis/usePermissionsAPI", () => ({
+        default: () => ({
+          requestWindowManagementPermissions: vi
+            .fn()
+            .mockResolvedValue("prompt"),
+        }),
+      }));
+
+      const { default: freshUseWindowManagementAPI } =
+        await import("@composables/apis/useWindowManagementAPI");
+      const { project } = freshUseWindowManagementAPI();
+
+      const result = await project("test-id", "test-channel");
+
+      // Should NOT show the alert
+      expect(window.alert).not.toHaveBeenCalled();
+      // Should proceed to call getScreenDetails and open the popup
+      expect(window.getScreenDetails).toHaveBeenCalled();
+      expect(result).toBeDefined();
+      expect(result?.proxy).toBe(mockWindowProxy);
     });
 
     test("it returns undefined when API is not available", async () => {

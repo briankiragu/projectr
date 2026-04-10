@@ -88,7 +88,7 @@ describe("<Prompter />", () => {
     // Make the assertions.
     expect(mainDiv).toHaveClass("flex");
     expect(mainDiv).toHaveClass("min-h-dvh");
-    expect(mainDiv).toHaveClass("bg-gray-100");
+    expect(mainDiv).toHaveClass("bg-white");
   });
 
   test("it displays title heading element", () => {

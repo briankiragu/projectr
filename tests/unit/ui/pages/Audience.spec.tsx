@@ -86,7 +86,7 @@ describe("<Audience />", () => {
     // Make the assertions.
     expect(mainDiv).toHaveClass("flex");
     expect(mainDiv).toHaveClass("h-dvh");
-    expect(mainDiv).toHaveClass("bg-gray-100");
+    expect(mainDiv).toHaveClass("bg-white");
   });
 
   test("it registers projection and presentation receivers on mount", () => {

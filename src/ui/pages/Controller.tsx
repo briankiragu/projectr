@@ -51,7 +51,7 @@ const Controller: Component = () => {
 
   // Import the composables.
   const { toTitleCase } = useFormatting();
-  // eslint-disable-next-line no-empty-pattern
+
   const {
     // isAvailable: receiverIsAvailable,
     // isConnected: receiverIsConnected,
@@ -62,7 +62,7 @@ const Controller: Component = () => {
     // closePresentation: closeReceiver,
     // sendPresentationData: sendToReceiver,
   } = usePresentation(); // Presentation API (For Wireless projection)
-  // eslint-disable-next-line no-empty-pattern
+
   const {
     isAvailable: receiverIsAvailable,
     isConnected: receiverIsConnected,
@@ -73,6 +73,7 @@ const Controller: Component = () => {
     closeProjection: closeReceiver,
     sendProjectionData: sendToReceiver,
   } = useProjection(channel); // Window Management API (Regular projection)
+
   const {
     queue,
     nowPlaying,
