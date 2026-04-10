@@ -121,7 +121,8 @@ services:
     volumes:
       - certbot_data:/var/www/certbot:rw
       - ./docker/certbot/conf:/etc/letsencrypt:rw
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 89d & wait $${!}; done;'"
+    entrypoint: "/bin/sh -c"
+    command: "trap exit TERM; while :; do certbot renew; sleep 89d & wait $${!}; done;"
 
   nginx:
     image: nginx:alpine
@@ -144,7 +145,7 @@ services:
       - meilisync
       - certbot
     healthcheck:
-      test: [ "CMD", "nginx", "-t" ]
+      test: ["CMD", "nginx", "-t"]
       timeout: 10s
       retries: 3
 
