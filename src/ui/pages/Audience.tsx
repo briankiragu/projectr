@@ -40,7 +40,7 @@ const Audience: Component = () => {
   });
 
   return (
-    <div class="flex h-dvh flex-col items-stretch gap-4 bg-black p-6">
+    <div class="flex h-dvh flex-col items-stretch gap-4 bg-white p-6 dark:bg-black">
       {/* Title */}
       <Show when={nowPlaying() !== undefined && currentVerseIndex() === 0}>
         <h2 class="text-center font-serif text-2xl font-black text-wrap text-[#D15F20] uppercase underline md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-9xl">
@@ -58,7 +58,7 @@ const Audience: Component = () => {
           <For each={currentVerse()}>
             {(line) => (
               <div
-                class="font-serif text-2xl font-black text-wrap text-gray-100 uppercase italic md:text-4xl lg:text-7xl 2xl:mb-8 2xl:text-8xl"
+                class="font-serif text-2xl font-black text-wrap text-gray-900 uppercase italic md:text-4xl lg:text-7xl 2xl:mb-8 2xl:text-8xl dark:text-gray-100"
                 innerHTML={line}
               ></div>
             )}
