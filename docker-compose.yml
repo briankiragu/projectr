@@ -118,11 +118,14 @@ services:
   certbot:
     image: certbot/certbot:latest
     container_name: certbot
+    restart: unless-stopped
     volumes:
       - certbot_data:/var/www/certbot:rw
       - ./docker/certbot/conf:/etc/letsencrypt:rw
     entrypoint: "/bin/sh -c"
     command: "trap exit TERM; while :; do certbot renew; sleep 89d & wait $${!}; done;"
+    networks:
+      - projectr
 
   nginx:
     image: nginx:alpine
