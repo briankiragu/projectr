@@ -47,12 +47,20 @@ export default defineConfig({
       reporter: ["text", "json-summary", "json"],
       reportOnFailure: true,
       thresholds: {
-        lines: 90,
-        branches: 90,
-        functions: 90,
-        statements: 90,
+        lines: 95,
+        branches: 95,
+        functions: 95,
+        statements: 95,
       },
-      exclude: ["src/index.tsx", "public/sw.js"],
+      exclude: [
+        "src/index.tsx",
+        "public/sw.js",
+        "playwright.config.ts",
+        "tests/e2e/**",
+        "eslint.config.ts",
+        "prettier.config.ts",
+        "tests.config.ts",
+      ],
     },
     // if you have few tests, try commenting this
     // out to improve performance:

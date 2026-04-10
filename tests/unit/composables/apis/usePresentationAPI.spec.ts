@@ -40,6 +40,98 @@ describe("usePresentationAPI", () => {
     vi.clearAllMocks();
   });
 
+  test("defaultRequest onconnectionavailable callback sets up connection", () => {
+    // The default PresentationRequest is created during module initialization
+    // and has an onconnectionavailable handler that calls setPresentationConnection
+
+    // Create API instance
+    const api = usePresentationAPI();
+
+    // The onconnectionavailable handler is set on the default request during construction
+    // We can test it indirectly by verifying setPresentationConnection handles connections properly
+    const mockConn = {
+      onconnect: null as (() => void) | null,
+      onclose: null as (() => void) | null,
+      onterminate: null as (() => void) | null,
+      onmessage: null as ((msg: MessageEvent) => void) | null,
+      send: vi.fn(),
+    };
+
+    // Call setPresentationConnection directly (which is what onconnectionavailable does)
+    const result = api.setPresentationConnection(mockConn);
+    expect(result).toBe(mockConn);
+    expect(mockConn.onconnect).toBeDefined();
+  });
+
+  test("defaultRequest.onconnectionavailable triggers setPresentationConnection via module init", async () => {
+    // Create a mock that captures the onconnectionavailable handler when it's assigned
+    let capturedHandler: ((event: { conn: unknown }) => void) | null = null;
+
+    const CapturingMock = vi.fn().mockImplementation((urls: string[]) => {
+      const _instance = {
+        urls,
+        _onconnectionavailable: null as
+          | ((event: { conn: unknown }) => void)
+          | null,
+        getAvailability: () => Promise.resolve({ value: true, onchange: null }),
+        start: () =>
+          Promise.resolve({
+            send: vi.fn(),
+            close: vi.fn(),
+            terminate: vi.fn(),
+            onconnect: null,
+            onclose: null,
+            onterminate: null,
+            onmessage: null,
+          }),
+      };
+
+      // Use a property descriptor to capture when onconnectionavailable is assigned
+      Object.defineProperty(_instance, "onconnectionavailable", {
+        set(handler) {
+          capturedHandler = handler;
+          _instance._onconnectionavailable = handler;
+        },
+        get() {
+          return _instance._onconnectionavailable;
+        },
+        configurable: true,
+      });
+
+      return _instance;
+    });
+
+    // Replace the global PresentationRequest with our capturing mock
+    (global as Record<string, unknown>)["PresentationRequest"] = CapturingMock;
+
+    // Reset modules so the module re-initializes with our capturing mock
+    vi.resetModules();
+    const { default: freshUsePresentationAPI } =
+      await import("@composables/apis/usePresentationAPI");
+    freshUsePresentationAPI();
+
+    // The handler should have been captured during module initialization
+    expect(capturedHandler).toBeDefined();
+
+    // Call the captured handler with a mock connection
+    const mockConn = {
+      onconnect: null as (() => void) | null,
+      onclose: null as (() => void) | null,
+      onterminate: null as (() => void) | null,
+      onmessage: null as ((msg: MessageEvent) => void) | null,
+    };
+    capturedHandler!({ conn: mockConn });
+
+    // setPresentationConnection should have been called, setting up the event handlers
+    expect(mockConn.onconnect).toBeDefined();
+    expect(mockConn.onclose).toBeDefined();
+    expect(mockConn.onterminate).toBeDefined();
+
+    // Restore the original mock
+    (global as Record<string, unknown>)["PresentationRequest"] =
+      MockPresentationRequest;
+  });
+
   test("it returns the required methods", () => {
     const api = usePresentationAPI();
 
@@ -94,6 +186,48 @@ describe("usePresentationAPI", () => {
       (global as Record<string, unknown>)["PresentationRequest"] =
         MockPresentationRequest;
     });
+    test("it reacts to availability changes via onchange", async () => {
+      // Create a mock that exposes the onchange handler
+      let onchangeHandler: (() => void) | null = null;
+      const availabilityObj = {
+        value: true,
+        set onchange(handler: (() => void) | null) {
+          onchangeHandler = handler;
+        },
+        get onchange() {
+          return onchangeHandler;
+        },
+      };
+
+      const MockWithOnchange = vi.fn().mockImplementation(() => ({
+        getAvailability: () => Promise.resolve(availabilityObj),
+        onconnectionavailable: null,
+      }));
+
+      (global as Record<string, unknown>)["PresentationRequest"] =
+        MockWithOnchange;
+
+      vi.resetModules();
+      const { default: freshAPI } =
+        await import("@composables/apis/usePresentationAPI");
+      const { getAvailability } = freshAPI();
+      const callback = vi.fn();
+
+      getAvailability(callback);
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      expect(callback).toHaveBeenCalledWith(true);
+
+      // Simulate availability change
+      availabilityObj.value = false;
+      if (onchangeHandler) (onchangeHandler as () => void)();
+
+      expect(callback).toHaveBeenCalledWith(false);
+
+      // Restore original mock
+      (global as Record<string, unknown>)["PresentationRequest"] =
+        MockPresentationRequest;
+    });
   });
 
   describe("getPresentationRequest", () => {
@@ -142,6 +276,30 @@ describe("usePresentationAPI", () => {
       await startPresentation("test-id", IProjectionScreenTypes.prompter);
 
       expect(true).toBe(true);
+    });
+
+    test("it throws error when presentation start fails", async () => {
+      const FailingMock = vi.fn().mockImplementation((urls: string[]) => ({
+        urls,
+        start: () => Promise.reject(new Error("User cancelled")),
+        getAvailability: () => Promise.resolve({ value: true, onchange: null }),
+        onconnectionavailable: null,
+      }));
+
+      (global as Record<string, unknown>)["PresentationRequest"] = FailingMock;
+
+      vi.resetModules();
+      const { default: freshAPI } =
+        await import("@composables/apis/usePresentationAPI");
+      const { startPresentation } = freshAPI();
+
+      await expect(startPresentation("test-id")).rejects.toThrow(
+        "[Presentation] Failed to start"
+      );
+
+      // Restore
+      (global as Record<string, unknown>)["PresentationRequest"] =
+        MockPresentationRequest;
     });
   });
 
@@ -385,7 +543,11 @@ describe("usePresentationAPI", () => {
         onclose: null,
       };
 
-      (onconnectionavailableHandler as ((event: { conn: unknown }) => void) | null)?.({ conn: newConnection });
+      (
+        onconnectionavailableHandler as
+          | ((event: { conn: unknown }) => void)
+          | null
+      )?.({ conn: newConnection });
 
       expect(newConnection.onmessage).toBeDefined();
     });

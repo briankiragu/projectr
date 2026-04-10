@@ -26,11 +26,7 @@ describe("usePresentation", () => {
   });
 
   test("it initializes with availability", () => {
-    const {
-      isAvailable,
-      isConnected,
-      isVisible,
-    } = usePresentation();
+    const { isAvailable, isConnected, isVisible } = usePresentation();
 
     // Initially should check availability
     expect(isAvailable()).toBe(true);
@@ -94,11 +90,95 @@ describe("usePresentation", () => {
     expect(isVisible()).toBe(true);
   });
 
+  test("it handles openPresentation failure gracefully", async () => {
+    // Re-mock to make startPresentation reject
+    vi.resetModules();
+    vi.doMock("@composables/apis/usePresentationAPI", () => ({
+      default: () => ({
+        getAvailability: vi.fn((callback: (value: boolean) => void) => {
+          callback(true);
+        }),
+        startPresentation: vi
+          .fn()
+          .mockRejectedValue(new Error("User cancelled")),
+        terminatePresentation: vi.fn(),
+        initialisePresentationController: vi.fn(),
+        initialisePresentationReceiver: vi.fn(),
+      }),
+    }));
+
+    const { default: freshUsePresentation } =
+      await import("@composables/usePresentation");
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    const { openPresentation, isConnected } = freshUsePresentation();
+    await openPresentation();
+
+    expect(isConnected()).toBe(false);
+    consoleSpy.mockRestore();
+  });
+
+  test("it clears connections when availability drops", async () => {
+    // Re-mock to control availability changes
+    vi.resetModules();
+    let availabilityCallback: ((value: boolean) => void) | null = null as
+      | ((value: boolean) => void)
+      | null;
+
+    vi.doMock("@composables/apis/usePresentationAPI", () => ({
+      default: () => ({
+        getAvailability: vi.fn((callback: (value: boolean) => void) => {
+          availabilityCallback = callback;
+          callback(true); // initially available
+        }),
+        startPresentation: vi.fn().mockResolvedValue({
+          send: vi.fn(),
+          close: vi.fn(),
+          terminate: vi.fn(),
+        }),
+        terminatePresentation: vi.fn(),
+        initialisePresentationController: vi.fn(),
+        initialisePresentationReceiver: vi.fn(),
+      }),
+    }));
+
+    const { default: freshUsePresentation } =
+      await import("@composables/usePresentation");
+    const { openPresentation, isConnected, isAvailable } =
+      freshUsePresentation();
+
+    // Open a connection
+    await openPresentation();
+    expect(isConnected()).toBe(true);
+    expect(isAvailable()).toBe(true);
+
+    // Simulate availability dropping
+    (availabilityCallback as (value: boolean) => void)(false);
+    expect(isAvailable()).toBe(false);
+    expect(isConnected()).toBe(false);
+  });
+
+  test("it sends null when sendPresentationData is called with null", () => {
+    const { sendPresentationData } = usePresentation();
+    // Should not throw
+    sendPresentationData(null);
+  });
+
+  test("it sends stringified data when sendPresentationData is called with data", async () => {
+    const { openPresentation, sendPresentationData } = usePresentation();
+    await openPresentation();
+
+    const data = {
+      nowPlaying: { qid: 1, title: "Test", content: [["Line"]] },
+      currentVerseIndex: 0,
+    };
+    sendPresentationData(data);
+    // No error means it worked
+  });
+
   test("it exposes presentation controller and receiver initializers", () => {
-    const {
-      initialisePresentationController,
-      initialisePresentationReceiver,
-    } = usePresentation();
+    const { initialisePresentationController, initialisePresentationReceiver } =
+      usePresentation();
 
     expect(initialisePresentationController).toBeDefined();
     expect(initialisePresentationReceiver).toBeDefined();

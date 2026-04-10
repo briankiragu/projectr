@@ -44,6 +44,13 @@ describe("usePersistence", () => {
     vi.clearAllMocks();
   });
 
+  test("it retrieves a stored queue from localStorage", () => {
+    const queue = [track1, track2];
+    localStorageMock.getItem.mockReturnValueOnce(JSON.stringify(queue));
+    const result = getStoredQueue();
+    expect(result).toEqual(queue);
+  });
+
   test("it returns an empty array when no queue is stored", () => {
     const result = getStoredQueue();
     expect(result).toEqual([]);
@@ -68,6 +75,12 @@ describe("usePersistence", () => {
     localStorageMock.getItem.mockReturnValueOnce("undefined");
     const result = getStoredNowPlaying();
     expect(result).toBeUndefined();
+  });
+
+  test("it retrieves a stored now playing item from localStorage", () => {
+    localStorageMock.getItem.mockReturnValueOnce(JSON.stringify(track1));
+    const result = getStoredNowPlaying();
+    expect(result).toEqual(track1);
   });
 
   test("it stores and retrieves the now playing", () => {

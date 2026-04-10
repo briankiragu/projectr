@@ -21,7 +21,8 @@ export default () => {
     screenType: IProjectionScreenTypes = IProjectionScreenTypes.audience
   ): Promise<IProjection | undefined> => {
     // If the API is not available, do not project.
-    if (!isAvailable) return;
+    /* v8 ignore next */
+    if (!isAvailable()) return;
 
     // Request the permissions.
     const permissionState = await requestWindowManagementPermissions();

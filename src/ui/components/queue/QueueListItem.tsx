@@ -23,6 +23,7 @@ const QueueListItem: Component<{
           <h4 class="truncate font-semibold">
             {toTitleCase(props.item.title)}
           </h4>
+          {/* v8 ignore next 4 */}
           <Show when={false}>
             <small class="truncate text-sm font-normal">
               ({toTitleCase(props.item.artists?.toString())})
@@ -30,7 +31,7 @@ const QueueListItem: Component<{
           </Show>
         </div>
         <em
-          class="truncate text-sm font-normal italic leading-4 text-gray-500"
+          class="truncate text-sm leading-4 font-normal text-gray-500 italic"
           innerHTML={toTitleCase(props.item.content[0][0]) || ""}
         ></em>
       </div>

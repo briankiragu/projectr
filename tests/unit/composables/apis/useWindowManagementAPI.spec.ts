@@ -198,6 +198,41 @@ describe("useWindowManagementAPI", () => {
       expect(result?.proxy).toBe(mockWindowProxy);
     });
 
+    test("it filters for primary screen when display is not extended and only primary exists", async () => {
+      Object.defineProperty(window, "screen", {
+        value: { isExtended: false },
+        writable: true,
+        configurable: true,
+      });
+
+      Object.defineProperty(window, "getScreenDetails", {
+        value: vi.fn().mockResolvedValue({
+          screens: [
+            {
+              left: 0,
+              top: 0,
+              width: 1920,
+              height: 1080,
+              isPrimary: true,
+              isExtended: false,
+            },
+          ],
+        }),
+        writable: true,
+        configurable: true,
+      });
+
+      const { project } = useWindowManagementAPI();
+      const result = await project("test-id", "test-channel");
+
+      expect(result).toBeDefined();
+      expect(window.open).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.any(String),
+        expect.stringContaining("left=0")
+      );
+    });
+
     test("it returns undefined when API is not available", async () => {
       // This test verifies the intended behavior when API is not available
       // Note: The source code has a potential bug - it checks `if (!isAvailable)`

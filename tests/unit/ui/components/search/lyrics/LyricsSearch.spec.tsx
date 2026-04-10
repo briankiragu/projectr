@@ -2,6 +2,7 @@ import LyricsSearch from "@components/search/lyrics/LyricsSearch";
 import type { ISearchItem } from "@interfaces/lyric";
 import { ISource, IStatus } from "@interfaces/lyric";
 import { render, screen, waitFor } from "@solidjs/testing-library";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, test, vi, beforeEach } from "vitest";
 
 // Mock useMeiliSearch
@@ -118,6 +119,59 @@ describe("<LyricsSearch />", () => {
     await waitFor(() => {
       expect(screen.getByRole("list")).toBeInTheDocument();
     });
+  });
+
+  test("it triggers searchHandler accessor when LyricsSearchForm renders", () => {
+    const searchFn = vi.fn();
+    const enqueueFn = vi.fn();
+
+    render(() => (
+      <LyricsSearch
+        results={[]}
+        searchHandler={searchFn}
+        enqueueHandler={enqueueFn}
+      />
+    ));
+
+    // The search form renders immediately, which accesses props.searchHandler
+    const input = screen.getByRole("searchbox");
+    expect(input).toBeInTheDocument();
+  });
+
+  test("it passes enqueueHandler to LyricsSearchResults when results exist", async () => {
+    const searchFn = vi.fn();
+    const enqueueFn = vi.fn();
+    const resultsWithItems: ISearchItem[] = [
+      {
+        title: "Test Song",
+        content: [["Test lyrics"]],
+        source: ISource.musix,
+        status: IStatus.PUBLISHED,
+        sort: null,
+      },
+    ];
+
+    render(() => (
+      <LyricsSearch
+        results={resultsWithItems}
+        searchHandler={searchFn}
+        enqueueHandler={enqueueFn}
+      />
+    ));
+
+    // Wait for lazy-loaded LyricsSearchResults to render
+    await waitFor(() => {
+      const list = screen.getByRole("list");
+      expect(list).toBeInTheDocument();
+    });
+
+    // The enqueueHandler prop accessor should have been called when LyricsSearchResults accessed it
+    // Click the add button to verify the handler chain works
+    const buttons = await screen.findAllByRole("button");
+    if (buttons.length > 0) {
+      await userEvent.setup().click(buttons[0]);
+      expect(enqueueFn).toHaveBeenCalled();
+    }
   });
 
   test("hasResults returns correct value based on results", () => {

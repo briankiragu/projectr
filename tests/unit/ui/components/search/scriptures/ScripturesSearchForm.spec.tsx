@@ -82,7 +82,9 @@ describe("<ScripturesSearchForm />", () => {
     // Wait for versions to load
     await waitFor(() => {
       const versionSelect = screen.getAllByRole("combobox")[0];
-      expect(versionSelect.querySelectorAll("option").length).toBeGreaterThan(1);
+      expect(versionSelect.querySelectorAll("option").length).toBeGreaterThan(
+        1
+      );
     });
   });
 
@@ -135,7 +137,9 @@ describe("<ScripturesSearchForm />", () => {
     // Wait for chapters to load
     await waitFor(() => {
       const chapterSelect = screen.getByLabelText("Chapter");
-      expect(chapterSelect.querySelectorAll("option").length).toBeGreaterThan(1);
+      expect(chapterSelect.querySelectorAll("option").length).toBeGreaterThan(
+        1
+      );
     });
   });
 
@@ -252,5 +256,105 @@ describe("<ScripturesSearchForm />", () => {
         content: expect.any(Array),
       })
     );
+  });
+
+  test("it generates correct title with single verse", async () => {
+    // Override the mock to return a single verse
+    vi.resetModules();
+    vi.doMock("@composables/useScriptures", () => ({
+      default: () => ({
+        loadVersions: vi.fn().mockResolvedValue(mockVersions),
+        loadBooks: vi.fn().mockResolvedValue(mockBooks),
+        loadChapters: vi.fn().mockResolvedValue(mockChapters),
+        loadChapterContent: vi
+          .fn()
+          .mockResolvedValue([
+            { reference: "Genesis 1:1", content: "In the beginning" },
+          ]),
+      }),
+    }));
+
+    const { default: ScripturesSearchFormFresh } =
+      await import("@components/search/scriptures/ScripturesSearchForm");
+
+    const enqueueFn = vi.fn();
+    const user = userEvent.setup();
+
+    render(() => <ScripturesSearchFormFresh enqueueHandler={enqueueFn} />);
+
+    // Go through the full selection flow
+    await waitFor(() => {
+      expect(
+        screen.getAllByRole("combobox")[0].querySelectorAll("option").length
+      ).toBeGreaterThan(1);
+    });
+    await user.selectOptions(screen.getAllByRole("combobox")[0], "v1");
+
+    await waitFor(() => {
+      expect(
+        screen.getByLabelText("Book").querySelectorAll("option").length
+      ).toBeGreaterThan(1);
+    });
+    await user.selectOptions(screen.getByLabelText("Book"), "GEN");
+
+    await waitFor(() => {
+      expect(
+        screen.getByLabelText("Chapter").querySelectorAll("option").length
+      ).toBeGreaterThan(1);
+    });
+    await user.selectOptions(screen.getByLabelText("Chapter"), "GEN.1");
+
+    // Wait for button to enable
+    await waitFor(() => {
+      expect(screen.getByRole("button")).not.toBeDisabled();
+    });
+
+    // Submit the form
+    await user.click(screen.getByRole("button"));
+
+    // With a single verse, title should be just the reference (not a range)
+    expect(enqueueFn).toHaveBeenCalledWith(
+      expect.objectContaining({
+        title: "Genesis 1:1",
+      })
+    );
+  });
+
+  test("it handles version without description", async () => {
+    vi.resetModules();
+    vi.doMock("@composables/useScriptures", () => ({
+      default: () => ({
+        loadVersions: vi.fn().mockResolvedValue([
+          {
+            id: "v2",
+            abbreviationLocal: "NIV",
+            nameLocal: "New International Version",
+            descriptionLocal: null,
+          },
+        ]),
+        loadBooks: vi.fn().mockResolvedValue(mockBooks),
+        loadChapters: vi.fn().mockResolvedValue(mockChapters),
+        loadChapterContent: vi.fn().mockResolvedValue(mockContent),
+      }),
+    }));
+
+    const { default: ScripturesSearchFormFresh } =
+      await import("@components/search/scriptures/ScripturesSearchForm");
+
+    const enqueueFn = vi.fn();
+    render(() => <ScripturesSearchFormFresh enqueueHandler={enqueueFn} />);
+
+    // Wait for versions to load
+    await waitFor(() => {
+      const opts = screen
+        .getAllByRole("combobox")[0]
+        .querySelectorAll("option");
+      expect(opts.length).toBeGreaterThan(1);
+    });
+
+    // Verify the option doesn't include "(null)" text
+    const option = screen.getByText(/NIV - New International Version/);
+    expect(option).toBeInTheDocument();
+    expect(option.textContent).not.toContain("null");
   });
 });

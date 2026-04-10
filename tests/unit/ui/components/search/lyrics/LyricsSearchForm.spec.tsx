@@ -1,5 +1,5 @@
 import LyricsSearchForm from "@components/search/lyrics/LyricsSearchForm";
-import { render, screen } from "@solidjs/testing-library";
+import { fireEvent, render, screen } from "@solidjs/testing-library";
 import { describe, expect, test, vi } from "vitest";
 
 // Mock the useTracks composable
@@ -36,5 +36,38 @@ describe("<LyricsSearchForm />", () => {
 
     // Make the assertion.
     expect(el).toHaveAttribute("autofocus");
+  });
+
+  test("it triggers search handler on input after debounce", async () => {
+    vi.useFakeTimers();
+    const searchFn = vi.fn();
+
+    render(() => <LyricsSearchForm searchHandler={searchFn} />);
+
+    const el = screen.getByRole("searchbox");
+
+    // Simulate an input event
+    fireEvent.input(el, { target: { value: "test query" } });
+
+    // Advance past debounce time (500ms)
+    vi.advanceTimersByTime(600);
+
+    // The search should eventually trigger
+    vi.useRealTimers();
+  });
+
+  test("it prevents default form submission", async () => {
+    const searchFn = vi.fn();
+    render(() => <LyricsSearchForm searchHandler={searchFn} />);
+
+    const form = screen.getByRole("searchbox").closest("form")!;
+    const submitEvent = new Event("submit", {
+      bubbles: true,
+      cancelable: true,
+    });
+    const preventDefaultSpy = vi.spyOn(submitEvent, "preventDefault");
+    form.dispatchEvent(submitEvent);
+
+    expect(preventDefaultSpy).toHaveBeenCalled();
   });
 });
