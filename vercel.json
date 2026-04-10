@@ -1,14 +1,6 @@
 {
   "rewrites": [
     {
-      "source": "/api/search/:path*",
-      "destination": "http://admin.thevoicecommunity.org/meilisearch/:path*"
-    },
-    {
-      "source": "/api/admin/:path*",
-      "destination": "http://admin.thevoicecommunity.org/:path*"
-    },
-    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
