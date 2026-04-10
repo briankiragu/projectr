@@ -51,7 +51,7 @@ const Controller: Component = () => {
 
   // Import the composables.
   const { toTitleCase } = useFormatting();
-  // eslint-disable-next-line no-empty-pattern
+
   const {
     // isAvailable: receiverIsAvailable,
     // isConnected: receiverIsConnected,
@@ -62,7 +62,7 @@ const Controller: Component = () => {
     // closePresentation: closeReceiver,
     // sendPresentationData: sendToReceiver,
   } = usePresentation(); // Presentation API (For Wireless projection)
-  // eslint-disable-next-line no-empty-pattern
+
   const {
     isAvailable: receiverIsAvailable,
     isConnected: receiverIsConnected,
@@ -73,6 +73,7 @@ const Controller: Component = () => {
     closeProjection: closeReceiver,
     sendProjectionData: sendToReceiver,
   } = useProjection(channel); // Window Management API (Regular projection)
+
   const {
     queue,
     nowPlaying,
@@ -287,10 +288,12 @@ const Controller: Component = () => {
             </div>
 
             {/* Search results */}
-            <LyricsSearchResults
-              results={results}
-              enqueueHandler={addToQueue}
-            />
+            <Show when={isShowingLyrics()}>
+              <LyricsSearchResults
+                results={results}
+                enqueueHandler={addToQueue}
+              />
+            </Show>
           </search>
 
           <section class="bg-tvc-orange flex min-h-0 flex-1 flex-col rounded-lg p-4 dark:bg-orange-600">
@@ -382,7 +385,7 @@ const Controller: Component = () => {
             id="controls"
             class="sticky bottom-0 bg-white pt-4 dark:bg-transparent"
           >
-            <div class="bg-tvc-green flex min-h-16 flex-wrap justify-center gap-2 rounded-lg p-4 px-6 text-gray-700 lg:justify-between lg:gap-4 dark:bg-teal-700">
+            <div class="bg-tvc-green flex min-h-16 flex-wrap justify-center gap-2 rounded-lg p-4 px-6 text-gray-700 lg:justify-between lg:gap-4 xl:gap-3 dark:bg-teal-700">
               <ProjectionButton
                 title="Shift + P"
                 isAvailable={receiverIsAvailable()}

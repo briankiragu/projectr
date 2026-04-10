@@ -469,11 +469,7 @@ test.describe("Prompter Page - Broadcast Messages", () => {
         nowPlaying: {
           qid: 123,
           title: "Test Song",
-          content: [
-            ["Verse 1 Line 1"],
-            ["Verse 2 Line 1"],
-            ["Verse 3 Line 1"],
-          ],
+          content: [["Verse 1 Line 1"], ["Verse 2 Line 1"], ["Verse 3 Line 1"]],
         },
         currentVerseIndex: 0,
       };
@@ -489,11 +485,7 @@ test.describe("Prompter Page - Broadcast Messages", () => {
         nowPlaying: {
           qid: 123,
           title: "Test Song",
-          content: [
-            ["Verse 1 Line 1"],
-            ["Verse 2 Line 1"],
-            ["Verse 3 Line 1"],
-          ],
+          content: [["Verse 1 Line 1"], ["Verse 2 Line 1"], ["Verse 3 Line 1"]],
         },
         currentVerseIndex: 1,
       };
@@ -569,10 +561,7 @@ test.describe("Audience Page - Title Visibility", () => {
         nowPlaying: {
           qid: 123,
           title: "Hidden Title",
-          content: [
-            ["Verse 1 Line 1"],
-            ["Verse 2 Line 1"],
-          ],
+          content: [["Verse 1 Line 1"], ["Verse 2 Line 1"]],
         },
         currentVerseIndex: 1,
       };
@@ -582,7 +571,9 @@ test.describe("Audience Page - Title Visibility", () => {
     // Verse 2 should be visible
     await expect(page.getByText("Verse 2 Line 1")).toBeVisible();
     // Title should NOT be visible
-    await expect(page.locator("h2", { hasText: "Hidden Title" })).not.toBeVisible();
+    await expect(
+      page.locator("h2", { hasText: "Hidden Title" })
+    ).not.toBeVisible();
   });
 
   test("should show title only on first verse", async ({ page }) => {
@@ -603,12 +594,12 @@ test.describe("Audience Page - Title Visibility", () => {
     });
 
     // Title should be visible
-    await expect(page.locator("h2", { hasText: "Visible Title" })).toBeVisible();
+    await expect(
+      page.locator("h2", { hasText: "Visible Title" })
+    ).toBeVisible();
   });
 
-  test("should handle null broadcast payload in audience", async ({
-    page,
-  }) => {
+  test("should handle null broadcast payload in audience", async ({ page }) => {
     await page.goto("/audience/test-session");
 
     // Send content first
@@ -670,7 +661,7 @@ test.describe("Projection Button Details", () => {
     // Click audience view (this will try to open a window.open)
     // We intercept window.open to prevent actual window creation
     await page.evaluate(() => {
-      (window as any).open = () => null;
+      window.open = () => null;
     });
     await page.getByText("Audience view").click();
 
@@ -691,7 +682,7 @@ test.describe("Projection Button Details", () => {
     await expect(page.getByText("Prompter view")).toBeVisible();
 
     await page.evaluate(() => {
-      (window as any).open = () => null;
+      window.open = () => null;
     });
     await page.getByText("Prompter view").click();
 
@@ -801,7 +792,9 @@ test.describe("Offline Banner", () => {
 });
 
 test.describe("Display Button Behavior", () => {
-  test("should show disabled display button when not connected", async ({ page }) => {
+  test("should show disabled display button when not connected", async ({
+    page,
+  }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await page.goto("/");
 
@@ -1125,9 +1118,6 @@ test.describe("Scripture Form Loading States", () => {
       await scripturesTab.click();
 
       // Should show loading option initially
-      const loadingOption = page
-        .locator("select#version option")
-        .filter({ hasText: "Loading..." });
       // The loading state may be very brief, so we just verify the select is there
       await expect(page.locator("select#version")).toBeVisible();
     }
@@ -1163,8 +1153,7 @@ test.describe("Scripture Form Loading States", () => {
               bookId: "GEN",
               chapterId: "GEN.1",
               reference: "Genesis 1:2",
-              content:
-                "<p>And the earth was without form, and void.</p>",
+              content: "<p>And the earth was without form, and void.</p>",
             },
           ],
         },
