@@ -13,8 +13,8 @@ permissions:
   contents: read
 
 env:
-  AZURE_LOCATION: "${{ secrets.AZURE_LOCATION }}"
-  AZURE_RESOURCE_GROUP: "${{ secrets.AZURE_RESOURCE_GROUP }}"
+  # AZURE_LOCATION: "${{ secrets.AZURE_LOCATION }}"
+  # AZURE_RESOURCE_GROUP: "${{ secrets.AZURE_RESOURCE_GROUP }}"
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
@@ -23,7 +23,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@main
+
+      - uses: oven-sh/setup-bun@main
+
+      - name: Set up environment
+        run: cp .env.example .env
+
+      - name: Install Vercel CLI
+        run: bun install --global vercel@latest
+
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
+
+      - name: Build Project Artifacts
+        run: vercel build --prod --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
+
+      - name: Deploy Project Artifacts to Vercel
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
 
       # - name: Log in to Azure
       #   uses: azure/login@v2
@@ -49,15 +66,3 @@ jobs:
       #       directusAdminEmail=${{ secrets.DIRECTUS_ADMIN_EMAIL }}
       #       directusAdminPassword=${{ secrets.DIRECTUS_ADMIN_PASSWORD }}
       #     failOnStdErr: false
-
-      - name: Install Vercel CLI
-        run: npm install --global vercel@latest
-
-      - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
-
-      - name: Build Project Artifacts
-        run: vercel build --prod --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
-
-      - name: Deploy Project Artifacts to Vercel
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_ACCESS_TOKEN }}

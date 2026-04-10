@@ -4,18 +4,14 @@
     "useDefineForClassFields": true,
     "module": "ESNext",
     "moduleDetection": "force",
-    "lib": [
-      "ESNext",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
     "allowJs": true,
     "types": [
       "vite/client",
       "vitest/globals",
       "@testing-library/jest-dom",
-      "@types/webscreens-window-placement"
+      "@types/webscreens-window-placement",
     ],
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -35,33 +31,18 @@
     "noFallthroughCasesInSwitch": true,
     "noPropertyAccessFromIndexSignature": true,
     /* Aliases */
-    "baseUrl": ".",
     "paths": {
-      "@components/*": [
-        "./src/ui/components/*"
-      ],
-      "@composables/*": [
-        "./src/lib/composables/*"
-      ],
-      "@interfaces/*": [
-        "./src/lib/interfaces/*"
-      ],
-      "@pages/*": [
-        "./src/ui/pages/*"
-      ]
-    }
+      "@components/*": ["./src/ui/components/*"],
+      "@composables/*": ["./src/lib/composables/*"],
+      "@interfaces/*": ["./src/lib/interfaces/*"],
+      "@pages/*": ["./src/ui/pages/*"],
+    },
   },
-  "include": [
-    "src",
-    "tests",
-    "public/sw.js"
-  ],
-  "exclude": [
-    "*.config.ts"
-  ],
+  "include": ["src", "tests", "public/sw.js"],
+  "exclude": ["*.config.ts"],
   "references": [
     {
-      "path": "./tsconfig.node.json"
-    }
-  ]
+      "path": "./tsconfig.node.json",
+    },
+  ],
 }

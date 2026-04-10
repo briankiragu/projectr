@@ -28,6 +28,7 @@ dist-ssr
 # Testing
 .nyc_output
 coverage
+coverage-e2e
 playwright-report
 test-results
 

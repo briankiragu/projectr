@@ -16,25 +16,23 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@main
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
+      - uses: oven-sh/setup-bun@main
 
       - name: Set up environment
         run: cp .env.example .env
 
       - name: Install dependencies
-        run: npm install -g pnpm && pnpm install
+        run: bun install --frozen-lockfile
 
       - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
+        run: bunx playwright install --with-deps
 
       - name: Run Playwright tests
-        run: pnpm exec playwright test
+        run: bunx playwright test
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@main
         if: ${{ !cancelled() }}
         with:
           name: playwright-report

@@ -55,8 +55,8 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: {
     command: process.env.E2E_COVERAGE
-      ? "npx cross-env E2E_COVERAGE=true npx vite"
-      : "npm run dev",
+      ? "bunx cross-env E2E_COVERAGE=true bunx vite"
+      : "bun run dev",
     url: "http://localhost:5173",
     reuseExistingServer: !process.env.CI,
   },

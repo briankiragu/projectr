@@ -36,9 +36,9 @@ To get a good launching point for working on this project, follow the instructio
 Ensure you have the latest version **_(LTS)_** of
 [NodeJS](https://nodejs.org/download/) installed on your machine.
 
-### PNPM [Mandatory]
+### Bun [Mandatory]
 
-This project uses [PNPM](https://pnpm.io/) as its dependency manager. Install it on your local
+This project uses [Bun](https://bun.sh/) as its JavaScript runtime and package manager. Install it on your local
 machine to manage all the packages in the `package.json` as well as run the
 scripts for **developing**, **testing** and **previewing** the application.
 
@@ -85,18 +85,18 @@ To manage the Docker images, use the following commands:
 
 ### Installing `node_modules`
 
-Install the dependencies via `pnpm` using the command:
+Install the dependencies via `bun` using the command:
 
-- `pnpm install`
+- `bun install`
 
 ### Developing, testing and previewing the application.
 
 To manage the scripts in the `package.json`, use the following commands:
 
-- Development: `pnpm run dev`
-- Unit Testing: `pnpm run test`
-- Unit Testing (With coverage): `pnpm run test:coverage`
-- Preview: `pnpm run build && pnpm run preview`
+- Development: `bun run dev`
+- Unit Testing: `bun run test`
+- Unit Testing (With coverage): `bun run test:coverage`
+- Preview: `bun run build && bun run preview`
 
 ## Viewing the application
 
