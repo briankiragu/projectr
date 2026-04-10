@@ -18,11 +18,7 @@ export default defineConfig({
       ? [
           istanbul({
             include: "src/**/*",
-            exclude: [
-              "node_modules",
-              "tests",
-              "src/vite-env.d.ts",
-            ],
+            exclude: ["node_modules", "tests", "src/vite-env.d.ts"],
             extension: [".ts", ".tsx"],
             requireEnv: false,
             checkProd: false,
