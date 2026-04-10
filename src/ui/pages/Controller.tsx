@@ -384,7 +384,7 @@ const Controller: Component = () => {
             id="controls"
             class="sticky bottom-0 bg-white pt-4 dark:bg-transparent"
           >
-            <div class="bg-tvc-green flex min-h-16 flex-wrap justify-center gap-2 rounded-lg p-4 px-6 text-gray-700 lg:justify-between lg:gap-4 dark:bg-teal-700">
+            <div class="bg-tvc-green flex min-h-16 flex-wrap justify-center gap-2 rounded-lg p-4 px-6 text-gray-700 lg:justify-between lg:gap-4 xl:gap-3 dark:bg-teal-700">
               <ProjectionButton
                 title="Shift + P"
                 isAvailable={receiverIsAvailable()}
