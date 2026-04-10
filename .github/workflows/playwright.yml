@@ -1,8 +1,8 @@
-name: Playwright Tests
+name: E2E Tests
 
 on:
   workflow_run:
-    workflows: ["Coverage Tests"]
+    workflows: ["Unit Tests"]
     branches: [main]
     types:
       - completed

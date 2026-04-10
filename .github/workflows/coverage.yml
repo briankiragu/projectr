@@ -1,4 +1,4 @@
-name: Coverage Tests
+name: Unit Tests
 
 on:
   push:

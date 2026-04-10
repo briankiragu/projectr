@@ -1,8 +1,8 @@
-name: Deploy Infrastructure
+name: Deploy to Prod
 
 on:
   workflow_run:
-    workflows: ["Playwright Tests"]
+    workflows: ["E2E Tests"]
     branches: [main]
     types:
       - completed
@@ -13,38 +13,51 @@ permissions:
   contents: read
 
 env:
-  AZURE_LOCATION: "southafricanorth"
-  AZURE_RESOURCE_GROUP: "projectr-rg-southafricanorth"
+  AZURE_LOCATION: "${{ secrets.AZURE_LOCATION }}"
+  AZURE_RESOURCE_GROUP: "${{ secrets.AZURE_RESOURCE_GROUP }}"
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
 jobs:
   deploy:
-    # if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Log in to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      # - name: Log in to Azure
+      #   uses: azure/login@v2
+      #   with:
+      #     client-id: ${{ secrets.AZURE_CLIENT_ID }}
+      #     tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      #     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Deploy Bicep
-        uses: azure/arm-deploy@v2
-        with:
-          scope: "resourcegroup"
-          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
-          template: ./infra/main.bicep
-          parameters: >-
-            ./infra/parameters/main.bicepparam
-            sqlDBUser=${{ secrets.MYSQL_DB_USER }}
-            sqlDBUserPassword=${{ secrets.MYSQL_DB_PASSWORD }}
-            meiliMasterKey=${{ secrets.MEILI_MASTER_KEY }}
-            directusKey=${{ secrets.DIRECTUS_KEY }}
-            directusSecret=${{ secrets.DIRECTUS_SECRET }}
-            directusAdminEmail=${{ secrets.DIRECTUS_ADMIN_EMAIL }}
-            directusAdminPassword=${{ secrets.DIRECTUS_ADMIN_PASSWORD }}
-          failOnStdErr: false
+      # - name: Deploy Bicep
+      #   uses: azure/arm-deploy@v2
+      #   with:
+      #     scope: "resourcegroup"
+      #     subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+      #     template: ./infra/main.bicep
+      #     parameters: >-
+      #       ./infra/parameters/main.bicepparam
+      #       sqlDBUser=${{ secrets.MYSQL_DB_USER }}
+      #       sqlDBUserPassword=${{ secrets.MYSQL_DB_PASSWORD }}
+      #       meiliMasterKey=${{ secrets.MEILI_MASTER_KEY }}
+      #       directusKey=${{ secrets.DIRECTUS_KEY }}
+      #       directusSecret=${{ secrets.DIRECTUS_SECRET }}
+      #       directusAdminEmail=${{ secrets.DIRECTUS_ADMIN_EMAIL }}
+      #       directusAdminPassword=${{ secrets.DIRECTUS_ADMIN_PASSWORD }}
+      #     failOnStdErr: false
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
+
+      - name: Build Project Artifacts
+        run: vercel build --prod --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
+
+      - name: Deploy Project Artifacts to Vercel
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_ACCESS_TOKEN }}
