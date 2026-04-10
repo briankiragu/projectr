@@ -123,7 +123,7 @@ services:
       - certbot_data:/var/www/certbot:rw
       - ./docker/certbot/conf:/etc/letsencrypt:rw
     entrypoint: "/bin/sh -c"
-    command: "trap exit TERM; while :; do certbot renew; sleep 89d & wait $${!}; done;"
+    command: "trap exit TERM; while :; do certbot renew; sleep 7d & wait $${!}; done;"
     networks:
       - projectr
 
