@@ -661,7 +661,7 @@ test.describe("Projection Button Details", () => {
     // Click audience view (this will try to open a window.open)
     // We intercept window.open to prevent actual window creation
     await page.evaluate(() => {
-      (window as any).open = () => null;
+      window.open = () => null;
     });
     await page.getByText("Audience view").click();
 
@@ -682,7 +682,7 @@ test.describe("Projection Button Details", () => {
     await expect(page.getByText("Prompter view")).toBeVisible();
 
     await page.evaluate(() => {
-      (window as any).open = () => null;
+      window.open = () => null;
     });
     await page.getByText("Prompter view").click();
 
