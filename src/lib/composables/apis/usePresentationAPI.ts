@@ -6,7 +6,9 @@ import { IProjectionScreenTypes } from "@interfaces/projection";
 export default () => {
   // Define the default request.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const defaultRequest: any = new PresentationRequest([IProjectionScreenTypes.audience]);
+  const defaultRequest: any = new PresentationRequest([
+    IProjectionScreenTypes.audience,
+  ]);
   defaultRequest.onconnectionavailable = ({ conn }) =>
     setPresentationConnection(conn);
 
@@ -35,12 +37,12 @@ export default () => {
   // Prepare the request with the presentation URLs.
   const getPresentationRequest = (
     id: string,
-    screenType: IProjectionScreenTypes = IProjectionScreenTypes.audience,
+    screenType: IProjectionScreenTypes = IProjectionScreenTypes.audience
   ) => new PresentationRequest([`${screenType}/${id}`]);
 
   const startPresentation = async (
     id: string,
-    screenType: IProjectionScreenTypes = IProjectionScreenTypes.audience,
+    screenType: IProjectionScreenTypes = IProjectionScreenTypes.audience
   ) => {
     try {
       // Create a PresentationRequest
@@ -99,7 +101,7 @@ export default () => {
   const addPresentationConnection = (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     conn: any,
-    callback: (message: MessageEvent) => void,
+    callback: (message: MessageEvent) => void
   ) => {
     // Listen for new messages.
     conn.onmessage = (message: MessageEvent) => callback(message);
@@ -110,7 +112,6 @@ export default () => {
     };
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const initialisePresentationController = () => {
     navigator.presentation.defaultRequest = defaultRequest;
   };

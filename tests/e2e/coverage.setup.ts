@@ -32,7 +32,9 @@ export const test = base.extend({
         const id = crypto.randomUUID();
         const coveragePath = path.join(coverageDir, `coverage-${id}.json`);
         fs.writeFileSync(coveragePath, coverage);
-        console.log(`Coverage written: ${coveragePath} (${coverage.length} bytes)`);
+        console.log(
+          `Coverage written: ${coveragePath} (${coverage.length} bytes)`
+        );
       } else {
         console.log("No __coverage__ found on window");
       }
