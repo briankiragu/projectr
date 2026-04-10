@@ -42,7 +42,9 @@ const Controller: Component = () => {
   const { setStoredNowPlaying } = usePersistence();
 
   // Create a BroadcastAPI channel.
-  const channel = new BroadcastChannel(import.meta.env.VITE_BROADCAST_NAME);
+  const channel = new BroadcastChannel(
+    import.meta.env.VITE_BROADCAST_NAME || "projectr"
+  );
 
   // Create the signals.
   const [isOffline, setIsOffline] = createSignal<boolean>(false);

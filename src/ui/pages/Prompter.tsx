@@ -20,7 +20,9 @@ const Prompter: Component = () => {
   let verseRefs: HTMLDivElement[] = [];
 
   // Create a BroadcastAPI channel.
-  const channel = new BroadcastChannel(import.meta.env.VITE_BROADCAST_NAME);
+  const channel = new BroadcastChannel(
+    import.meta.env.VITE_BROADCAST_NAME || "projectr"
+  );
 
   // Import the composables.
   const { toTitleCase } = useFormatting();
