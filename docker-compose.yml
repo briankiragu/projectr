@@ -52,10 +52,10 @@ services:
       CACHE_STORE: "redis"
       KEY: "${DIRECTUS_KEY}"
       SECRET: "${DIRECTUS_SECRET}"
+      PUBLIC_URL: "${DIRECTUS_PUBLIC_URL}"
       ADMIN_EMAIL: "${DIRECTUS_ADMIN_EMAIL}"
       ADMIN_PASSWORD: "${DIRECTUS_ADMIN_PASSWORD}"
       WEBSOCKETS_ENABLED: "true"
-      PUBLIC_URL: "https://admin.thevoicecommunity.org"
     volumes:
       - directus_data:/directus:rw
     extra_hosts:
