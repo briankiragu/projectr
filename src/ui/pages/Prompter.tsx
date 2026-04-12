@@ -71,7 +71,7 @@ const Prompter: Component = () => {
       {/* Lyrics - Scrollable list */}
       <div
         style={{ "font-size": "1em" }}
-        class="flex flex-auto flex-col items-center justify-center gap-2 rounded-lg bg-[url('/images/upperroom-logo.png')] bg-contain bg-center bg-no-repeat text-center text-[#000435] opacity-100 transition-colors 2xl:px-6"
+        class="flex flex-auto flex-col items-center justify-center gap-2 rounded-lg bg-[url('/images/tvc-logo.svg')] bg-contain bg-center bg-no-repeat text-center text-[#000435] opacity-100 transition-colors 2xl:px-6"
         classList={{ "bg-none opacity-full": nowPlaying() !== undefined }}
       >
         <Show when={nowPlaying() !== undefined}>
