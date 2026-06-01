@@ -54,10 +54,10 @@
     "solid-js": "^1.9.12",
     "tailwindcss": "^4.2.2",
     "typescript-eslint": "^8.58.1",
-    "vite": "^5.4.21",
+    "vite": "^8.0.16",
     "vite-plugin-istanbul": "^7.2.1",
     "vite-plugin-solid": "^2.11.12",
-    "vitest": "^1.6.1",
+    "vitest": "^4.1.8",
     "web-vitals": "^3.5.2"
   },
   "module": "index.tsx"
